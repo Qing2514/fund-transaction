@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.example</groupId>
+    <artifactId>fund_trans</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>api</module>
+        <module>userManage.server</module>
+        <module>userManage.client</module>
+        <module>clearing.server</module>
+        <module>clearing.client</module>
+        <module>fundPurchase.server</module>
+        <module>fundPurchase.client</module>
+        <module>fundRedemption.server</module>
+        <module>fundRedemption.client</module>
+        <module>infoSearch.server</module>
+        <module>infoSearch.client</module>
+        <module>productManage.server</module>
+        <module>productManage.client</module>
+    </modules>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.hundsun.jrescloud</groupId>
+            <artifactId>jrescloud-starter-rpc-def</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.hundsun.jrescloud</groupId>
+                <artifactId>jrescloud-dependencies</artifactId>
+                <version>2.0.39</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>

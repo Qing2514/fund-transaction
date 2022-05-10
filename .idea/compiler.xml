@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="fundRedemption.client" />
+        <module name="infoSearch.client" />
+        <module name="productManage.server" />
+        <module name="userManage.client" />
+        <module name="productManage.client" />
+        <module name="userManage.server" />
+        <module name="clearing.client" />
+        <module name="infoSearch.server" />
+        <module name="fundRedemption.server" />
+        <module name="fundPurchase.client" />
+        <module name="clearing.server" />
+        <module name="fundPurchase.server" />
+        <module name="api" />
+      </profile>
+    </annotationProcessing>
+  </component>
+</project>

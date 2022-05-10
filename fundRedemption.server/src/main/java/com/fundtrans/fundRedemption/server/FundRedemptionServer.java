@@ -1,0 +1,13 @@
+package com.fundtrans.fundRedemption.server;
+
+import com.hundsun.jrescloud.common.boot.CloudApplication;
+import com.hundsun.jrescloud.common.boot.CloudBootstrap;
+import com.hundsun.jrescloud.db.core.configuration.EnableCloudDataSource;
+
+@CloudApplication
+@EnableCloudDataSource
+public class FundRedemptionServer {
+    public static void main(String[] args) {
+        CloudBootstrap.run(FundRedemptionServer.class,args);
+    }
+}
