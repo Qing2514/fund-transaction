@@ -49,15 +49,19 @@ public class UserServiceImpl implements UserService {
         String ctype = userVo.getCtype();
         String cid = userVo.getCid();
         if (name == null){
+            logger.error("用户姓名为空");
             return RespBean.error(RespBeanEnum.USER_NAME_EMPTY);
         }
         if (type == null){
+            logger.error("用户类别为空");
             return RespBean.error(RespBeanEnum.USER_TYPE_EMPTY);
         }
         if (ctype == null){
+            logger.error("用户证件类型为空");
             return RespBean.error(RespBeanEnum.USER_CTYPE_EMPTY);
         }
         if (cid == null){
+            logger.error("用户证件号为空");
             return RespBean.error(RespBeanEnum.USER_CID_EMPTY);
         }
         User temp = null;

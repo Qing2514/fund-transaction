@@ -31,7 +31,7 @@ public class PtransController {
      * @return
      */
     //-----------------------------------------------------------------------------
-    @PostMapping("/OwnPtrans")
+    @PostMapping("/ownPtrans")
     public RespBean ownPtrans(String user_id){
         return ptransService.ownPtrans(user_id);
     }

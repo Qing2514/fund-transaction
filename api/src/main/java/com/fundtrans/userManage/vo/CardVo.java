@@ -12,6 +12,4 @@ public class CardVo {
 
     @NotNull
     private String user_id;
-
-    private BigDecimal account;
 }

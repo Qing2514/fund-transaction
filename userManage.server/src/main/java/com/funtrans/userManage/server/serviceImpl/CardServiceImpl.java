@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @CloudComponent
 public class CardServiceImpl implements CardService {
@@ -60,7 +61,8 @@ public class CardServiceImpl implements CardService {
 
         //判断完成，进行绑定
         try {
-            cardMapper.addCard(0,cardVo.getCard_id(), cardVo.getUser_id(), cardVo.getAccount());
+            Random rd = new Random();
+            cardMapper.addCard(0,cardVo.getCard_id(), cardVo.getUser_id(), new BigDecimal(rd.nextInt(3000) + rd.nextDouble()));
         }catch (Exception e){
             logger.error("绑定失败:"+e.getMessage());
             return RespBean.error(RespBeanEnum.CARD_INSERT_FAIL);

@@ -40,16 +40,16 @@ public class UserController {
         return userService.addUser(userVo);
     }
 
-    /**
-     * 用户风险评估
-     * @param user
-     * @param answer
-     * @return
-     */
-    @PostMapping("/riskAssess")
-    public RespBean riskAssess(User user, @RequestBody String answer){
-        return userService.riskAssess(user, answer);
-    }
+//    /**
+//     * 用户风险评估
+//     * @param user
+//     * @param answer
+//     * @return
+//     */
+//    @PostMapping("/riskAssess")
+//    public RespBean riskAssess(User user, @RequestBody String answer){
+//        return userService.riskAssess(user, answer);
+//    }
 
     /**
      * 用户更新

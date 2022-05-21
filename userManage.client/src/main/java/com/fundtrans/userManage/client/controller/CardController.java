@@ -56,13 +56,13 @@ public class CardController {
         return cardService.topUpCard(card_id,user_id,amount);
     }
 
-    /**
-     * 结束用户绑定
-     * @param user_id
-     * @return
-     */
-    @GetMapping("/finishBind")
-    public RespBean finishBind(String user_id){
-        return cardService.finishBind(user_id);
-    }
+//    /**
+//     * 结束用户绑定
+//     * @param user_id
+//     * @return
+//     */
+//    @GetMapping("/finishBind")
+//    public RespBean finishBind(String user_id){
+//        return cardService.finishBind(user_id);
+//    }
 }

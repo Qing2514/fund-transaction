@@ -119,7 +119,7 @@ public class PtransServiceImpl implements PtransService {
             logger.error("该卡余额不足");
             return RespBean.error(RespBeanEnum.BALANCE_NOT_AVAILABLE);
         }
-
+        ptrans.setId(0);
         ptrans.setTime(date);
         ptrans.setState(0);
         logger.info("添加申购交易记录：" + ptrans.toString());

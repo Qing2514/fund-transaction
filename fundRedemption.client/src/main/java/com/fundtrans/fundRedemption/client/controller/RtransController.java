@@ -24,7 +24,7 @@ public class RtransController {
     //-----------------------------------------------------------
     //序列化和反序列化问题
     //通过map存储尝试
-    @PostMapping("/OwnRtrans")
+    @PostMapping("/ownRtrans")
     public RespBean ownRtrans(@RequestBody String user_id){
         return rtransService.ownRtrans(user_id);
     }
