@@ -14,24 +14,70 @@ public enum RespBeanEnum {
 
     SUCCESS(200,"SUCCESS"),
     ERROR(500,"服务端异常"),
+    BIND_ERROR(500009,"参数校验异常"),
 
     USER_FINDALL_ERROR(500100,"查询失败"),
-    USER_FINDBYID_ERROR(500101,"用户查询失败"),
+    USER_FIND_ERROR(500101,"用户查询失败"),
     USER_NOT_EXIST(500102,"用户不存在"),
     USER_LIST_NULL(500103,"用户列表为空"),
     USER_INSERT_ERROR(500104,"用户插入失败"),
     USER_UPDATE_ERROR(500105,"用户更新失败"),
     USER_DELETE_ERROR(500106,"用户删除失败"),
-    USER_ALREADY_EXIST(500107,"用户已注册"),
+    USER_ALREADY_EXIST(500107,"用户已开户"),
+    USER_ASSESS_FAIL(500108,"用户评估失败，用户更新失败"),
+    USER_NAME_EMPTY(500109,"姓名不能为空"),
+    USER_TYPE_EMPTY(500110,"客户类型不能为空"),
+    USER_CTYPE_EMPTY(500111,"证件类型不能为空"),
+    USER_CID_EMPTY(500112,"证件号不能为空"),
 
-    EMPTY_ERROR(500209,"用户名或密码不能为空"),
-    LOGIN_ERROR(500210,"用户名或密码不正确"),
-    MOBILE_ERROR(500211,"手机号码格式不正确"),
-    BIND_ERROR(500212,"参数校验异常"),
-    MOBILE_NOT_EXIST(500213,"手机号码不存在"),
-    PASSWORD_UPDATE_FAIL(500214,"密码更新失败"),
-    SESSION_ERROR(500215,"用户不存在"),
-    ADMIN_SESSION_ERROR(500216,"管理员不存在");
+
+
+
+
+    CARD_ALREADY_BIND(500300,"该银行卡已绑定"),
+    CARD_INSERT_FAIL(500301,"银行卡绑定失败"),
+    CARD_NOT_BIND(500302,"银行卡未绑定"),
+    CARD_UNBIND_FAIL(500303,"银行卡解绑失败"),
+    CARD_NOT_EXIST(500304,"银行卡不存在"),
+    CARD_CANT_TOPUP(500305,"该用户与该银行卡不存在绑定关系，无法进行充值"),
+    CARD_TOPUP_FAIL(500306,"银行卡充值失败"),
+    CARD_FIND_FAIL(500307,"查询客户银行卡失败"),
+    CARD_NUM_EMPTY(500308,"客户绑定银行卡数量为0，请进行绑定"),
+    CARD_UPDATE_FAIL(500309,"银行卡余额扣减失败"),
+    CARD_ACCOUNT_UPDATE_ERROR(500310,"银行卡余额更新失败"),
+
+
+    BALANCE_NOT_AVAILABLE(500400,"该卡余额不足"),
+    PTRANS_INSERT_FAIL(500401,"申购交易记录添加失败"),
+    PTRANS_FINDBYID_FAIL(500402,"根据用户查询申购交易记录失败"),
+    PTRASN_FINDBYPID_FAIL(500403,"根据申购记录ID查询失败"),
+    PTRANS_NOT_EXIST(500404,"申购记录不存在"),
+    PTRANS_STATE_UPDATE_FAIL(500405,"申购记录状态字段更新失败"),
+    PTRANS_ALREADY_PROCESS(500505,"申购记录已处理或者已撤回，无法进行撤回"),
+    PTRANS_WITHDRAW_ERROR(500506,"超过规定撤回时间，无法对交易进行撤回"),
+
+
+    RTRANS_ADD_ERROR(500600,"添加赎回交易记录失败"),
+    RTRANS_COUNT_BEYOND(500601,"赎回份额不能大于该卡已购份额"),
+    RTRANS_FIND_ERROR(500602,"用户赎回交易记录查询失败"),
+    RTRANS_NOT_EXIST(500603,"赎回交易记录不存在"),
+    RTRANS_ALREADY_PROCEED(500604,"赎回交易记录已处理或者已撤回，无法进行撤回"),
+    RTRANS_WITHDRAW_ERROR(500605,"超过规定撤回时间，无法对交易进行撤回"),
+    RTRANS_STATE_UPDATE_FAIL(500606,"赎回记录状态字段更新失败"),
+
+    SHARE_FIND_ERROR(500700,"份额查询失败"),
+    SHARE_NO_PURCHASE(500701,"该用户未购买该基金产品，无法进行赎回"),
+    SHARE_CARD_NO_PURCHASE(500702,"该用户未用该卡进行申购，无法赎回到该卡中"),
+    SHARE_FROZEN_UPDATE_ERROR(500703,"冻结份额更新失败"),
+    SHARE_DELETE_ERROR(500704,"份额记录删除失败"),
+    SHARE_UPDATE_ERROR(500705,"份额表更新失败"),
+
+    REDEMPTION_ADD_ERROR(500800,"赎回记录添加失败"),
+
+    RECORD_ADD_ERROR(500900,"份额流水记录添加失败"),
+
+    PRODUCT_FIND_FAIL(500500,"基金查询失败")
+    ;
 
 
     private final Integer code;

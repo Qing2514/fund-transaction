@@ -1,12 +1,19 @@
 package com.fundtrans.userManage.client.controller;
 
 
+import com.fundtrans.userManage.pojo.Card;
 import com.fundtrans.userManage.pojo.User;
+import com.fundtrans.userManage.service.CardService;
 import com.fundtrans.userManage.service.UserService;
+import com.fundtrans.userManage.vo.CardVo;
+import com.fundtrans.userManage.vo.UserSearch;
+import com.fundtrans.userManage.vo.UserVo;
 import com.fundtrans.vo.RespBean;
 import com.hundsun.jrescloud.rpc.annotation.CloudReference;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -15,29 +22,59 @@ public class UserController {
 
     @CloudReference
     private UserService userService;
+    @CloudReference
+    private CardService cardService;
 
-    @GetMapping("/findAll/{index}/{limit}")
-    public RespBean findAll(@PathVariable("index") int index, @PathVariable("limit") int limit) {
-        return userService.findAll(index, limit);
+    @GetMapping("/findAll")
+    public RespBean findAll() {
+        return userService.findAll(0, 10);
     }
 
-    @GetMapping("findById/{id}")
-    public RespBean findById(@PathVariable("id") String userId) {
-        return userService.findById(userId);
-    }
-
+    /**
+     * 判断客户基本四要素信息是否完整以及是否已开户
+     * @param userVo
+     * @return
+     */
     @PostMapping("/addUser")
-    public RespBean addUser(@RequestBody User user) {
-        return userService.addUser(user);
+    public RespBean addUser(@Valid @RequestBody UserVo userVo){
+        return userService.addUser(userVo);
     }
 
+    /**
+     * 用户风险评估
+     * @param user
+     * @param answer
+     * @return
+     */
+    @PostMapping("/riskAssess")
+    public RespBean riskAssess(User user, @RequestBody String answer){
+        return userService.riskAssess(user, answer);
+    }
+
+    /**
+     * 用户更新
+     * @param user
+     * @return
+     */
     @PutMapping("/updateUser")
-    public RespBean updateUser(@RequestBody User user) {
+    public RespBean updateUser(@Valid @RequestBody User user) {
         return userService.updateUser(user);
     }
 
-    @DeleteMapping("/deleteUser/{id}")
-    public RespBean deleteUser(@PathVariable("id") String userId){
-        return userService.deleteUser(userId);
+    /**
+     * 销户
+     * @param user
+     * @return
+     */
+    @PutMapping("/deleteUser")
+    public RespBean deleteUser(User user){
+        return userService.deleteUser(user);
     }
+
+
+    @PostMapping("/findUser")
+    public RespBean findUser(@RequestBody UserSearch userSearch){
+        return userService.findUser(userSearch);
+    }
+
 }

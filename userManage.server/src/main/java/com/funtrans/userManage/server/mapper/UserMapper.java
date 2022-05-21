@@ -14,6 +14,9 @@ public interface UserMapper {
     @Select("select * from user where id = #{id}")
     public User findById(@Param("id") String id);
 
+    @Select("select * from user where name = #{name} and type = #{type} and ctype= #{ctype} and cid = #{cid}")
+    public User findByFour(@Param("name") String name, @Param("type") String type, @Param("ctype") String ctype, @Param("cid") String cid);
+
     @Insert("insert into user values(#{id},#{name},#{type},#{ctype},#{cid},#{password},#{phone},#{age},#{sex},#{address},#{job},#{security},#{state})")
     public void addUserByField(@Param("id") String id, @Param("name") String name, @Param("type") String type,
                                @Param("ctype") String ctype, @Param("cid") String cid, @Param("password") String password,
@@ -30,6 +33,9 @@ public interface UserMapper {
             "address = #{user.address}, job = #{user.job}, security = #{user.security}, state = #{user.state} where id = #{user.id}")
     public void updateUser(@Param("user") User user);
 
-    @Delete("delete from user where id = #{id}")
-    public void deleteUser(@Param("id") String id);
+    @Update("update user set state = 1 where id = #{user.id}")
+    public void deleteUser(@Param("user") User user);
+
+    @Select("select * from user where name like #{name}")
+    List<User> findByName(@Param("name") String name);
 }
