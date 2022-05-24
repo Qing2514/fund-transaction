@@ -16,4 +16,5 @@ public interface ProductService {
     public RespBean findProductBySecurity(String security);//通过风险等级查找产品信息
     public RespBean deleteProduct(String id);//删除产品
     public RespBean findBubbleId(String id);
+    public Product outFindProductById(String id);
 }

@@ -18,11 +18,9 @@ public class UserController {
 
     @CloudReference
     private UserService userService;
-    @CloudReference
-    private CardService cardService;
 
-    @GetMapping("/findAll")
-    public RespBean findAll(int index, int limit) {
+    @GetMapping("/findAll/{index}/{limit}")
+    public RespBean findAll(@PathVariable("index") int index, @PathVariable("limit") int limit) {
         return userService.findAll(index, limit);
     }
 

@@ -5,7 +5,7 @@ import com.fundtrans.infoSearch.server.mapper.CardMapper;
 import com.fundtrans.infoSearch.service.CardService;
 import com.fundtrans.pojo.User;
 import com.fundtrans.userManage.service.UserService;
-import com.fundtrans.userManage.vo.CardVo;
+import com.fundtrans.infoSearch.vo.CardVo;
 import com.fundtrans.vo.RespBean;
 import com.fundtrans.vo.RespBeanEnum;
 import com.hundsun.jrescloud.rpc.annotation.CloudComponent;

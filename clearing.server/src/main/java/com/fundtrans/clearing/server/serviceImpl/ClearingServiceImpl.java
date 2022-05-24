@@ -1,9 +1,11 @@
 package com.fundtrans.clearing.server.serviceImpl;
 
+import com.fundtrans.pojo.Product;
 import com.fundtrans.pojo.Trend;
 import com.fundtrans.clearing.service.ClearingService;
 import com.fundtrans.fundPurchase.service.PurchaseService;
 import com.fundtrans.fundRedemption.service.RedemptionService;
+import com.fundtrans.productManage.service.ProductService;
 import com.fundtrans.productManage.service.TrendService;
 import com.fundtrans.utils.ClearingUtil;
 import com.fundtrans.vo.RespBean;
@@ -30,6 +32,9 @@ public class ClearingServiceImpl implements ClearingService {
 
     @CloudReference
     private TrendService trendService;
+
+    @CloudReference
+    private ProductService productService;
 
 
     @Override
@@ -67,6 +72,14 @@ public class ClearingServiceImpl implements ClearingService {
             }catch (Exception e){
                 logger.error("更新行情失败：" + e.getMessage());
                 return RespBean.error(RespBeanEnum.TREND_UPDATE_ERROR);
+            }
+            try{
+                Product product = productService.outFindProductById(productId);
+                product.setPrange(netWorth.subtract(trend.getPrice()));
+                productService.updateProduct(product);
+            }catch (Exception e){
+                logger.error("产品涨跌幅更新失败："+e.getMessage());
+                return RespBean.error(RespBeanEnum.ERROR);
             }
             // 重新生成当天的申购订单和赎回订单
 //            try {

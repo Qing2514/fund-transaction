@@ -1,7 +1,7 @@
 package com.fundtrans.infoSearch.client.controller;
 
 import com.fundtrans.infoSearch.service.CardService;
-import com.fundtrans.userManage.vo.CardVo;
+import com.fundtrans.infoSearch.vo.CardVo;
 import com.fundtrans.vo.RespBean;
 import com.hundsun.jrescloud.rpc.annotation.CloudReference;
 import org.springframework.web.bind.annotation.*;
@@ -57,8 +57,8 @@ public class CardController {
      *存在大数以json格式传入 反序列化问题
      */
     @PutMapping("/topUp")
-    public RespBean topUp(String card_id,String user_id,BigDecimal amount){
-        return cardService.topUpCard(card_id,user_id,amount);
+    public RespBean topUp(@RequestBody CardVo cardVo){
+        return cardService.topUpCard(cardVo.getCard_id(), cardVo.getUser_id(), cardVo.getAmount());
     }
 
 //    /**

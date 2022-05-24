@@ -1,7 +1,7 @@
 package com.fundtrans.infoSearch.service;
 
 import com.fundtrans.pojo.Card;
-import com.fundtrans.userManage.vo.CardVo;
+import com.fundtrans.infoSearch.vo.CardVo;
 import com.fundtrans.vo.RespBean;
 import com.hundsun.jrescloud.rpc.annotation.CloudService;
 

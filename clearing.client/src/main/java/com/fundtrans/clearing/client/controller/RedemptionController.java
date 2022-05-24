@@ -4,16 +4,14 @@ import com.fundtrans.fundRedemption.service.RedemptionService;
 import com.fundtrans.vo.RespBean;
 import com.hundsun.jrescloud.rpc.annotation.CloudReference;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
 @RestController
 @RequestMapping("/redemption")
+@CrossOrigin
 public class RedemptionController {
 
     @CloudReference

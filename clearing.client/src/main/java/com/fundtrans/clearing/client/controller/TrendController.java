@@ -10,6 +10,7 @@ import java.util.Date;
 
 @RestController
 @RequestMapping("/clearing")
+@CrossOrigin
 public class TrendController {
 
     @CloudReference

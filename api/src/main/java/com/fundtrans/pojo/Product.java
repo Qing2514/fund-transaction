@@ -33,5 +33,6 @@ public class Product implements Serializable {
 
     private String security;
 
+    private BigDecimal prange;
 
 }

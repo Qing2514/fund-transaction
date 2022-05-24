@@ -1,4 +1,4 @@
-package com.fundtrans.userManage.vo;
+package com.fundtrans.infoSearch.vo;
 
 import lombok.Data;
 
@@ -12,4 +12,6 @@ public class CardVo {
 
     @NotNull
     private String user_id;
+
+    private BigDecimal amount;
 }

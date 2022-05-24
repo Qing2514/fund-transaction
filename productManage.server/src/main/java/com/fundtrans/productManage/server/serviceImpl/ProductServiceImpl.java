@@ -181,4 +181,20 @@ public class ProductServiceImpl implements ProductService {
         logger.info("查询结束");
         return RespBean.success(product);
     }
+
+    @Override
+    public Product outFindProductById(String id){
+        logger.info("查询产品"+id);
+        Product product = null;
+        try {
+            product = productMapper.findProductById(id);
+        }catch (Exception e){
+            logger.error("无指定产品"+e.getMessage());
+        }
+        if (product == null){
+            logger.error("产品列表为空");
+        }
+        logger.info("查询结束");
+        return product;
+    }
 }

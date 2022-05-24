@@ -13,12 +13,12 @@ public interface ProductMapper {
     public List<Product> findAllProduct(@Param("index") int index, @Param("limit") int limit);
 
     @Insert("insert into product values(#{product.id},#{product.name}," +
-            "#{product.detail},#{product.networth},#{product.type},#{product.security})")
+            "#{product.detail},#{product.networth},#{product.type},#{product.security},0.0000)")
     public void addProduct(@Param("product") Product product);
 
     @Update("update product set name = #{product.name}, " +
             "detail = #{product.detail}, networth = #{product.networth}, " +
-            "type = #{product.type}, security = #{product.security} where id=#{product.id}")
+            "type = #{product.type}, security = #{product.security}, prange = #{prange} where id=#{product.id}")
     public void updateProduct(@Param("product") Product product);
 
     @Select("select * from product where id = #{id}")
