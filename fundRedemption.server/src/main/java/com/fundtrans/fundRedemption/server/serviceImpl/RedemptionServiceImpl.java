@@ -1,12 +1,18 @@
 package com.fundtrans.fundRedemption.server.serviceImpl;
 
-import com.fundtrans.fundRedemption.pojo.*;
+import com.fundtrans.infoSearch.service.CardService;
+import com.fundtrans.infoSearch.service.RecordService;
+import com.fundtrans.infoSearch.service.ShareService;
+import com.fundtrans.pojo.*;
 import com.fundtrans.fundRedemption.server.mapper.*;
 import com.fundtrans.fundRedemption.service.RedemptionService;
+import com.fundtrans.productManage.service.TrendService;
 import com.fundtrans.vo.RespBean;
 import com.fundtrans.vo.RespBeanEnum;
 import com.hundsun.jrescloud.rpc.annotation.CloudComponent;
+import com.hundsun.jrescloud.rpc.annotation.CloudReference;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,45 +31,48 @@ public class RedemptionServiceImpl implements RedemptionService {
 
     private static final Log logger = LogFactory.getLog(RedemptionServiceImpl.class);
 
+    @CloudReference
+    private CardService cardService;
+    @CloudReference
+    private RecordService recordService;
+    @CloudReference
+    private ShareService shareService;
+    @CloudReference
+    private TrendService trendService;
+
     @Autowired
     private RtransMapper rtransMapper;
     @Autowired
-    private RecordMapper recordMapper;
-    @Autowired
-    private ShareMapper shareMapper;
-    @Autowired
     private RedemptionMapper redemptionMapper;
-    @Autowired
-    private CardMapper cardMapper;
+
 
     @Override
-    public RespBean doRedemption() {
+    public RespBean doRedemption(Date date_now) {
         logger.info("写入赎回记录表");
         List<Rtrans> rtransList = new ArrayList<>();
+        logger.info("当日三点前赎回交易记录查询（前一天三点后到当日三点前，未撤回的交易）");
+        String date1 = DateFormatUtils.format(date_now, "yyyy-MM-dd 15:00:00");
+        DateFormat pattern = new SimpleDateFormat("yyyy-MM-dd HH:ss:mm");
+        Date date = null;
         try {
-            logger.info("当日三点前赎回交易记录查询（前一天三点后到当日三点前，未撤回的交易）");
-            String date1 = DateFormatUtils.format(new Date(), "yyyy-MM-dd 15:00:00");
-            DateFormat pattern = new SimpleDateFormat("yyyy-MM-dd HH:ss:mm");
-            Date date = null;
-            try {
-                date = pattern.parse(date1);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(date);
-            calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) - 24);
-            SimpleDateFormat spattern = new SimpleDateFormat("yyyy-MM-dd 15:00:00");
-            String date2 = spattern.format(calendar.getTime());
-            DateFormat pattern1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date date3 = null;
-            try {
-                date3 = pattern1.parse(date2);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-            rtransList = rtransMapper.findTodayrtrans(date,date3);
+            date = pattern.parse(date1);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) - 24);
+        SimpleDateFormat spattern = new SimpleDateFormat("yyyy-MM-dd 15:00:00");
+        String date2 = spattern.format(calendar.getTime());
+        DateFormat pattern1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date3 = null;
+        try {
+            date3 = pattern1.parse(date2);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        try {
+            rtransList = rtransMapper.findTodayrtrans(date, date3);
         } catch (Exception e) {
             logger.error("今日赎回交易记录查询失败：" + e.getMessage());
             return RespBean.error(RespBeanEnum.RTRANS_FIND_ERROR);
@@ -73,7 +82,7 @@ public class RedemptionServiceImpl implements RedemptionService {
             Share share = null;
             try {
                 logger.info("份额三要素查询");
-                share = shareMapper.findByThree(temp.getUser_id(), temp.getProduct_id(), temp.getCard_id());
+                share = shareService.OutFindByThree(temp.getUser_id(), temp.getProduct_id(), temp.getCard_id());
             } catch (Exception e) {
                 logger.error("份额三要素查询失败：" + e.getMessage());
                 continue;
@@ -94,8 +103,21 @@ public class RedemptionServiceImpl implements RedemptionService {
             /**
              * 调用净值计算模块，根据净值来计算赎回后可以获得的金额
              */
-            redemption.setAmount(BigDecimal.valueOf(1000.00));
-
+            Trend trend = null;
+            try {
+                logger.info("净值查询");
+                trend = trendService.outTrendFindById(date, temp.getProduct_id());
+            } catch (Exception e) {
+                logger.error("净值查询失败：" + e.getMessage());
+//                return RespBean.error(RespBeanEnum.TREND_FIND_ERROR);
+                continue;
+            }
+            if (trend == null) {
+                logger.error("指定条件下无净值");
+//                return RespBean.error(RespBeanEnum.TREND_NOT_EXIST);
+                continue;
+            }
+            redemption.setAmount(trend.getPrice().multiply(temp.getCount()));
             try {
                 logger.info("添加赎回记录：" + redemption.toString());
                 redemptionMapper.addRedemption(redemption);
@@ -118,11 +140,11 @@ public class RedemptionServiceImpl implements RedemptionService {
             record.setUser_id(temp.getUser_id());
             record.setProduct_id(temp.getProduct_id());
             record.setCard_id(temp.getCard_id());
-            record.setTime(new Date());
+            record.setTime(date_now);
             record.setNum("-" + temp.getCount());
             try {
                 logger.info("添加份额流水记录：" + record.toString());
-                recordMapper.addRecord(record);
+                recordService.OutAddRecord(record);
             } catch (Exception e) {
                 logger.error("添加份额流水记录失败：" + e.getMessage());
                 redemptionMapper.deleteRedemption(redemption);
@@ -132,27 +154,27 @@ public class RedemptionServiceImpl implements RedemptionService {
             }
             share.setNum(share.getNum().subtract(temp.getCount()));
             share.setFrozen_num(share.getFrozen_num().subtract(temp.getCount()));
-            if (share.getNum().compareTo(BigDecimal.valueOf(0)) == 0 && share.getFrozen_num().compareTo(BigDecimal.valueOf(0) )== 0){
+            if (share.getNum().compareTo(BigDecimal.valueOf(0)) == 0 && share.getFrozen_num().compareTo(BigDecimal.valueOf(0)) == 0) {
                 try {
                     logger.info("该银行卡剩余份额为0，删除记录");
-                    shareMapper.deleteShare(share);
-                }catch (Exception e){
+                    shareService.OutDeleteShare(share);
+                } catch (Exception e) {
                     logger.info("份额记录删除失败");
                     redemptionMapper.deleteRedemption(redemption);
                     rtransMapper.updateState(0, temp.getId());
-                    recordMapper.deleteRecord(record);
+                    recordService.OutDeleteRecord(record.getId());
 //                    return RespBean.error(RespBeanEnum.SHARE_DELETE_ERROR);
                     continue;
                 }
             }
             try {
                 logger.info("份额表赎回更新");
-                shareMapper.updateCount(share);
+                shareService.OutUpdateCount(share);
             } catch (Exception e) {
                 logger.error("份额表赎回更新失败：" + e.getMessage());
                 redemptionMapper.deleteRedemption(redemption);
                 rtransMapper.updateState(0, temp.getId());
-                recordMapper.deleteRecord(record);
+                recordService.OutDeleteRecord(record.getId());
 //                return RespBean.error(RespBeanEnum.SHARE_UPDATE_ERROR);
                 continue;
             }
@@ -161,32 +183,32 @@ public class RedemptionServiceImpl implements RedemptionService {
             Card card = null;
             try {
                 logger.info("根据银行卡号查询银行卡");
-                card = cardMapper.findByCardId(temp.getCard_id());
-            }catch (Exception e){
+                card = cardService.OutSelectByCardId(temp.getCard_id());
+            } catch (Exception e) {
                 logger.error("银行卡查询失败");
                 redemptionMapper.deleteRedemption(redemption);
                 rtransMapper.updateState(0, temp.getId());
-                recordMapper.deleteRecord(record);
+                recordService.OutDeleteRecord(record.getId());
 //                return RespBean.error(RespBeanEnum.CARD_FIND_FAIL);
                 continue;
             }
-            if (card == null){
+            if (card == null) {
                 logger.error("该赎回记录对应银行卡不存在");
                 redemptionMapper.deleteRedemption(redemption);
                 rtransMapper.updateState(0, temp.getId());
-                recordMapper.deleteRecord(record);
+                recordService.OutDeleteRecord(record.getId());
 //                return RespBean.error(RespBeanEnum.CARD_NOT_EXIST);
                 continue;
             }
             card.setAccount(card.getAccount().add(redemption.getAmount()));
             try {
                 logger.info("更新银行卡余额");
-                cardMapper.updateCard(card);
-            }catch (Exception e){
+                cardService.OutUpdateCard(card);
+            } catch (Exception e) {
                 logger.error("银行卡余额更新失败");
                 redemptionMapper.deleteRedemption(redemption);
                 rtransMapper.updateState(0, temp.getId());
-                recordMapper.deleteRecord(record);
+                recordService.OutDeleteRecord(record.getId());
 //                return RespBean.error(RespBeanEnum.CARD_ACCOUNT_UPDATE_ERROR);
                 continue;
             }
@@ -194,5 +216,21 @@ public class RedemptionServiceImpl implements RedemptionService {
             logger.info("赎回成功");
         }
         return RespBean.success();
+    }
+
+    @Override
+    public RespBean updateRedemptionByDate(Date datetime, String productId, BigDecimal amount) {
+        logger.info("更新赎回表份额");
+        int num = 0;
+        try {
+            // 将时间设置成每天的 15:00
+            datetime = DateUtils.addHours(datetime, 15);
+            num = redemptionMapper.updateRedemptionByDate(datetime, productId, amount);
+        } catch (Exception e) {
+            logger.error("更新赎回表份额失败: " + e.getMessage());
+            return RespBean.error(RespBeanEnum.REDEMPTION_UPDATEAMOUNT_ERROR);
+        }
+        logger.info("更新赎回表结束, 受影响赎回记录数: " + num);
+        return RespBean.success(num);
     }
 }

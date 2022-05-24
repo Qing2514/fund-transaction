@@ -1,6 +1,6 @@
 package com.fundtrans.fundRedemption.server.mapper;
 
-import com.fundtrans.fundRedemption.pojo.Rtrans;
+import com.fundtrans.pojo.Rtrans;
 import org.apache.ibatis.annotations.*;
 
 import java.util.Date;

@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
+
 @RestController
 @RequestMapping("/redemption")
 public class RedemptionController {
@@ -15,7 +17,7 @@ public class RedemptionController {
     private RedemptionService redemptionService;
 
     @GetMapping("/doRedemption")
-    public RespBean doRedemption(){
-        return redemptionService.doRedemption();
+    public RespBean doRedemption(Date date){
+        return redemptionService.doRedemption(date);
     }
 }

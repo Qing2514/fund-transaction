@@ -1,11 +1,9 @@
 package com.fundtrans.userManage.client.controller;
 
 
-import com.fundtrans.userManage.pojo.Card;
-import com.fundtrans.userManage.pojo.User;
-import com.fundtrans.userManage.service.CardService;
+import com.fundtrans.infoSearch.service.CardService;
+import com.fundtrans.pojo.User;
 import com.fundtrans.userManage.service.UserService;
-import com.fundtrans.userManage.vo.CardVo;
 import com.fundtrans.userManage.vo.UserSearch;
 import com.fundtrans.userManage.vo.UserVo;
 import com.fundtrans.vo.RespBean;
@@ -13,8 +11,6 @@ import com.hundsun.jrescloud.rpc.annotation.CloudReference;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.math.BigDecimal;
-import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -26,8 +22,8 @@ public class UserController {
     private CardService cardService;
 
     @GetMapping("/findAll")
-    public RespBean findAll() {
-        return userService.findAll(0, 10);
+    public RespBean findAll(int index, int limit) {
+        return userService.findAll(index, limit);
     }
 
     /**

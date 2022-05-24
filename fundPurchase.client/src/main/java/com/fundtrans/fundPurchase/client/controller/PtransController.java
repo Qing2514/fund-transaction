@@ -1,6 +1,6 @@
 package com.fundtrans.fundPurchase.client.controller;
 
-import com.fundtrans.fundPurchase.pojo.Ptrans;
+import com.fundtrans.pojo.Ptrans;
 import com.fundtrans.fundPurchase.service.PtransService;
 import com.fundtrans.vo.RespBean;
 import com.hundsun.jrescloud.rpc.annotation.CloudReference;
@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Date;
 
 @RestController
 @RequestMapping("/ptrans")
@@ -21,8 +23,8 @@ public class PtransController {
      * @return
      */
     @PostMapping("/addPtrans")
-    public RespBean addPtrans(@RequestBody Ptrans ptrans){
-        return ptransService.addPtrans(ptrans);
+    public RespBean addPtrans(@RequestBody Ptrans ptrans, Date date){
+        return ptransService.addPtrans(ptrans,date);
     }
 
     /**
@@ -42,7 +44,7 @@ public class PtransController {
      * @return
      */
     @PostMapping("/withdrawPtrans")
-    public RespBean withdrawPtrans(Ptrans ptrans){
-        return ptransService.withdrawPtrans(ptrans);
+    public RespBean withdrawPtrans(Ptrans ptrans,Date date){
+        return ptransService.withdrawPtrans(ptrans,date);
     }
 }

@@ -1,7 +1,7 @@
 package com.funtrans.userManage.server.serviceImpl;
 
 import com.fundtrans.exception.GlobalException;
-import com.fundtrans.userManage.pojo.User;
+import com.fundtrans.pojo.User;
 import com.fundtrans.userManage.service.UserService;
 import com.fundtrans.userManage.vo.UserSearch;
 import com.fundtrans.userManage.vo.UserVo;
@@ -213,6 +213,11 @@ public class UserServiceImpl implements UserService {
         }
         logger.info("销户结束");
         return RespBean.success();
+    }
+
+    @Override
+    public User OutFindById(String id) {
+        return userMapper.findById(id);
     }
 }
 

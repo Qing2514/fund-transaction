@@ -1,19 +1,16 @@
 package com.fundtrans.fundRedemption.server.serviceImpl;
 
-import com.fundtrans.fundPurchase.pojo.Ptrans;
-import com.fundtrans.fundRedemption.pojo.Rtrans;
-import com.fundtrans.fundRedemption.pojo.Share;
-import com.fundtrans.fundRedemption.server.mapper.CardMapper;
+import com.fundtrans.pojo.Rtrans;
+import com.fundtrans.pojo.Share;
 import com.fundtrans.fundRedemption.server.mapper.RtransMapper;
-import com.fundtrans.fundRedemption.server.mapper.ShareMapper;
-import com.fundtrans.fundRedemption.server.mapper.UserMapper;
-import com.fundtrans.fundRedemption.service.RedemptionService;
 import com.fundtrans.fundRedemption.service.RtransService;
-import com.fundtrans.userManage.pojo.Card;
-import com.fundtrans.userManage.pojo.User;
+import com.fundtrans.infoSearch.service.ShareService;
+import com.fundtrans.pojo.User;
+import com.fundtrans.userManage.service.UserService;
 import com.fundtrans.vo.RespBean;
 import com.fundtrans.vo.RespBeanEnum;
 import com.hundsun.jrescloud.rpc.annotation.CloudComponent;
+import com.hundsun.jrescloud.rpc.annotation.CloudReference;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.logging.Log;
@@ -34,23 +31,22 @@ public class RtransServiceImpl implements RtransService {
 
     private static final Log logger = LogFactory.getLog(RtransServiceImpl.class);
 
+    @CloudReference
+    private ShareService shareService;
+    @CloudReference
+    private UserService userService;
+
     @Autowired
     private RtransMapper rtransMapper;
-    @Autowired
-    private ShareMapper shareMapper;
-    @Autowired
-    private UserMapper userMapper;
-
-
 
     @Override
-    public RespBean addRtrans(Rtrans rtrans) {
+    public RespBean addRtrans(Rtrans rtrans, Date date_now) {
 
         //首先判断赎回银行卡是否在份额表中该用户对应该基金产品持有份额对应的银行卡列表中
         String card_id = rtrans.getCard_id();
         List<Share> shareList = new ArrayList<>();
         try {
-            shareList = shareMapper.judgeCard(rtrans.getUser_id(),rtrans.getProduct_id());
+            shareList = shareService.OutJudgeCard(rtrans.getUser_id(),rtrans.getProduct_id());
         }catch (Exception e){
             logger.error("份额表根据用户与基金查询银行卡失败："+e.getMessage());
             return RespBean.error(RespBeanEnum.SHARE_FIND_ERROR);
@@ -81,7 +77,7 @@ public class RtransServiceImpl implements RtransService {
 
         //完成判断 能够添加到赎回交易记录中
         rtrans.setId(0);
-        rtrans.setTime(new Date());
+        rtrans.setTime(date_now);
         rtrans.setState(0);
         logger.info("添加赎回交易记录"+rtrans.toString());
         try {
@@ -92,7 +88,7 @@ public class RtransServiceImpl implements RtransService {
         }
         share.setFrozen_num(share.getFrozen_num().add(rtrans.getCount()));
         try {
-            shareMapper.updateCount(share);
+            shareService.OutUpdateCount(share);
         }catch (Exception e){
             logger.error("冻结份额更新失败："+e.getMessage());
             return RespBean.error(RespBeanEnum.SHARE_FROZEN_UPDATE_ERROR);
@@ -106,7 +102,7 @@ public class RtransServiceImpl implements RtransService {
         logger.info("查询用户申购交易记录");
         User user = null;
         try {
-            user = userMapper.findById(user_id);
+            user = userService.OutFindById(user_id);
         }catch (Exception e){
             logger.error("用户查询失败："+e.getMessage());
             return RespBean.error(RespBeanEnum.USER_FIND_ERROR);
@@ -127,8 +123,7 @@ public class RtransServiceImpl implements RtransService {
     }
 
     @Override
-    public RespBean withdrawRtrans(Rtrans rtrans) {
-        Date date = new Date();
+    public RespBean withdrawRtrans(Rtrans rtrans,Date date_now) {
         logger.info("撤回赎回交易记录："+rtrans.toString());
         Rtrans rtrans1 = null;
         try {
@@ -147,7 +142,7 @@ public class RtransServiceImpl implements RtransService {
         }
         //如果赎回交易时间为三点前 且 撤回时间迟于当日三点 则撤单不成功
         //如果可以 在前端进行判断赎回交易记录时间早于当日三点的记录 将撤回按钮隐藏
-        String stop1 = DateFormatUtils.format(new Date(), "yyyy-MM-dd 15:00:00");
+        String stop1 = DateFormatUtils.format(date_now, "yyyy-MM-dd 15:00:00");
         DateFormat stop2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date stop = null;
         try {
@@ -171,13 +166,13 @@ public class RtransServiceImpl implements RtransService {
 
         //若申购交易记录时间在昨日三点后今日三点前，且撤回时间在三点后，则撤回失败
         if (DateUtils.truncatedCompareTo(rtrans1.getTime(), start3, Calendar.SECOND) == 1 && DateUtils.truncatedCompareTo(rtrans1.getTime(), stop, Calendar.SECOND) == -1 &&
-                DateUtils.truncatedCompareTo(date, stop, Calendar.SECOND) == 1) {
+                DateUtils.truncatedCompareTo(date_now, stop, Calendar.SECOND) == 1) {
             logger.error("超过规定撤回时间，无法对交易进行撤回");
             return RespBean.error(RespBeanEnum.RTRANS_WITHDRAW_ERROR);
         }
         Share share = null;
         try {
-            share = shareMapper.findByThree(rtrans.getUser_id(),rtrans.getProduct_id(),rtrans.getCard_id());
+            share = shareService.OutFindByThree(rtrans.getUser_id(),rtrans.getProduct_id(),rtrans.getCard_id());
         }catch (Exception e){
             logger.error("份额查询失败" + e.getMessage());
             return RespBean.error(RespBeanEnum.SHARE_FIND_ERROR);
@@ -188,7 +183,7 @@ public class RtransServiceImpl implements RtransService {
         }
         share.setFrozen_num(BigDecimal.valueOf(0));
         try {
-            shareMapper.updateCount(share);
+            shareService.OutUpdateCount(share);
         }catch (Exception e){
             logger.error("冻结份额回滚失败："+e.getMessage());
             return RespBean.error(RespBeanEnum.SHARE_FROZEN_UPDATE_ERROR);

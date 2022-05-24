@@ -1,6 +1,6 @@
 package com.fundtrans.fundPurchase.server.mapper;
 
-import com.fundtrans.fundPurchase.pojo.Ptrans;
+import com.fundtrans.pojo.Ptrans;
 import org.apache.ibatis.annotations.*;
 
 import java.util.Date;

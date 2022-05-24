@@ -1,6 +1,6 @@
 package com.fundtrans.fundPurchase.server.mapper;
 
-import com.fundtrans.fundPurchase.pojo.Share;
+import com.fundtrans.pojo.Share;
 import org.apache.ibatis.annotations.*;
 
 @Mapper

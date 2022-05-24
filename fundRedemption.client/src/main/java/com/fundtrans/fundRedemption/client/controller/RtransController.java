@@ -1,6 +1,6 @@
 package com.fundtrans.fundRedemption.client.controller;
 
-import com.fundtrans.fundRedemption.pojo.Rtrans;
+import com.fundtrans.pojo.Rtrans;
 import com.fundtrans.fundRedemption.service.RtransService;
 import com.fundtrans.vo.RespBean;
 import com.hundsun.jrescloud.rpc.annotation.CloudReference;
@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Date;
 
 @RestController
 @RequestMapping("/rtrans")
@@ -17,8 +19,8 @@ public class RtransController {
     private RtransService rtransService;
 
     @PostMapping("/addRtrans")
-    public RespBean addRtrans(@RequestBody Rtrans rtrans){
-        return rtransService.addRtrans(rtrans);
+    public RespBean addRtrans(@RequestBody Rtrans rtrans, Date date){
+        return rtransService.addRtrans(rtrans,date);
     }
 
     //-----------------------------------------------------------
@@ -30,7 +32,7 @@ public class RtransController {
     }
 
     @PostMapping("/withdrawRtrans")
-    public RespBean withdrawRtrans(Rtrans rtrans){
-        return rtransService.withdrawRtrans(rtrans);
+    public RespBean withdrawRtrans(Rtrans rtrans,Date date){
+        return rtransService.withdrawRtrans(rtrans,date);
     }
 }

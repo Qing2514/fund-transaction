@@ -1,21 +1,25 @@
 package com.fundtrans.fundPurchase.server.serviceImpl;
 
-import com.fundtrans.fundPurchase.pojo.Ptrans;
-import com.fundtrans.fundPurchase.pojo.Purchase;
-import com.fundtrans.fundPurchase.pojo.Record;
-import com.fundtrans.fundPurchase.pojo.Share;
+import com.fundtrans.pojo.*;
 import com.fundtrans.fundPurchase.server.mapper.*;
 import com.fundtrans.fundPurchase.service.PurchaseService;
-import com.fundtrans.userManage.pojo.Card;
+import com.fundtrans.infoSearch.service.CardService;
+import com.fundtrans.infoSearch.service.RecordService;
+import com.fundtrans.infoSearch.service.ShareService;
+import com.fundtrans.productManage.service.TrendService;
+import com.fundtrans.userManage.service.UserService;
 import com.fundtrans.vo.RespBean;
 import com.fundtrans.vo.RespBeanEnum;
 import com.hundsun.jrescloud.rpc.annotation.CloudComponent;
+import com.hundsun.jrescloud.rpc.annotation.CloudReference;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,16 +33,22 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     private static final Log logger = LogFactory.getLog(PurchaseServiceImpl.class);
 
+    @CloudReference
+    private ShareService shareService;
+    @CloudReference
+    private UserService userService;
+    @CloudReference
+    private CardService cardService;
+    @CloudReference
+    private RecordService recordService;
+    @CloudReference
+    private TrendService trendService;
+
     @Autowired
     private PtransMapper ptransMapper;
     @Autowired
     private PurchaseMapper purchaseMapper;
-    @Autowired
-    private CardMapper cardMapper;
-    @Autowired
-    private RecordMapper recordMapper;
-    @Autowired
-    private ShareMapper shareMapper;
+
 
     /**
      * 三点后自动将用户提交的申购交易记录写入申购记录表
@@ -46,36 +56,35 @@ public class PurchaseServiceImpl implements PurchaseService {
      * @return
      */
     @Override
-    public RespBean doPurchase() {
+    public RespBean doPurchase(Date date_now) {
 
         logger.info("写入申购记录表");
         List<Ptrans> ptransList = new ArrayList<>();
+        /**
+         * 数据库如何根据日期进行判断交易，前天三点后到今天三点前的未处理的申购交易记录 state=0
+         */
+        logger.info("当日三点前申购交易记录查询（前一天三点后到当日三点前，未撤回的交易）");
+        String date1 = DateFormatUtils.format(date_now, "yyyy-MM-dd 15:00:00");
+        DateFormat pattern = new SimpleDateFormat("yyyy-MM-dd HH:ss:mm");
+        Date date = null;
         try {
-            /**
-             * 数据库如何根据日期进行判断交易，前天三点后到今天三点前的未处理的申购交易记录 state=0
-             */
-            logger.info("当日三点前申购交易记录查询（前一天三点后到当日三点前，未撤回的交易）");
-            String date1 = DateFormatUtils.format(new Date(), "yyyy-MM-dd 15:00:00");
-            DateFormat pattern = new SimpleDateFormat("yyyy-MM-dd HH:ss:mm");
-            Date date = null;
-            try {
-                date = pattern.parse(date1);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(date);
-            calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) - 24);
-            SimpleDateFormat spattern = new SimpleDateFormat("yyyy-MM-dd 15:00:00");
-            String date2 = spattern.format(calendar.getTime());
-            DateFormat pattern1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date date3 = null;
-            try {
-                date3 = pattern1.parse(date2);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
+            date = pattern.parse(date1);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) - 24);
+        SimpleDateFormat spattern = new SimpleDateFormat("yyyy-MM-dd 15:00:00");
+        String date2 = spattern.format(calendar.getTime());
+        DateFormat pattern1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date3 = null;
+        try {
+            date3 = pattern1.parse(date2);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        try {
             ptransList = ptransMapper.findTodayptrans(date, date3);
         } catch (Exception e) {
             logger.error("今日申购交易记录查询失败：" + e.getMessage());
@@ -87,7 +96,7 @@ public class PurchaseServiceImpl implements PurchaseService {
             Ptrans temp = ptransList.get(i);
             String card_id = temp.getCard_id();
             BigDecimal amount = temp.getAmount();
-            Card card = cardMapper.selectByCardId(card_id);
+            Card card = cardService.OutSelectByCardId(card_id);
             if (card == null) {
                 logger.error("记录：" + temp.getId() + "银行卡不存在");
 //                return RespBean.error(RespBeanEnum.CARD_NOT_EXIST);
@@ -100,7 +109,7 @@ public class PurchaseServiceImpl implements PurchaseService {
             }
             card.setAccount(card.getAccount().subtract(amount));
             try {
-                cardMapper.update(card);
+                cardService.OutUpdateCard(card);
             } catch (Exception e) {
                 logger.error("记录：" + temp.getId() + "银行卡信息余额扣减失败：" + e.getMessage());
 //                return RespBean.error(RespBeanEnum.CARD_UPDATE_FAIL);
@@ -113,7 +122,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 //                return RespBean.error(RespBeanEnum.PTRANS_STATE_UPDATE_FAIL);
                 //银行卡余额扣减的回滚操作
                 card.setAccount(card.getAccount().add(amount));
-                cardMapper.update(card);
+                cardService.OutUpdateCard(card);
                 continue;
             }
             Purchase purchase = new Purchase();
@@ -126,7 +135,27 @@ public class PurchaseServiceImpl implements PurchaseService {
             /**
              * 调用净值计算模块，根据净值来计算份额
              */
-            purchase.setCount(BigDecimal.valueOf(100.00));
+            Trend trend = null;
+            try {
+                logger.info("净值查询");
+                trend = trendService.outTrendFindById(date, temp.getProduct_id());
+            }catch (Exception e){
+                logger.error("净值查询失败：" + e.getMessage());
+//                return RespBean.error(RespBeanEnum.TREND_FIND_ERROR);
+                card.setAccount(card.getAccount().add(amount));
+                cardService.OutUpdateCard(card);
+                ptransMapper.updateState(0, temp.getId());
+                continue;
+            }
+            if (trend == null){
+                logger.error("指定条件下无净值");
+//                return RespBean.error(RespBeanEnum.TREND_NOT_EXIST);
+                card.setAccount(card.getAccount().add(amount));
+                cardService.OutUpdateCard(card);
+                ptransMapper.updateState(0, temp.getId());
+                continue;
+            }
+            purchase.setCount(temp.getAmount().divide(trend.getPrice(),2, RoundingMode.HALF_UP));
             try {
                 logger.info("记录：" + temp.getId() + "添加申购记录：" + purchase.toString());
                 purchaseMapper.addPurchase(purchase);
@@ -135,7 +164,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 //                return RespBean.error(RespBeanEnum.ERROR);
                 //回滚操作：扣减余额增加，申购交易记录字段设回0
                 card.setAccount(card.getAccount().add(amount));
-                cardMapper.update(card);
+                cardService.OutUpdateCard(card);
                 ptransMapper.updateState(0, temp.getId());
                 continue;
             }
@@ -148,7 +177,7 @@ public class PurchaseServiceImpl implements PurchaseService {
             record.setNum("+" + purchase.getCount());
             try {
                 logger.info("记录：" + temp.getId() + "添加份额流水表");
-                recordMapper.addRecord(record);
+                recordService.OutAddRecord(record);
             } catch (Exception e) {
                 logger.error("记录：" + temp.getId() + "添加份额流水表失败：" + e.getMessage());
                 //-------------------------------------------
@@ -156,29 +185,29 @@ public class PurchaseServiceImpl implements PurchaseService {
 
                 //回滚操作：扣减余额增加，申购交易记录字段设回0，申购记录删除
                 card.setAccount(card.getAccount().add(amount));
-                cardMapper.update(card);
+                cardService.OutUpdateCard(card);
                 ptransMapper.updateState(0, temp.getId());
                 purchaseMapper.deletePurchase(purchase.getId());
                 continue;
             }
             Share share = null;
             try {
-                share = shareMapper.findByThree(purchase.getUser_id(), purchase.getProduct_id(), purchase.getCard_id());
+                share = shareService.OutFindByThree(purchase.getUser_id(), purchase.getProduct_id(), purchase.getCard_id());
             } catch (Exception e) {
                 logger.error("记录：" + temp.getId() + "查找份额表失败：" + e.getMessage());
 //                return RespBean.error(RespBeanEnum.ERROR);
 
                 //回滚操作：扣减余额增加，申购交易记录字段设回0，申购记录删除，删除份额流水记录
                 card.setAccount(card.getAccount().add(amount));
-                cardMapper.update(card);
+                cardService.OutUpdateCard(card);
                 ptransMapper.updateState(0, temp.getId());
                 purchaseMapper.deletePurchase(purchase.getId());
-                recordMapper.deleteRecord(record.getId());
+                recordService.OutDeleteRecord(record.getId());
                 continue;
             }
             //若份额表中无该用户，该基金，该银行卡对应的份额记录，则添加
             if (share == null) {
-                logger.info("添加记录："+ temp.getId() + "份额记录");
+                logger.info("添加记录：" + temp.getId() + "份额记录");
                 share = new Share();
                 share.setUser_id(purchase.getUser_id());
                 share.setProduct_id(purchase.getProduct_id());
@@ -186,7 +215,7 @@ public class PurchaseServiceImpl implements PurchaseService {
                 share.setNum(purchase.getCount());
                 share.setFrozen_num(BigDecimal.valueOf(0));
                 try {
-                    shareMapper.addShare(share);
+                    shareService.OutAddShare(share);
                 } catch (Exception e) {
                     logger.error("记录：" + temp.getId() + "份额记录添加失败：" + e.getMessage());
                     //--------------------------------------
@@ -194,19 +223,19 @@ public class PurchaseServiceImpl implements PurchaseService {
 
                     //回滚操作：扣减余额增加，申购交易记录字段设回0，申购记录删除，删除份额流水记录
                     card.setAccount(card.getAccount().add(amount));
-                    cardMapper.update(card);
+                    cardService.OutUpdateCard(card);
                     ptransMapper.updateState(0, temp.getId());
                     purchaseMapper.deletePurchase(purchase.getId());
-                    recordMapper.deleteRecord(record.getId());
+                    recordService.OutDeleteRecord(record.getId());
                     continue;
                 }
             }
             //否则进行更新修改
             else {
-                logger.info("更新记录："+ temp.getId() + "份额记录");
-                share.setNum(share.getNum().add(purchase.getCount()));
+                logger.info("更新记录：" + temp.getId() + "份额记录");
                 try {
-                    shareMapper.updateShareAdd(share);
+                    share.setNum(share.getNum().add(purchase.getCount()));
+                    shareService.OutUpdateShareAdd(share);
                 } catch (Exception e) {
                     logger.error("记录：" + temp.getId() + "份额记录更新失败：" + e.getMessage());
                     //---------------------------------------
@@ -214,15 +243,31 @@ public class PurchaseServiceImpl implements PurchaseService {
 
                     //回滚操作：扣减余额增加，申购交易记录字段设回0，申购记录删除，删除份额流水记录
                     card.setAccount(card.getAccount().add(amount));
-                    cardMapper.update(card);
+                    cardService.OutUpdateCard(card);
                     ptransMapper.updateState(0, temp.getId());
                     purchaseMapper.deletePurchase(purchase.getId());
-                    recordMapper.deleteRecord(record.getId());
+                    recordService.OutDeleteRecord(record.getId());
                     continue;
                 }
             }
             logger.info("记录：" + temp.getId() + "添加成功");
         }
         return RespBean.success();
+    }
+
+    @Override
+    public RespBean updatePurchaseByDate(Date datetime, String productId, BigDecimal count) {
+        logger.info("更新申购表份额");
+        int num = 0;
+        try {
+            // 将时间设置成每天的 15:00
+            datetime = DateUtils.addHours(datetime, 15);
+            num = purchaseMapper.updatePurchaseByDate(datetime, productId, count);
+        } catch (Exception e) {
+            logger.error("更新申购表份额失败: " + e.getMessage());
+            return RespBean.error(RespBeanEnum.PURCHASE_UPDATECOUNT_ERROR);
+        }
+        logger.info("更新申购表结束, 受影响申购记录数: " + num);
+        return RespBean.success(num);
     }
 }

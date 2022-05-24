@@ -1,6 +1,6 @@
 package com.fundtrans.userManage.service;
 
-import com.fundtrans.userManage.pojo.User;
+import com.fundtrans.pojo.User;
 import com.fundtrans.userManage.vo.UserSearch;
 import com.fundtrans.userManage.vo.UserVo;
 import com.fundtrans.vo.RespBean;
@@ -22,4 +22,6 @@ public interface UserService {
     RespBean riskAssess(User user, String answer);
 
     RespBean findUser(UserSearch userSearch);
+
+    User OutFindById(String id);
 }

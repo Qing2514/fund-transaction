@@ -1,6 +1,6 @@
 package com.fundtrans.fundPurchase.server.mapper;
 
-import com.fundtrans.userManage.pojo.Card;
+import com.fundtrans.pojo.Card;
 import org.apache.ibatis.annotations.*;
 
 import java.math.BigDecimal;

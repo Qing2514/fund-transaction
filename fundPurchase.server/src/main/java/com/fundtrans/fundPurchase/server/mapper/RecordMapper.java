@@ -1,6 +1,6 @@
 package com.fundtrans.fundPurchase.server.mapper;
 
-import com.fundtrans.fundPurchase.pojo.Record;
+import com.fundtrans.pojo.Record;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;

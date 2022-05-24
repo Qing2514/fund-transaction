@@ -1,6 +1,6 @@
 package com.funtrans.userManage.server.mapper;
 
-import com.fundtrans.userManage.pojo.User;
+import com.fundtrans.pojo.User;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;

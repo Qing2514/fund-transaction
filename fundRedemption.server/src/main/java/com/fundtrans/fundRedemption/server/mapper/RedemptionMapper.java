@@ -1,10 +1,10 @@
 package com.fundtrans.fundRedemption.server.mapper;
 
-import com.fundtrans.fundRedemption.pojo.Redemption;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
+import com.fundtrans.pojo.Redemption;
+import org.apache.ibatis.annotations.*;
+
+import java.math.BigDecimal;
+import java.util.Date;
 
 @Mapper
 public interface RedemptionMapper {
@@ -14,4 +14,9 @@ public interface RedemptionMapper {
 
     @Delete("delete from redemption where id = #{redemption.id}")
     void deleteRedemption(@Param("redemption") Redemption redemption);
+
+    @Update("update redemption set amount = count * #{netWorth} where product_id = #{productId} " +
+            "and time < #{date} and time >= DATE_SUB(#{date}, INTERVAL 1 DAY)")
+    int updateRedemptionByDate(@Param("date") Date date, @Param("productId") String productId,
+                               @Param("netWorth") BigDecimal netWorth);
 }

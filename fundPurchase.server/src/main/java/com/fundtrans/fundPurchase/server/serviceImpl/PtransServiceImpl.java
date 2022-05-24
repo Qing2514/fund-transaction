@@ -1,15 +1,18 @@
 package com.fundtrans.fundPurchase.server.serviceImpl;
 
-import com.fundtrans.fundPurchase.pojo.Ptrans;
+import com.fundtrans.infoSearch.service.CardService;
+import com.fundtrans.pojo.Ptrans;
 import com.fundtrans.fundPurchase.server.mapper.CardMapper;
 import com.fundtrans.fundPurchase.server.mapper.PtransMapper;
 import com.fundtrans.fundPurchase.server.mapper.UserMapper;
 import com.fundtrans.fundPurchase.service.PtransService;
-import com.fundtrans.userManage.pojo.Card;
-import com.fundtrans.userManage.pojo.User;
+import com.fundtrans.pojo.Card;
+import com.fundtrans.pojo.User;
+import com.fundtrans.userManage.service.UserService;
 import com.fundtrans.vo.RespBean;
 import com.fundtrans.vo.RespBeanEnum;
 import com.hundsun.jrescloud.rpc.annotation.CloudComponent;
+import com.hundsun.jrescloud.rpc.annotation.CloudReference;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.logging.Log;
@@ -31,12 +34,14 @@ public class PtransServiceImpl implements PtransService {
 
     private static final Log logger = LogFactory.getLog(PtransServiceImpl.class);
 
+    @CloudReference
+    private CardService cardService;
+    @CloudReference
+    private UserService userService;
+
     @Autowired
     private PtransMapper ptransMapper;
-    @Autowired
-    private CardMapper cardMapper;
-    @Autowired
-    private UserMapper userMapper;
+
 
     /**
      * 添加申购记录
@@ -48,10 +53,10 @@ public class PtransServiceImpl implements PtransService {
      * @return
      */
     @Override
-    public RespBean addPtrans(Ptrans ptrans) {
+    public RespBean addPtrans(Ptrans ptrans,Date date) {
         String card_id = ptrans.getCard_id();
         BigDecimal amount = ptrans.getAmount();
-        List<Card> cardList = cardMapper.findByUserId(ptrans.getUser_id());
+        List<Card> cardList = cardService.OutFindByUserId(ptrans.getUser_id());
         if (cardList.size() == 0) {
             logger.error("该用户未绑定银行卡");
             return RespBean.error(RespBeanEnum.CARD_NUM_EMPTY);
@@ -71,10 +76,9 @@ public class PtransServiceImpl implements PtransService {
         //是一种事前机制，当余额不足时及时提醒到用户，而不是在处理申购交易时再去进行判断
         //-------------------------------------------------------------
         //获得当前时间
-        Date date = new Date();
         //获得当日下午三点的日期时间信息
-        String date1 = DateFormatUtils.format(new Date(), "yyyy-MM-dd 15:00:00");
-        String date2 = DateFormatUtils.format(new Date(),"yyyy-MM-dd HH:mm:ss");
+        String date1 = DateFormatUtils.format(date, "yyyy-MM-dd 15:00:00");
+        String date2 = DateFormatUtils.format(date,"yyyy-MM-dd HH:mm:ss");
         DateFormat pattern = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date standard_date = null;
         try {
@@ -146,7 +150,7 @@ public class PtransServiceImpl implements PtransService {
         logger.info("查询用户申购交易记录");
         User user = null;
         try {
-            user = userMapper.findById(user_id);
+            user = userService.OutFindById(user_id);
         } catch (Exception e) {
             logger.error("用户查询失败：" + e.getMessage());
             return RespBean.error(RespBeanEnum.USER_FIND_ERROR);
@@ -175,8 +179,7 @@ public class PtransServiceImpl implements PtransService {
      * @return
      */
     @Override
-    public RespBean withdrawPtrans(Ptrans ptrans) {
-        Date date = new Date();
+    public RespBean withdrawPtrans(Ptrans ptrans,Date date) {
         logger.info("撤回申购交易记录：" + ptrans.toString());
         Ptrans ptrans1 = null;
         try {
@@ -196,7 +199,7 @@ public class PtransServiceImpl implements PtransService {
         //如果申购交易时间为三点前 且 撤回时间迟于当日三点 则撤单不成功
         //如果可以 在前端进行判断申购交易记录时间早于当日三点的记录 将撤回按钮隐藏
 
-        String stop1 = DateFormatUtils.format(new Date(), "yyyy-MM-dd 15:00:00");
+        String stop1 = DateFormatUtils.format(date, "yyyy-MM-dd 15:00:00");
         DateFormat stop2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date stop = null;
         try {
