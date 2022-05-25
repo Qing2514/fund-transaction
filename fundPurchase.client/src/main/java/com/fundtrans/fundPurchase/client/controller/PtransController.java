@@ -1,18 +1,17 @@
 package com.fundtrans.fundPurchase.client.controller;
 
+import com.fundtrans.infoSearch.vo.CardVo;
 import com.fundtrans.pojo.Ptrans;
 import com.fundtrans.fundPurchase.service.PtransService;
 import com.fundtrans.vo.RespBean;
 import com.hundsun.jrescloud.rpc.annotation.CloudReference;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 
 @RestController
 @RequestMapping("/ptrans")
+@CrossOrigin
 public class PtransController {
     @CloudReference
     private PtransService ptransService;
@@ -29,13 +28,13 @@ public class PtransController {
 
     /**
      * 在撤回申购阶段，I.首先根据用户ID查询其申购交易记录，并将其返回给前端，前端根据记录状态字段，将未处理的记录后面添加“撤回”按钮
-     * @param user_id
+     * @param cardVo
      * @return
      */
     //-----------------------------------------------------------------------------
     @PostMapping("/ownPtrans")
-    public RespBean ownPtrans(String user_id){
-        return ptransService.ownPtrans(user_id);
+    public RespBean ownPtrans(@RequestBody CardVo cardVo){
+        return ptransService.ownPtrans(cardVo.getUser_id());
     }
 
     /**

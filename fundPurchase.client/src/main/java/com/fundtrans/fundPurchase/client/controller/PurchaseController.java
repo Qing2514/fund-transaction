@@ -5,16 +5,14 @@ import com.fundtrans.pojo.Purchase;
 import com.fundtrans.fundPurchase.service.PurchaseService;
 import com.fundtrans.vo.RespBean;
 import com.hundsun.jrescloud.rpc.annotation.CloudReference;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Date;
 
 @RestController
 @RequestMapping("/purchase")
+@CrossOrigin
 public class PurchaseController {
 
     @CloudReference

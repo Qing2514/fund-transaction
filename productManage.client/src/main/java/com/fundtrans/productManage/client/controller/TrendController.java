@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/trend")
+@CrossOrigin
 public class TrendController {
     @CloudReference
     private TrendService trendService;

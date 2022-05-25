@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/card")
+@CrossOrigin
 public class CardController {
 
     @CloudReference
