@@ -18,7 +18,7 @@ public interface ProductMapper {
 
     @Update("update product set name = #{product.name}, " +
             "detail = #{product.detail}, networth = #{product.networth}, " +
-            "type = #{product.type}, security = #{product.security}, prange = #{prange} where id=#{product.id}")
+            "type = #{product.type}, security = #{product.security}, prange = #{product.prange} where id=#{product.id}")
     public void updateProduct(@Param("product") Product product);
 
     @Select("select * from product where id = #{id}")
