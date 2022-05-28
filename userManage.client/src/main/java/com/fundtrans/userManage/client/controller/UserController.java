@@ -62,7 +62,7 @@ public class UserController {
      * @return
      */
     @PutMapping("/deleteUser")
-    public RespBean deleteUser(User user){
+    public RespBean deleteUser(@RequestBody User user){
         return userService.deleteUser(user);
     }
 

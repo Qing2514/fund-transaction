@@ -1,5 +1,6 @@
 package com.fundtrans.fundPurchase.client.controller;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fundtrans.infoSearch.vo.CardVo;
 import com.fundtrans.pojo.Ptrans;
 import com.fundtrans.fundPurchase.service.PtransService;
@@ -25,7 +26,7 @@ public class PtransController {
      * @return
      */
     @PostMapping("/addPtrans")
-    public RespBean addPtrans(@RequestBody Ptrans ptrans, @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date date) {
+    public RespBean addPtrans(@RequestBody Ptrans ptrans, @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss" , timezone = "GMT+8") Date date) {
         return ptransService.addPtrans(ptrans, date);
     }
 
@@ -48,7 +49,7 @@ public class PtransController {
      * @return
      */
     @PostMapping("/withdrawPtrans")
-    public RespBean withdrawPtrans(Ptrans ptrans, @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")Date date) {
+    public RespBean withdrawPtrans(Ptrans ptrans, @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss" , timezone = "GMT+8")Date date) {
         return ptransService.withdrawPtrans(ptrans, date);
     }
 
