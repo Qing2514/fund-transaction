@@ -20,12 +20,12 @@ public class CardController {
     private CardService cardService;
 
     @GetMapping("/findByUserId")
-    public RespBean findByUserId(@RequestParam("user_id") String user_id) {
+    public RespBean findByUserId(String user_id) {
         return cardService.findByUserId(user_id);
     }
 
     @GetMapping("/getAllCard")
-    public RespBean getAllCard(@RequestParam("user_id") String user_id){
+    public RespBean getAllCard(String user_id){
         return cardService.getAllCard(user_id);
     }
 

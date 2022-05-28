@@ -84,7 +84,7 @@ public class UserController {
         return userService.findById(user.getId());
     }
 
-    @PostMapping("/findById")
+    @PostMapping("/findByIdBubble")
     public RespBean findByIdBubble(@RequestBody User user){
         return userService.findByIdBubble(user.getId());
     }
