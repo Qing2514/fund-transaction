@@ -78,6 +78,7 @@ public class RedemptionServiceImpl implements RedemptionService {
             logger.error("今日赎回交易记录查询失败：" + e.getMessage());
             return RespBean.error(RespBeanEnum.RTRANS_FIND_ERROR);
         }
+        List<Redemption> redemptions = new ArrayList<>();
         for (int i = 0; i < rtransList.size(); ++i) {
             Rtrans temp = rtransList.get(i);
             Share share = null;
@@ -127,6 +128,8 @@ public class RedemptionServiceImpl implements RedemptionService {
                 continue;
 //                return RespBean.error(RespBeanEnum.REDEMPTION_ADD_ERROR);
             }
+            redemptions.add(redemption);
+
             //将rtrans的状态字段改为1 表示已处理
             try {
                 rtransMapper.updateState(1, temp.getId());
@@ -216,7 +219,7 @@ public class RedemptionServiceImpl implements RedemptionService {
 
             logger.info("赎回成功");
         }
-        return RespBean.success();
+        return RespBean.success(redemptions);
     }
 
     @Override

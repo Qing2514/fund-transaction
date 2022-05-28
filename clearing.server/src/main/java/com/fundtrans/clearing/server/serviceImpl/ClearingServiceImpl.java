@@ -55,6 +55,7 @@ public class ClearingServiceImpl implements ClearingService {
         logger.info("更新行情");
         BigDecimal netWorth;
         int num = 0;
+        Product product = null;
         try {
             // 将时间设置成每天的 15:00
             dateId = DateUtils.addHours(dateId, 15);
@@ -74,7 +75,10 @@ public class ClearingServiceImpl implements ClearingService {
                 return RespBean.error(RespBeanEnum.TREND_UPDATE_ERROR);
             }
             try{
-                Product product = productService.outFindProductById(productId);
+                product = productService.outFindProductById(productId);
+                if (product == null){
+                    return RespBean.error(RespBeanEnum.PRODUCT_NOT_EXIST);
+                }
                 product.setPrange(netWorth.subtract(trend.getPrice()));
                 productService.updateProduct(product);
             }catch (Exception e){
@@ -101,7 +105,7 @@ public class ClearingServiceImpl implements ClearingService {
             return RespBean.error(RespBeanEnum.TREND_UPDATE_ERROR);
         }
         logger.info("更新行情结束, 受影响产品走势数: " + num);
-        return RespBean.success(netWorth);
+        return RespBean.success(product);
     }
 
 }

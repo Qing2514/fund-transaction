@@ -91,6 +91,7 @@ public class PurchaseServiceImpl implements PurchaseService {
             logger.error("今日申购交易记录查询失败：" + e.getMessage());
             return RespBean.error(RespBeanEnum.ERROR);
         }
+        List<Purchase> purchases = new ArrayList<>();
         //--------------------------------------------------------------------
         //希望每个循环中的整个操作具有原子性，要么在出现报错时回滚，跳到对下一条记录进行操作，要么把全部操作做完
         for (int i = 0; i < ptransList.size(); i++) {
@@ -169,6 +170,8 @@ public class PurchaseServiceImpl implements PurchaseService {
                 ptransMapper.updateState(0, temp.getId());
                 continue;
             }
+            purchases.add(purchase);
+
             Record record = new Record();
             record.setId(purchase.getId() + "p");
             record.setUser_id(purchase.getUser_id());
@@ -253,7 +256,7 @@ public class PurchaseServiceImpl implements PurchaseService {
             }
             logger.info("记录：" + temp.getId() + "添加成功");
         }
-        return RespBean.success();
+        return RespBean.success(purchases);
     }
 
     @Override
