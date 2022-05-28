@@ -8,13 +8,13 @@ import java.util.List;
 @Mapper
 public interface UserMapper {
 
-    @Select("select * from user limit #{index},#{limit}")
+    @Select("select * from user where state = 0 limit #{index},#{limit}")
     public List<User> findAll(@Param("index") int index, @Param("limit") int limit);
 
-    @Select("select * from user where id = #{id}")
+    @Select("select * from user where id = #{id} and state = 0")
     public User findById(@Param("id") String id);
 
-    @Select("select * from user where name = #{name} and type = #{type} and ctype= #{ctype} and cid = #{cid}")
+    @Select("select * from user where name = #{name} and type = #{type} and ctype= #{ctype} and cid = #{cid} and state = 0")
     public User findByFour(@Param("name") String name, @Param("type") String type, @Param("ctype") String ctype, @Param("cid") String cid);
 
     @Insert("insert into user values(#{id},#{name},#{type},#{ctype},#{cid},#{password},#{phone},#{age},#{sex},#{address},#{job},#{security},#{state})")
@@ -36,12 +36,12 @@ public interface UserMapper {
     @Update("update user set state = 1 where id = #{user.id}")
     public void deleteUser(@Param("user") User user);
 
-    @Select("select * from user where name like #{name}")
+    @Select("select * from user where name like #{name} and state = 0")
     List<User> findByName(@Param("name") String name);
 
-    @Select("select count(*) from user")
+    @Select("select count(*) from user where state = 0")
     int getSum();
 
-    @Select("select * from user where id like #{id}")
+    @Select("select * from user where id like #{id} and state = 0")
     List<User> findByIdBubble(@Param("id") String id);
 }

@@ -67,10 +67,10 @@ public class UserController {
     }
 
 
-//    @PostMapping("/findUser")
-//    public RespBean findUser(@RequestBody UserSearch userSearch){
-//        return userService.findUser(userSearch);
-//    }
+    @PostMapping("/findUser")
+    public RespBean findUser(@RequestBody UserSearch userSearch){
+        return userService.findUser(userSearch);
+    }
 
 
 

@@ -20,8 +20,8 @@ public class RtransController {
     @CloudReference
     private RtransService rtransService;
 
-    @PostMapping("/addRtrans")
-    public RespBean addRtrans(@RequestBody Rtrans rtrans, @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")Date date){
+    @PostMapping("/addRtrans/{date}")
+    public RespBean addRtrans(@RequestBody Rtrans rtrans, @PathVariable("date")@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")Date date){
         return rtransService.addRtrans(rtrans,date);
     }
 
@@ -30,8 +30,8 @@ public class RtransController {
         return rtransService.ownRtrans(user.getId());
     }
 
-    @PostMapping("/withdrawRtrans")
-    public RespBean withdrawRtrans(Rtrans rtrans,@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")Date date){
+    @PostMapping("/withdrawRtrans/{date}")
+    public RespBean withdrawRtrans(Rtrans rtrans,@PathVariable("date")@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")Date date){
         return rtransService.withdrawRtrans(rtrans,date);
     }
 

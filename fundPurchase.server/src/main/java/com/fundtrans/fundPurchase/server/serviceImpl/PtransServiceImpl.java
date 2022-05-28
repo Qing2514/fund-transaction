@@ -133,7 +133,7 @@ public class PtransServiceImpl implements PtransService {
             return RespBean.error(RespBeanEnum.PTRANS_INSERT_FAIL);
         }
         logger.info("申购交易记录添加成功");
-        return RespBean.success(card.getAccount().subtract(purchase_amount));
+        return RespBean.success();
     }
 
     /**

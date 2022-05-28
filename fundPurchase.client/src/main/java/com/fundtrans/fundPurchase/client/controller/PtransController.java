@@ -25,8 +25,8 @@ public class PtransController {
      * @param ptrans
      * @return
      */
-    @PostMapping("/addPtrans")
-    public RespBean addPtrans(@RequestBody Ptrans ptrans, @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss" , timezone = "GMT+8") Date date) {
+    @PostMapping("/addPtrans/{date}")
+    public RespBean addPtrans(@RequestBody Ptrans ptrans, @PathVariable("date")@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")Date date) {
         return ptransService.addPtrans(ptrans, date);
     }
 
@@ -48,8 +48,8 @@ public class PtransController {
      * @param ptrans
      * @return
      */
-    @PostMapping("/withdrawPtrans")
-    public RespBean withdrawPtrans(Ptrans ptrans, @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss" , timezone = "GMT+8")Date date) {
+    @PostMapping("/withdrawPtrans/{date}")
+    public RespBean withdrawPtrans(@RequestBody Ptrans ptrans, @PathVariable("date")@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")Date date) {
         return ptransService.withdrawPtrans(ptrans, date);
     }
 

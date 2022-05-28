@@ -19,8 +19,8 @@ public class RedemptionController {
     @CloudReference
     private RedemptionService redemptionService;
 
-    @GetMapping("/doRedemption")
-    public RespBean doRedemption(@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")Date date){
+    @GetMapping("/doRedemption/{date}")
+    public RespBean doRedemption(@PathVariable("date")@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")Date date){
         return redemptionService.doRedemption(date);
     }
 

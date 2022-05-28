@@ -19,8 +19,8 @@ public class PurchaseController {
     @CloudReference
     private PurchaseService purchaseService;
 
-    @RequestMapping("/doPurchase")
-    public RespBean doPurchase(@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")Date date){
+    @RequestMapping("/doPurchase/{date}")
+    public RespBean doPurchase(@PathVariable("date")@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")Date date){
         return purchaseService.doPurchase(date);
     }
 
