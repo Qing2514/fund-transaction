@@ -67,9 +67,25 @@ public class UserController {
     }
 
 
-    @PostMapping("/findUser")
-    public RespBean findUser(@RequestBody UserSearch userSearch){
-        return userService.findUser(userSearch);
+//    @PostMapping("/findUser")
+//    public RespBean findUser(@RequestBody UserSearch userSearch){
+//        return userService.findUser(userSearch);
+//    }
+
+
+
+    @GetMapping("/getSum")
+    public RespBean getSum(){
+        return userService.getSum();
     }
 
+    @PostMapping("/findById")
+    public RespBean findById(@RequestBody User user){
+        return userService.findById(user.getId());
+    }
+
+    @PostMapping("/findById")
+    public RespBean findByIdBubble(@RequestBody User user){
+        return userService.findByIdBubble(user.getId());
+    }
 }

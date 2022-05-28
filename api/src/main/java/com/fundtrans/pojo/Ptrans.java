@@ -24,13 +24,10 @@ public class Ptrans implements Serializable {
 
     private Integer id;
 
-    @NotNull
     private String user_id;
 
-    @NotNull
     private String product_id;
 
-    @NotNull
     private String card_id;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -38,7 +35,6 @@ public class Ptrans implements Serializable {
 
     private String method;
 
-    @NotNull
     private BigDecimal amount;
 
     /**

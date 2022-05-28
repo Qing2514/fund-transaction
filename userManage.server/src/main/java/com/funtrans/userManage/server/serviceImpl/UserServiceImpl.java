@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService {
             return RespBean.error(RespBeanEnum.USER_INSERT_ERROR);
         }
         logger.info("添加结束");
-        return RespBean.success();
+        return RespBean.success(user);
     }
 
 
@@ -218,6 +218,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public User OutFindById(String id) {
         return userMapper.findById(id);
+    }
+
+    @Override
+    public RespBean getSum() {
+        return RespBean.success(userMapper.getSum());
+    }
+
+    @Override
+    public RespBean findById(String id) {
+        return RespBean.success(userMapper.findById(id));
+    }
+
+    @Override
+    public RespBean findByIdBubble(String id) {
+        return RespBean.success(userMapper.findByIdBubble(id+"%"));
     }
 }
 

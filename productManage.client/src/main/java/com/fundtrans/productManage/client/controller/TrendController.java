@@ -23,4 +23,9 @@ public class TrendController {
     public RespBean addTrend(@RequestBody Trend trend) {
         return trendService.addTrend(trend);
     }
+
+    @GetMapping("/getSum")
+    public RespBean getSum(){
+        return trendService.getSum();
+    }
 }

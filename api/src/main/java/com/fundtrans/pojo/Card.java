@@ -15,10 +15,8 @@ public class Card implements Serializable {
 
     private String id;
 
-    @NotNull
     private String card_id;
 
-    @NotNull
     private String user_id;
 
     private BigDecimal account;

@@ -24,4 +24,10 @@ public interface UserService {
     RespBean findUser(UserSearch userSearch);
 
     User OutFindById(String id);
+
+    RespBean getSum();
+
+    RespBean findById(String id);
+
+    RespBean findByIdBubble(String id);
 }

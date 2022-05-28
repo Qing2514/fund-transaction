@@ -6,6 +6,7 @@ import com.fundtrans.vo.RespBean;
 import com.hundsun.jrescloud.rpc.annotation.CloudService;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 @CloudService
@@ -38,4 +39,8 @@ public interface CardService {
     List<Card> OutFindAllCard(String user_id);
 
     void OutUpdateCard(Card card);
+
+    RespBean getSumByUserId(String user_id);
+
+    RespBean getVacancy(String user_id, String card_id, Date date);
 }

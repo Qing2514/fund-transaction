@@ -8,6 +8,8 @@ import java.util.List;
 
 @Mapper
 public interface ProductMapper {
+    @Select("select count(*) from product")
+    public int getSum();
 
     @Select("select * from product limit #{index},#{limit}")
     public List<Product> findAllProduct(@Param("index") int index, @Param("limit") int limit);
@@ -37,5 +39,5 @@ public interface ProductMapper {
     public void deleteProduct(@Param("id") String id);
 
     @Select("select * from product where id like #{id}")
-    Product findBubbleById(String id);
+    List<Product> findBubbleById(String id);
 }

@@ -1,8 +1,11 @@
 package com.fundtrans.infoSearch.server.serviceImpl;
 
+import com.fundtrans.fundPurchase.service.PtransService;
+import com.fundtrans.fundPurchase.service.PurchaseService;
 import com.fundtrans.pojo.Card;
 import com.fundtrans.infoSearch.server.mapper.CardMapper;
 import com.fundtrans.infoSearch.service.CardService;
+import com.fundtrans.pojo.Ptrans;
 import com.fundtrans.pojo.User;
 import com.fundtrans.userManage.service.UserService;
 import com.fundtrans.infoSearch.vo.CardVo;
@@ -10,14 +13,16 @@ import com.fundtrans.vo.RespBean;
 import com.fundtrans.vo.RespBeanEnum;
 import com.hundsun.jrescloud.rpc.annotation.CloudComponent;
 import com.hundsun.jrescloud.rpc.annotation.CloudReference;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @CloudComponent
 public class CardServiceImpl implements CardService {
@@ -26,6 +31,8 @@ public class CardServiceImpl implements CardService {
 
     @CloudReference
     private UserService userService;
+    @CloudReference
+    private PtransService ptransService;
 
     @Autowired
     private CardMapper cardMapper;
@@ -80,6 +87,59 @@ public class CardServiceImpl implements CardService {
     @Override
     public void OutUpdateCard(Card card) {
         cardMapper.update(card);
+    }
+
+    @Override
+    public RespBean getSumByUserId(String user_id) {
+        return RespBean.success(cardMapper.getSumByUserId(user_id));
+    }
+
+    @Override
+    public RespBean getVacancy(String user_id, String card_id, Date date) {
+        Card card = cardMapper.selectByCardId(card_id);
+        BigDecimal vacancy = card.getAccount();
+        String date1 = DateFormatUtils.format(date, "yyyy-MM-dd 15:00:00");
+        String date2 = DateFormatUtils.format(date,"yyyy-MM-dd HH:mm:ss");
+        DateFormat pattern = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date standard_date = null;
+        try {
+            standard_date = pattern.parse(date1);
+            date = pattern.parse(date2);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        //获得前一天的日期信息
+        Calendar calendar=Calendar.getInstance();
+        calendar.setTime(standard_date);
+        calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY)-24);
+        SimpleDateFormat spattern = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date3 = spattern.format(calendar.getTime());
+        DateFormat pattern1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date4=null;
+        try {
+            date4 = pattern1.parse(date3);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        List<Ptrans> ptransList = new ArrayList<>();
+        try {
+            if (date.before(standard_date)) {
+                //判断昨日三点到此时（前提是今日三点前）申购交易的总金额是否超过银行卡余额
+                ptransList = ptransService.outFindTodayPtrans1(user_id,card_id,date,date4);
+            } else {
+                //判断今日三点后到此时，申购交易总金额是否超过银行卡余额
+                ptransList = ptransService.outFindTodayPtrans1(user_id,card_id,date,standard_date);
+            }
+        } catch (Exception e) {
+            logger.error("申购交易记录查询失败");
+            //-------------------------------------------------
+            return RespBean.error(RespBeanEnum.ERROR);
+        }
+        BigDecimal purchase_amount = BigDecimal.valueOf(0);
+        for (int k = 0; k < ptransList.size(); ++k) {
+            purchase_amount = purchase_amount.add(ptransList.get(k).getAmount());
+        }
+        return RespBean.success(vacancy.subtract(purchase_amount));
     }
 
     @Override

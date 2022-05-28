@@ -24,22 +24,18 @@ public class User implements Serializable {
      */
     private String id;
 
-    @NotNull
     private String name;
 
-    @NotNull
     private String type;
 
     /**
      * 证件类型
      */
-    @NotNull
     private String ctype;
 
     /**
      * 证件号
      */
-    @NotNull
     private String cid;
 
     private String password;

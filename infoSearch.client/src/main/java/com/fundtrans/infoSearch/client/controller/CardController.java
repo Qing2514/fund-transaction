@@ -4,10 +4,12 @@ import com.fundtrans.infoSearch.service.CardService;
 import com.fundtrans.infoSearch.vo.CardVo;
 import com.fundtrans.vo.RespBean;
 import com.hundsun.jrescloud.rpc.annotation.CloudReference;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
+import java.util.Date;
 
 @RestController
 @RequestMapping("/card")
@@ -71,4 +73,20 @@ public class CardController {
 //    public RespBean finishBind(String user_id){
 //        return cardService.finishBind(user_id);
 //    }
+    @GetMapping("/getSum")
+    public RespBean getSum(String user_id){
+        return cardService.getSumByUserId(user_id);
+    }
+
+    /**
+     * 余额查询
+     * @param user_id
+     * @param card_id
+     * @param date
+     * @return
+     */
+    @PostMapping("/getVacancy")
+    public RespBean getVacancy(String user_id, String card_id,@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date date){
+        return cardService.getVacancy(user_id,card_id,date);
+    }
 }

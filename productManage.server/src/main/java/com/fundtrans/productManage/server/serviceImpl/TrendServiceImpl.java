@@ -80,4 +80,9 @@ public class TrendServiceImpl implements TrendService {
     public int outTrendUpdate(Date dateId, String productId, BigDecimal netWorth) {
         return trendMapper.updateTrend(dateId,productId,netWorth);
     }
+
+    @Override
+    public RespBean getSum() {
+        return RespBean.success(trendMapper.getSum());
+    }
 }

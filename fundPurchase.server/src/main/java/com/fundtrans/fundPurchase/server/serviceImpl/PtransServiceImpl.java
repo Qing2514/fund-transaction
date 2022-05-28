@@ -2,15 +2,15 @@ package com.fundtrans.fundPurchase.server.serviceImpl;
 
 import com.fundtrans.infoSearch.service.CardService;
 import com.fundtrans.pojo.Ptrans;
-import com.fundtrans.fundPurchase.server.mapper.CardMapper;
 import com.fundtrans.fundPurchase.server.mapper.PtransMapper;
-import com.fundtrans.fundPurchase.server.mapper.UserMapper;
 import com.fundtrans.fundPurchase.service.PtransService;
 import com.fundtrans.pojo.Card;
 import com.fundtrans.pojo.User;
 import com.fundtrans.userManage.service.UserService;
+import com.fundtrans.vo.Datetime;
 import com.fundtrans.vo.RespBean;
 import com.fundtrans.vo.RespBeanEnum;
+import com.fundtrans.vo.TransSelectVo;
 import com.hundsun.jrescloud.rpc.annotation.CloudComponent;
 import com.hundsun.jrescloud.rpc.annotation.CloudReference;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -18,7 +18,6 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
@@ -107,7 +106,7 @@ public class PtransServiceImpl implements PtransService {
                 ptransList = ptransMapper.findTodayPtrans1(ptrans.getUser_id(),ptrans.getCard_id(),date,date4);
             } else {
                 //判断今日三点后到此时，申购交易总金额是否超过银行卡余额
-                ptransList = ptransMapper.findTodayPtrans2(ptrans.getUser_id(),ptrans.getCard_id(),date,standard_date);
+                ptransList = ptransMapper.findTodayPtrans1(ptrans.getUser_id(),ptrans.getCard_id(),date,standard_date);
             }
         } catch (Exception e) {
             logger.error("申购交易记录查询失败");
@@ -134,7 +133,7 @@ public class PtransServiceImpl implements PtransService {
             return RespBean.error(RespBeanEnum.PTRANS_INSERT_FAIL);
         }
         logger.info("申购交易记录添加成功");
-        return RespBean.success();
+        return RespBean.success(card.getAccount().subtract(purchase_amount));
     }
 
     /**
@@ -236,5 +235,25 @@ public class PtransServiceImpl implements PtransService {
         }
         logger.info("申购交易记录撤回成功");
         return RespBean.success();
+    }
+
+    @Override
+    public RespBean getSum() {
+        return RespBean.success(ptransMapper.getSum());
+    }
+
+    @Override
+    public RespBean findById(int id) {
+        return RespBean.success(ptransMapper.findByPtransId(id));
+    }
+
+    @Override
+    public RespBean findByAll(TransSelectVo transSelectVo) {
+        return RespBean.success(ptransMapper.findByAll(transSelectVo));
+    }
+
+    @Override
+    public List<Ptrans> outFindTodayPtrans1(String user_id, String card_id, Date date1, Date date2) {
+        return ptransMapper.findTodayPtrans1(user_id,card_id,date1,date2);
     }
 }

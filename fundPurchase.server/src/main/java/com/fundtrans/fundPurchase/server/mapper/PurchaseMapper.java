@@ -21,4 +21,11 @@ public interface PurchaseMapper {
             "and time < #{date} and time >= DATE_SUB(#{date}, INTERVAL 1 DAY)")
     int updatePurchaseByDate(@Param("date") Date date, @Param("productId") String productId,
                              @Param("netWorth") BigDecimal netWorth);
+
+
+    @Select("select count(*) from purchase")
+    int getSum();
+
+    @Select("select * from purchase where id = #{id}")
+    public Purchase findById(@Param("id") int id);
 }

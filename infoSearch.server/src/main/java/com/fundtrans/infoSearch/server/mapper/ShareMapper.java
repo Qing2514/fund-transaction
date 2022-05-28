@@ -1,6 +1,7 @@
 package com.fundtrans.infoSearch.server.mapper;
 
 import com.fundtrans.pojo.Share;
+import com.fundtrans.vo.TransSelectVo;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -28,4 +29,10 @@ public interface ShareMapper {
             "product_id = #{share.product_id} and card_id = #{share.card_id}")
     void updateShareAdd(@Param("share") Share share);
 
+
+
+    @Select("select count(*) from share")
+    int getSum();
+
+    List<Share> findByAll(TransSelectVo transSelectVo);
 }

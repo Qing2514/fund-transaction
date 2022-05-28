@@ -168,18 +168,18 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public RespBean findBubbleId(String id) {
         logger.info("查询产品"+id);
-        Product product = null;
+        List<Product> products = new ArrayList<>();
         try {
-            product = productMapper.findBubbleById(id + "%");
+            products = productMapper.findBubbleById(id + "%");
         }catch (Exception e){
             logger.error(e.getMessage());
             return RespBean.error(RespBeanEnum.PRODUCT_NOTFIND_ERROR);
         }
-        if (product == null){
+        if (products == null){
             return RespBean.error(RespBeanEnum.PRODUCT_NOT_EXIST);
         }
         logger.info("查询结束");
-        return RespBean.success(product);
+        return RespBean.success(products);
     }
 
     @Override
@@ -197,4 +197,10 @@ public class ProductServiceImpl implements ProductService {
         logger.info("查询结束");
         return product;
     }
+
+    @Override
+    public RespBean getSum() {
+        return RespBean.success(productMapper.getSum());
+    }
+
 }

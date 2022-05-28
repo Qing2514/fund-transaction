@@ -17,4 +17,5 @@ public interface ProductService {
     public RespBean deleteProduct(String id);//删除产品
     public RespBean findBubbleId(String id);
     public Product outFindProductById(String id);
+    public RespBean getSum();
 }

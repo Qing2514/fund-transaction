@@ -8,6 +8,7 @@ import com.fundtrans.infoSearch.service.RecordService;
 import com.fundtrans.infoSearch.service.ShareService;
 import com.fundtrans.productManage.service.TrendService;
 import com.fundtrans.userManage.service.UserService;
+import com.fundtrans.vo.Datetime;
 import com.fundtrans.vo.RespBean;
 import com.fundtrans.vo.RespBeanEnum;
 import com.hundsun.jrescloud.rpc.annotation.CloudComponent;
@@ -269,5 +270,15 @@ public class PurchaseServiceImpl implements PurchaseService {
         }
         logger.info("更新申购表结束, 受影响申购记录数: " + num);
         return RespBean.success(num);
+    }
+
+    @Override
+    public RespBean getSum() {
+        return RespBean.success(purchaseMapper.getSum());
+    }
+
+    @Override
+    public RespBean findById(int id) {
+        return RespBean.success(purchaseMapper.findById(id));
     }
 }

@@ -37,23 +37,28 @@ public class ProductController {
         return productService.findProductById(id);
     }
 
-    @GetMapping("/findProductByName/{name}")
-    public RespBean findProductByName(@PathVariable("name") String name) {
-        return productService.findProductByName("%" + name + "%");
-    }
-
-    @GetMapping("/findProductByType/{type}")
-    public RespBean findProductByType(@PathVariable("type") String productType) {
-        return productService.findProductByType(productType);
-    }
-
-    @GetMapping("/findProductBySecurity/{security}")
-    public RespBean findProductBySecurity(@PathVariable("security") String security) {
-        return productService.findProductBySecurity(security);
-    }
 
     @DeleteMapping("/deleteProduct/{id}")
     public RespBean deleteProduct(@PathVariable("id") String id){
         return productService.deleteProduct(id);
+    }
+
+    /**
+     * 查询产品记录总数
+     * @return
+     */
+    @GetMapping("/getSum")
+    public RespBean getSum(){
+        return productService.getSum();
+    }
+
+    /**
+     * 通过product_id模糊查询
+     * @param id
+     * @return
+     */
+    @GetMapping("/findProductByIdBubble/{id}")
+    public RespBean findProductByIdBubble(@PathVariable("id") String id) {
+        return productService.findBubbleId(id);
     }
 }

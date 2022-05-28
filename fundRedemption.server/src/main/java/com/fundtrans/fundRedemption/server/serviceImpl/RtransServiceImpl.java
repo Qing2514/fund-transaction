@@ -7,8 +7,10 @@ import com.fundtrans.fundRedemption.service.RtransService;
 import com.fundtrans.infoSearch.service.ShareService;
 import com.fundtrans.pojo.User;
 import com.fundtrans.userManage.service.UserService;
+import com.fundtrans.vo.Datetime;
 import com.fundtrans.vo.RespBean;
 import com.fundtrans.vo.RespBeanEnum;
+import com.fundtrans.vo.TransSelectVo;
 import com.hundsun.jrescloud.rpc.annotation.CloudComponent;
 import com.hundsun.jrescloud.rpc.annotation.CloudReference;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -197,6 +199,27 @@ public class RtransServiceImpl implements RtransService {
         }
         logger.info("赎回交易记录撤回成功");
         return RespBean.success();
+    }
+
+    @Override
+    public RespBean getSum() {
+        return RespBean.success(rtransMapper.getSum());
+    }
+
+
+    @Override
+    public RespBean findByUserId(String user_id) {
+        return RespBean.success(rtransMapper.findByUserId(user_id));
+    }
+
+    @Override
+    public RespBean findById(int id) {
+        return RespBean.success(rtransMapper.findByRtransId(id));
+    }
+
+    @Override
+    public RespBean findByAll(TransSelectVo transSelectVo) {
+        return RespBean.success(rtransMapper.findByAll(transSelectVo));
     }
 
 

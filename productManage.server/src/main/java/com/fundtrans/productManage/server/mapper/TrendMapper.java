@@ -24,4 +24,7 @@ public interface TrendMapper {
     @Update("update trend set price = #{netWorth} where id = #{dateId} and product_id = #{productId}")
     int updateTrend(@Param("dateId") Date dateId, @Param("productId") String productId,
                     @Param("netWorth") BigDecimal netWorth);
+
+    @Select("select count(*) from trend")
+    int getSum();
 }

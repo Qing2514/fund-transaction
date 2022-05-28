@@ -7,6 +7,7 @@ import com.fundtrans.pojo.*;
 import com.fundtrans.fundRedemption.server.mapper.*;
 import com.fundtrans.fundRedemption.service.RedemptionService;
 import com.fundtrans.productManage.service.TrendService;
+import com.fundtrans.vo.Datetime;
 import com.fundtrans.vo.RespBean;
 import com.fundtrans.vo.RespBeanEnum;
 import com.hundsun.jrescloud.rpc.annotation.CloudComponent;
@@ -232,5 +233,30 @@ public class RedemptionServiceImpl implements RedemptionService {
         }
         logger.info("更新赎回表结束, 受影响赎回记录数: " + num);
         return RespBean.success(num);
+    }
+
+    @Override
+    public RespBean getSum() {
+        return RespBean.success(redemptionMapper.getSum());
+    }
+
+    @Override
+    public RespBean findByDate(Datetime datetime) {
+        return RespBean.success(redemptionMapper.findByDate(datetime.getDate1(),datetime.getDate2()));
+    }
+
+    @Override
+    public RespBean findByUserId(String user_id) {
+        return RespBean.success(redemptionMapper.findByUserId(user_id));
+    }
+
+    @Override
+    public RespBean findByDateAndUserId(String user_id, Date date1, Date date2) {
+        return RespBean.success(redemptionMapper.findByDateAndUserId(date1,date2,user_id));
+    }
+
+    @Override
+    public RespBean findById(int id) {
+        return RespBean.success(redemptionMapper.findById(id));
     }
 }

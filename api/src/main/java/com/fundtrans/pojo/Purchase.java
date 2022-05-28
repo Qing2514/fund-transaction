@@ -24,13 +24,10 @@ public class Purchase implements Serializable {
 
     private Integer id;
 
-    @NotNull
     private String user_id;
 
-    @NotNull
     private String product_id;
 
-    @NotNull
     private String card_id;
 
     private Date time;

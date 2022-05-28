@@ -38,4 +38,10 @@ public interface UserMapper {
 
     @Select("select * from user where name like #{name}")
     List<User> findByName(@Param("name") String name);
+
+    @Select("select count(*) from user")
+    int getSum();
+
+    @Select("select * from user where id like #{id}")
+    List<User> findByIdBubble(@Param("id") String id);
 }

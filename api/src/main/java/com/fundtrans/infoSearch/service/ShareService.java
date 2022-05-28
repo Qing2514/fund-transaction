@@ -2,6 +2,8 @@ package com.fundtrans.infoSearch.service;
 
 
 import com.fundtrans.pojo.Share;
+import com.fundtrans.vo.RespBean;
+import com.fundtrans.vo.TransSelectVo;
 import com.hundsun.jrescloud.rpc.annotation.CloudService;
 
 import java.util.List;
@@ -19,4 +21,11 @@ public interface ShareService {
     void OutAddShare(Share share);
 
     void OutUpdateShareAdd(Share share);
+
+    RespBean getSum();
+
+
+    RespBean findByAll(TransSelectVo transSelectVo);
+
+    RespBean getShare(String user_id, String product_id, String card_id);
 }

@@ -30,4 +30,6 @@ public interface CardMapper {
     @Update("update card set account = #{card.account} where id = #{card.id}")
     public void update(@Param("card") Card card);
 
+    @Select("select count(*) from card where user_id = #{user_id}")
+    List<Card> getSumByUserId(@Param("user_id") String user_id);
 }

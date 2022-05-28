@@ -1,6 +1,8 @@
 package com.fundtrans.fundRedemption.server.mapper;
 
+import com.fundtrans.pojo.Ptrans;
 import com.fundtrans.pojo.Rtrans;
+import com.fundtrans.vo.TransSelectVo;
 import org.apache.ibatis.annotations.*;
 
 import java.util.Date;
@@ -12,9 +14,6 @@ public interface RtransMapper {
             "#{rtrans.card_id},#{rtrans.time},#{rtrans.method},#{rtrans.count},#{rtrans.state})")
     void addRtrans(@Param("rtrans") Rtrans rtrans);
 
-    @Select("select * from rtrans where user_id = #{user_id}")
-    List<Rtrans> findByUserId(@Param("user_id") String user_id);
-
     @Select("select * from rtrans where id = #{id}")
     Rtrans findByRtransId(@Param("id") Integer id);
 
@@ -23,4 +22,14 @@ public interface RtransMapper {
 
     @Select("select * from rtrans where time >= #{beforeDate} and #{date} > time and state = 0")
     List<Rtrans> findTodayrtrans(@Param("date") Date date,@Param("beforeDate") Date beforeDate);
+
+
+    @Select("select count(*) from rtrans")
+    int getSum();
+
+    @Select("select * from rtrans where user_id = #{user_id}")
+    List<Rtrans> findByUserId(@Param("user_id") String user_id);
+
+    List<Rtrans> findByAll(TransSelectVo transSelectVo);
+
 }

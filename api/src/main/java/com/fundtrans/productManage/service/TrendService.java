@@ -18,4 +18,6 @@ public interface TrendService {
     Trend outTrendFindById(Date dateId, String productId);
 
     public int outTrendUpdate(Date dateId,String productId,BigDecimal netWorth);
+
+    RespBean getSum();
 }
