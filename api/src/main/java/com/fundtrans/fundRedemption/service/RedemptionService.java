@@ -10,7 +10,7 @@ import java.util.Date;
 @CloudService
 public interface RedemptionService {
     RespBean doRedemption(Date date);
-    RespBean updateRedemptionByDate(Date datetime, String productId, BigDecimal amount);
+    RespBean updateRedemptionByDate(Date datetime);
     RespBean getSum();
     RespBean findByDate(Datetime datetime);
     RespBean findByUserId(String user_id);

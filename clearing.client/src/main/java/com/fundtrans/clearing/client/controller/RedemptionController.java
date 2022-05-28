@@ -17,9 +17,8 @@ public class RedemptionController {
     @CloudReference
     private RedemptionService redemptionService;
 
-    @PostMapping("/updateRedemptionByDate/{date}/{productId}/{amount}")
-    public RespBean updateRedemptionByDate(@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date date,
-                                         @PathVariable String productId, @PathVariable BigDecimal amount) {
-        return redemptionService.updateRedemptionByDate(date, productId, amount);
+    @PostMapping("/updateRedemptionByDate/{date}")
+    public RespBean updateRedemptionByDate(@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
+        return redemptionService.updateRedemptionByDate(date);
     }
 }

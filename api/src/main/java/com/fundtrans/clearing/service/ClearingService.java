@@ -10,5 +10,5 @@ public interface ClearingService {
 
     RespBean initializeDay(Date date, int step);
 
-    RespBean updateNetWorth(Date dateId, String productId);
+    RespBean updateNetWorth(Date dateId);
 }

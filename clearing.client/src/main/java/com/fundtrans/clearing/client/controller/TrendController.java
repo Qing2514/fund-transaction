@@ -22,10 +22,9 @@ public class TrendController {
         return clearingService.initializeDay(date, step);
     }
 
-    @PostMapping("/updateNetWorth/{dateId}/{productId}")
-    public RespBean updateNetWorth(@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateId,
-                                   @PathVariable String productId) {
-        return clearingService.updateNetWorth(dateId, productId);
+    @PostMapping("/updateNetWorth/{date}")
+    public RespBean updateNetWorth(@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
+        return clearingService.updateNetWorth(date);
     }
 
 }

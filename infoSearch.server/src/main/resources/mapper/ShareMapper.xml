@@ -6,14 +6,15 @@
     <resultMap id="BaseResultMap" type="com.fundtrans.pojo.Share">
         <id column="user_id" property="userId" />
         <result column="product_id" property="productId" />
+        <result column="name" property="name" />
         <result column="card_id" property="cardId" />
-        <result column="num" property="num" />
+        <result column="value" property="value" />
         <result column="frozen_num" property="frozenNum" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        user_id, product_id, card_id, num, time
+        user_id, product_id, name, card_id, value, time
     </sql>
     <select id="findByAll" parameterType="com.fundtrans.vo.TransSelectVo" resultType="com.fundtrans.pojo.Share">
         select * from share
@@ -23,6 +24,9 @@
             </if>
             <if test="product_id!=null">
                 and product_id = #{product_id}
+            </if>
+            <if test="name!=null">
+                and name = #{name}
             </if>
             <if test="card_id!=null">
                 and card_id = #{card_id}

@@ -6,6 +6,7 @@ import com.fundtrans.infoSearch.service.ShareService;
 import com.fundtrans.pojo.*;
 import com.fundtrans.fundRedemption.server.mapper.*;
 import com.fundtrans.fundRedemption.service.RedemptionService;
+import com.fundtrans.productManage.service.ProductService;
 import com.fundtrans.productManage.service.TrendService;
 import com.fundtrans.vo.Datetime;
 import com.fundtrans.vo.RespBean;
@@ -40,6 +41,8 @@ public class RedemptionServiceImpl implements RedemptionService {
     private ShareService shareService;
     @CloudReference
     private TrendService trendService;
+    @CloudReference
+    private ProductService productService;
 
     @Autowired
     private RtransMapper rtransMapper;
@@ -156,9 +159,9 @@ public class RedemptionServiceImpl implements RedemptionService {
 //                return RespBean.error(RespBeanEnum.RECORD_ADD_ERROR);
                 continue;
             }
-            share.setNum(share.getNum().subtract(temp.getCount()));
+            share.setValue(share.getValue().subtract(temp.getCount()));
             share.setFrozen_num(share.getFrozen_num().subtract(temp.getCount()));
-            if (share.getNum().compareTo(BigDecimal.valueOf(0)) == 0 && share.getFrozen_num().compareTo(BigDecimal.valueOf(0)) == 0) {
+            if (share.getValue().compareTo(BigDecimal.valueOf(0)) == 0 && share.getFrozen_num().compareTo(BigDecimal.valueOf(0)) == 0) {
                 try {
                     logger.info("该银行卡剩余份额为0，删除记录");
                     shareService.OutDeleteShare(share);
@@ -223,13 +226,30 @@ public class RedemptionServiceImpl implements RedemptionService {
     }
 
     @Override
-    public RespBean updateRedemptionByDate(Date datetime, String productId, BigDecimal amount) {
+    public RespBean updateRedemptionByDate(Date datetime) {
         logger.info("更新赎回表份额");
         int num = 0;
+        List<Product> products = new ArrayList<Product>();
         try {
             // 将时间设置成每天的 15:00
-            datetime = DateUtils.addHours(datetime, 15);
-            num = redemptionMapper.updateRedemptionByDate(datetime, productId, amount);
+            datetime = DateUtils.setHours(datetime, 15);
+            products = productService.outFindAllProduct();
+            for (Product product : products) {
+                // 查询当前产品当天的基金走势，若不存在，则查询下一个产品
+                Trend trend = trendService.outTrendFindById(datetime, product.getId());
+                if (trend == null) {
+                    logger.error(product.getId() + "基金该天走势不存在: " + RespBeanEnum.TREND_NOT_EXIST.getMessage());
+                    continue;
+                }
+                // 生成当天的赎回订单
+                try {
+                    logger.info("生成当天赎回订单");
+                    num = redemptionMapper.updateRedemptionByDate(datetime, product.getId(), trend.getPrice());
+                } catch (Exception e) {
+                    logger.error("生成当天赎回订单失败：" + e.getMessage());
+                    return RespBean.error(RespBeanEnum.REDEMPTION_RELOAD_ERROR);
+                }
+            }
         } catch (Exception e) {
             logger.error("更新赎回表份额失败: " + e.getMessage());
             return RespBean.error(RespBeanEnum.REDEMPTION_UPDATEAMOUNT_ERROR);

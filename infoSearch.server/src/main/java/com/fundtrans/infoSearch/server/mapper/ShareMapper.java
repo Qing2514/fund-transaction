@@ -16,7 +16,7 @@ public interface ShareMapper {
     @Select("select * from share where user_id = #{user_id} and product_id = #{product_id} and card_id = #{card_id}")
     Share findByThree(@Param("user_id") String userId, @Param("product_id") String productId, @Param("card_id") String cardId);
 
-    @Update("update share set num = #{share.num}, frozen_num = #{share.frozen_num} where user_id = #{share.user_id} and " +
+    @Update("update share set value = #{share.value}, frozen_num = #{share.frozen_num} where user_id = #{share.user_id} and " +
             "product_id = #{share.product_id} and  card_id = #{share.card_id}")
     void updateCount(@Param("share") Share share);
 
@@ -24,10 +24,10 @@ public interface ShareMapper {
     void deleteShare(@Param("share") Share share);
 
     @Insert("insert into share values(#{share.user_id},#{share.product_id}," +
-            "#{share.card_id},#{share.num},#{share.frozen_num})")
+            "#{share.name},#{share.card_id},#{share.value},#{share.frozen_num})")
     void addShare(@Param("share") Share share);
 
-    @Update("update share set num = #{share.num} where user_id = #{share.user_id} and " +
+    @Update("update share set value = #{share.value} where user_id = #{share.user_id} and " +
             "product_id = #{share.product_id} and card_id = #{share.card_id}")
     void updateShareAdd(@Param("share") Share share);
 

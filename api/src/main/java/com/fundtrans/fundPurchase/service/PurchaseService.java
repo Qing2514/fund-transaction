@@ -10,7 +10,7 @@ import java.util.Date;
 @CloudService
 public interface PurchaseService {
     RespBean doPurchase(Date date);
-    RespBean updatePurchaseByDate(Date datetime, String productId, BigDecimal count);
+    RespBean updatePurchaseByDate(Date datetime);
     RespBean getSum();
     RespBean findById(int id);
 }

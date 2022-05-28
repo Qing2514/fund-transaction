@@ -5,6 +5,8 @@ import com.fundtrans.pojo.Product;
 import com.fundtrans.vo.RespBean;
 import com.hundsun.jrescloud.rpc.annotation.CloudService;
 
+import java.util.List;
+
 @CloudService
 public interface ProductService {
     public RespBean findAllProduct(int index,int limit);//查找所有的产品信息
@@ -18,4 +20,5 @@ public interface ProductService {
     public RespBean findBubbleId(String id);
     public Product outFindProductById(String id);
     public RespBean getSum();
+    List<Product> outFindAllProduct();
 }

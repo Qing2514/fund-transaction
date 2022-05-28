@@ -24,9 +24,11 @@ public class Share implements Serializable {
 
     private String product_id;
 
+    private String name;
+
     private String card_id;
 
-    private BigDecimal num;
+    private BigDecimal value;
 
     private BigDecimal frozen_num;
 

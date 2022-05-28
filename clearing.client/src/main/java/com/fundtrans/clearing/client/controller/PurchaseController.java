@@ -17,9 +17,8 @@ public class PurchaseController {
     @CloudReference
     private PurchaseService purchaseService;
 
-    @PostMapping("/updatePurchaseByDate/{date}/{productId}/{count}")
-    public RespBean updatePurchaseByDate(@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date date,
-                                  @PathVariable String productId, @PathVariable BigDecimal count) {
-        return purchaseService.updatePurchaseByDate(date, productId, count);
+    @PostMapping("/updatePurchaseByDate/{date}")
+    public RespBean updatePurchaseByDate(@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
+        return purchaseService.updatePurchaseByDate(date);
     }
 }

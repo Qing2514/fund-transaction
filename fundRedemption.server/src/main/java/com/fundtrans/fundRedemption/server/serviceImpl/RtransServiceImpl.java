@@ -72,7 +72,7 @@ public class RtransServiceImpl implements RtransService {
         //若存在用户不断进行赎回操作，获取前天下午三点后到当今时间的之前未处理的赎回交易记录，计算总共需要赎回的份额与剩余份额，再与
         //还要进行赎回的份额相比较，判断是否超份额赎回
         Share share = shareList.get(i);
-        if (share.getNum().compareTo(share.getFrozen_num().add(rtrans.getCount())) == -1){
+        if (share.getValue().compareTo(share.getFrozen_num().add(rtrans.getCount())) == -1){
             logger.error("赎回份额不能大于该卡已购份额");
             return RespBean.error(RespBeanEnum.RTRANS_COUNT_BEYOND);
         }

@@ -6,6 +6,7 @@ import com.fundtrans.fundPurchase.service.PurchaseService;
 import com.fundtrans.infoSearch.service.CardService;
 import com.fundtrans.infoSearch.service.RecordService;
 import com.fundtrans.infoSearch.service.ShareService;
+import com.fundtrans.productManage.service.ProductService;
 import com.fundtrans.productManage.service.TrendService;
 import com.fundtrans.userManage.service.UserService;
 import com.fundtrans.vo.Datetime;
@@ -44,6 +45,8 @@ public class PurchaseServiceImpl implements PurchaseService {
     private RecordService recordService;
     @CloudReference
     private TrendService trendService;
+    @CloudReference
+    private ProductService productService;
 
     @Autowired
     private PtransMapper ptransMapper;
@@ -215,8 +218,11 @@ public class PurchaseServiceImpl implements PurchaseService {
                 share = new Share();
                 share.setUser_id(purchase.getUser_id());
                 share.setProduct_id(purchase.getProduct_id());
+                Product product = null;
+                product = productService.outFindProductById(purchase.getProduct_id());
+                share.setName(product.getName());
                 share.setCard_id(purchase.getCard_id());
-                share.setNum(purchase.getCount());
+                share.setValue(purchase.getCount());
                 share.setFrozen_num(BigDecimal.valueOf(0));
                 try {
                     shareService.OutAddShare(share);
@@ -238,7 +244,7 @@ public class PurchaseServiceImpl implements PurchaseService {
             else {
                 logger.info("更新记录：" + temp.getId() + "份额记录");
                 try {
-                    share.setNum(share.getNum().add(purchase.getCount()));
+                    share.setValue(share.getValue().add(purchase.getCount()));
                     shareService.OutUpdateShareAdd(share);
                 } catch (Exception e) {
                     logger.error("记录：" + temp.getId() + "份额记录更新失败：" + e.getMessage());
@@ -260,13 +266,30 @@ public class PurchaseServiceImpl implements PurchaseService {
     }
 
     @Override
-    public RespBean updatePurchaseByDate(Date datetime, String productId, BigDecimal count) {
+    public RespBean updatePurchaseByDate(Date datetime) {
         logger.info("更新申购表份额");
         int num = 0;
+        List<Product> products = new ArrayList<Product>();
         try {
             // 将时间设置成每天的 15:00
-            datetime = DateUtils.addHours(datetime, 15);
-            num = purchaseMapper.updatePurchaseByDate(datetime, productId, count);
+            datetime = DateUtils.setHours(datetime, 15);
+            products = productService.outFindAllProduct();
+            for (Product product : products) {
+                // 查询当前产品当天的基金走势，若不存在，则查询下一个产品
+                Trend trend = trendService.outTrendFindById(datetime, product.getId());
+                if (trend == null) {
+                    logger.error(product.getId() + "基金该天走势不存在: " + RespBeanEnum.TREND_NOT_EXIST.getMessage());
+                    continue;
+                }
+                // 生成当天的申购订单
+                try {
+                    logger.info("生成当天申购订单");
+                    num = purchaseMapper.updatePurchaseByDate(datetime, product.getId(), trend.getPrice());
+                } catch (Exception e) {
+                    logger.error("生成当天申购订单失败：" + e.getMessage());
+                    return RespBean.error(RespBeanEnum.PURCHASE_RELOAD_ERROR);
+                }
+            }
         } catch (Exception e) {
             logger.error("更新申购表份额失败: " + e.getMessage());
             return RespBean.error(RespBeanEnum.PURCHASE_UPDATECOUNT_ERROR);

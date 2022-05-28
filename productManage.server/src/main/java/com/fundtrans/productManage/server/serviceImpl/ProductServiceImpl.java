@@ -203,4 +203,20 @@ public class ProductServiceImpl implements ProductService {
         return RespBean.success(productMapper.getSum());
     }
 
+    @Override
+    public List<Product> outFindAllProduct() {
+        logger.info("查询所有产品");
+        List<Product> products = new ArrayList<Product>();
+        try {
+            products = productMapper.findAllProduct(0, 1000);
+        }catch (Exception e){
+            logger.error("无产品"+e.getMessage());
+        }
+        if (products == null){
+            logger.error("产品列表为空");
+        }
+        logger.info("查询结束");
+        return products;
+    }
+
 }
