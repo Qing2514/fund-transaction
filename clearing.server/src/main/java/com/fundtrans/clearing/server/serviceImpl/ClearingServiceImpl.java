@@ -79,7 +79,8 @@ public class ClearingServiceImpl implements ClearingService {
                 if (product == null){
                     return RespBean.error(RespBeanEnum.PRODUCT_NOT_EXIST);
                 }
-                product.setPrange(netWorth.subtract(trend.getPrice()));
+                //设置涨跌幅
+                product.setPrange((netWorth.subtract(trend.getPrice())).divide(trend.getPrice(),2));
                 productService.updateProduct(product);
             }catch (Exception e){
                 logger.error("产品涨跌幅更新失败："+e.getMessage());
