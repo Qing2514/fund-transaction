@@ -2,6 +2,7 @@ package com.fundtrans.infoSearch.server.mapper;
 
 import com.fundtrans.pojo.Card;
 import org.apache.ibatis.annotations.*;
+import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.util.List;

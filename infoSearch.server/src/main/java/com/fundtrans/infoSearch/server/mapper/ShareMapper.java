@@ -3,9 +3,11 @@ package com.fundtrans.infoSearch.server.mapper;
 import com.fundtrans.pojo.Share;
 import com.fundtrans.vo.TransSelectVo;
 import org.apache.ibatis.annotations.*;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 @Mapper
 public interface ShareMapper {
     @Select("select * from share where user_id = #{user_id}and product_id = #{product_id}")

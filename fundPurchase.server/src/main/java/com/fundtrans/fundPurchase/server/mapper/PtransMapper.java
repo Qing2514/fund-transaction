@@ -3,10 +3,12 @@ package com.fundtrans.fundPurchase.server.mapper;
 import com.fundtrans.pojo.Ptrans;
 import com.fundtrans.vo.TransSelectVo;
 import org.apache.ibatis.annotations.*;
+import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
 
+@Repository
 @Mapper
 public interface PtransMapper {
 
