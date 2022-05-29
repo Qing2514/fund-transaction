@@ -80,7 +80,9 @@ public class ClearingServiceImpl implements ClearingService {
                     return RespBean.error(RespBeanEnum.TREND_UPDATE_ERROR);
                 }
                 //判断传入的date时间是否为当天时间，若是则更新涨跌幅，设置产品净值
-                if (dateId.equals(new Date())) {
+                Date date_now = new Date();
+                if (dateId.getDate() == date_now.getDate() && dateId.getMonth() == date_now.getMonth() &&
+                dateId.getYear() == date_now.getYear()) {
                     try {
                         product.setNetworth(netWorth);
                         //设置涨跌幅
