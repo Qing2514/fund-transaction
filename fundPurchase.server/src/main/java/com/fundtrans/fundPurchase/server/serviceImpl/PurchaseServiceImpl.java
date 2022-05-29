@@ -12,6 +12,7 @@ import com.fundtrans.userManage.service.UserService;
 import com.fundtrans.vo.Datetime;
 import com.fundtrans.vo.RespBean;
 import com.fundtrans.vo.RespBeanEnum;
+import com.fundtrans.vo.TransSelectVo;
 import com.hundsun.jrescloud.rpc.annotation.CloudComponent;
 import com.hundsun.jrescloud.rpc.annotation.CloudReference;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -306,5 +307,10 @@ public class PurchaseServiceImpl implements PurchaseService {
     @Override
     public RespBean findById(int id) {
         return RespBean.success(purchaseMapper.findById(id));
+    }
+
+    @Override
+    public RespBean findByAll(TransSelectVo transSelectVo) {
+        return RespBean.success(purchaseMapper.findByAll(transSelectVo));
     }
 }

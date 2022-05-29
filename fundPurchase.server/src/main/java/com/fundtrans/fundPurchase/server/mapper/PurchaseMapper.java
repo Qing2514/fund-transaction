@@ -2,12 +2,15 @@ package com.fundtrans.fundPurchase.server.mapper;
 
 import com.fundtrans.pojo.Ptrans;
 import com.fundtrans.pojo.Purchase;
+import com.fundtrans.vo.TransSelectVo;
 import org.apache.ibatis.annotations.*;
+import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+@Repository
 @Mapper
 public interface PurchaseMapper {
     @Insert("insert into purchase values(#{purchase.id},#{purchase.user_id},#{purchase.product_id}," +
@@ -28,4 +31,6 @@ public interface PurchaseMapper {
 
     @Select("select * from purchase where id = #{id}")
     public Purchase findById(@Param("id") int id);
+
+    List<Purchase> findByAll(TransSelectVo transSelectVo);
 }

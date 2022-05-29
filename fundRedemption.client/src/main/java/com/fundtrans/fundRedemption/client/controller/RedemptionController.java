@@ -42,4 +42,9 @@ public class RedemptionController {
     public RespBean findById(int id){
         return redemptionService.findById(id);
     }
+
+    @PostMapping("/findByAll")
+    public RespBean findByAll(@RequestBody TransSelectVo transSelectVo){
+        return redemptionService.findByAll(transSelectVo);
+    }
 }

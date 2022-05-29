@@ -42,4 +42,9 @@ public class PurchaseController {
     public RespBean findById(int id){
         return purchaseService.findById(id);
     }
+
+    @PostMapping("/findByAll")
+    public RespBean findByAll(@RequestBody TransSelectVo transSelectVo){
+        return purchaseService.findByAll(transSelectVo);
+    }
 }

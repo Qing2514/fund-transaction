@@ -2,6 +2,7 @@ package com.fundtrans.fundRedemption.service;
 
 import com.fundtrans.vo.Datetime;
 import com.fundtrans.vo.RespBean;
+import com.fundtrans.vo.TransSelectVo;
 import com.hundsun.jrescloud.rpc.annotation.CloudService;
 
 import java.math.BigDecimal;
@@ -17,4 +18,6 @@ public interface RedemptionService {
     RespBean findByDateAndUserId(String user_id, Date date1, Date date2);
 
     RespBean findById(int id);
+
+    RespBean findByAll(TransSelectVo transSelectVo);
 }

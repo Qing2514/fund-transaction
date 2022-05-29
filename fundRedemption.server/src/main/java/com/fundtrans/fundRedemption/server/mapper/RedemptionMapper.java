@@ -2,12 +2,14 @@ package com.fundtrans.fundRedemption.server.mapper;
 
 import com.fundtrans.pojo.Ptrans;
 import com.fundtrans.pojo.Redemption;
+import com.fundtrans.vo.TransSelectVo;
 import org.apache.ibatis.annotations.*;
+import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-
+@Repository
 @Mapper
 public interface RedemptionMapper {
     @Insert("insert into redemption values(#{redemption.id},#{redemption.user_id}," +
@@ -37,4 +39,6 @@ public interface RedemptionMapper {
 
     @Select("select * from redemption where id = #{id}")
     public Redemption findById(@Param("id") int id);
+
+    List<Redemption> findByAll(TransSelectVo transSelectVo);
 }

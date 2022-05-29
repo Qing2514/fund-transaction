@@ -2,6 +2,7 @@ package com.fundtrans.fundPurchase.service;
 
 import com.fundtrans.vo.Datetime;
 import com.fundtrans.vo.RespBean;
+import com.fundtrans.vo.TransSelectVo;
 import com.hundsun.jrescloud.rpc.annotation.CloudService;
 
 import java.math.BigDecimal;
@@ -13,4 +14,6 @@ public interface PurchaseService {
     RespBean updatePurchaseByDate(Date datetime);
     RespBean getSum();
     RespBean findById(int id);
+
+    RespBean findByAll(TransSelectVo transSelectVo);
 }
