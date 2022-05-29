@@ -79,13 +79,17 @@ public class ClearingServiceImpl implements ClearingService {
                     logger.error("更新行情失败：" + e.getMessage());
                     return RespBean.error(RespBeanEnum.TREND_UPDATE_ERROR);
                 }
-                try {
-                    //设置涨跌幅
-                    product.setPrange((netWorth.subtract(trend.getPrice())).divide(trend.getPrice(), 2));
-                    productService.updateProduct(product);
-                } catch (Exception e) {
-                    logger.error("产品涨跌幅更新失败：" + e.getMessage());
-                    return RespBean.error(RespBeanEnum.ERROR);
+                //判断传入的date时间是否为当天时间，若是则更新涨跌幅，设置产品净值
+                if (dateId.equals(new Date())) {
+                    try {
+                        product.setNetworth(netWorth);
+                        //设置涨跌幅
+                        product.setPrange((netWorth.subtract(trend.getPrice())).divide(trend.getPrice(), 2));
+                        productService.updateProduct(product);
+                    } catch (Exception e) {
+                        logger.error("产品涨跌幅更新失败：" + e.getMessage());
+                        return RespBean.error(RespBeanEnum.ERROR);
+                    }
                 }
             }
             // 重新生成当天的申购订单和赎回订单
