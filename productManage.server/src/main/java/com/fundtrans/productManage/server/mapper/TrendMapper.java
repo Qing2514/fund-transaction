@@ -27,4 +27,7 @@ public interface TrendMapper {
 
     @Select("select count(*) from trend")
     int getSum();
+
+    @Select("select max(id) from trend")
+    Date getMaxDate();
 }

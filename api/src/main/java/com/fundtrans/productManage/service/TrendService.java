@@ -20,4 +20,6 @@ public interface TrendService {
     public int outTrendUpdate(Date dateId,String productId,BigDecimal netWorth);
 
     RespBean getSum();
+
+    Date outGetMaxDate();
 }

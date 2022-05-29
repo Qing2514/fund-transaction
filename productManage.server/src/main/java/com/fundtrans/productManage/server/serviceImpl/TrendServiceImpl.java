@@ -85,4 +85,9 @@ public class TrendServiceImpl implements TrendService {
     public RespBean getSum() {
         return RespBean.success(trendMapper.getSum());
     }
+
+    @Override
+    public Date outGetMaxDate() {
+        return trendMapper.getMaxDate();
+    }
 }
