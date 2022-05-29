@@ -15,7 +15,7 @@
     <sql id="Base_Column_List">
         user_id, product_id, card_id, num, time
     </sql>
-    <select id="findByAll" parameterType="com.fundtrans.vo.RecordSelect" resultType="com.fundtrans.pojo.Record">
+    <select id="findByAll" parameterType="com.fundtrans.vo.TransSelectVo" resultType="com.fundtrans.pojo.Record">
         select * from record
         <where>
             <if test="user_id!=null">

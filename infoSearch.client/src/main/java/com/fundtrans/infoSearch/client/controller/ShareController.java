@@ -24,7 +24,7 @@ public class ShareController {
      * @param transSelectVo
      * @return
      */
-    @PostMapping("/findByAll")
+    @GetMapping("/findByAll")
     public RespBean findByAll(TransSelectVo transSelectVo){
         return shareService.findByAll(transSelectVo);
     }

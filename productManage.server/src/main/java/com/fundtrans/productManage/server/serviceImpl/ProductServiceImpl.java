@@ -10,6 +10,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +49,7 @@ public class ProductServiceImpl implements ProductService {
             return RespBean.error(RespBeanEnum.PRODUCT_ALREADY_EXIST);
         }
         try {
+            product.setNetworth(BigDecimal.valueOf(1.0000));
             productMapper.addProduct(product);
         }catch (Exception e){
             logger.error(e.getMessage());
