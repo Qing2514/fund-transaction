@@ -4,7 +4,10 @@ import com.fundtrans.pojo.Trend;
 import com.fundtrans.productManage.service.TrendService;
 import com.fundtrans.vo.RespBean;
 import com.hundsun.jrescloud.rpc.annotation.CloudReference;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
 
 @RestController
 @RequestMapping("/trend")
@@ -19,9 +22,9 @@ public class TrendController {
         return trendService.findTrendById(product_id);
     }
 
-    @PostMapping("/addTrend")
-    public RespBean addTrend(@RequestBody Trend trend) {
-        return trendService.addTrend(trend);
+    @PostMapping("/addTrend/{date}")
+    public RespBean addTrend(@RequestBody Trend trend, @PathVariable("date")@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")Date date) {
+        return trendService.addTrend(trend,date);
     }
 
     @GetMapping("/getSum")

@@ -1,17 +1,21 @@
 package com.fundtrans.productManage.server.serviceImpl;
 
 import com.fundtrans.pojo.Product;
+import com.fundtrans.pojo.Trend;
 import com.fundtrans.productManage.server.mapper.ProductMapper;
 import com.fundtrans.productManage.service.ProductService;
+import com.fundtrans.productManage.service.TrendService;
 import com.fundtrans.vo.RespBean;
 import com.fundtrans.vo.RespBeanEnum;
 import com.hundsun.jrescloud.rpc.annotation.CloudComponent;
+import com.hundsun.jrescloud.rpc.annotation.CloudReference;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @CloudComponent
@@ -19,6 +23,8 @@ public class ProductServiceImpl implements ProductService {
 
     private static final Log logger = LogFactory.getLog(ProductServiceImpl.class);
 
+    @CloudReference
+    private TrendService trendService;
     @Autowired
     private ProductMapper productMapper;
     //查找所有的产品信息
@@ -42,7 +48,7 @@ public class ProductServiceImpl implements ProductService {
 
     //添加产品信息
     @Override
-    public RespBean addProduct(Product product){
+    public RespBean addProduct(Product product, Date date){
         logger.info("增加产品:"+product.toString());
         Product temp = productMapper.findProductById(product.getId());
         if (temp != null){//产品代码已存在
@@ -54,6 +60,16 @@ public class ProductServiceImpl implements ProductService {
         }catch (Exception e){
             logger.error(e.getMessage());
             return RespBean.error(RespBeanEnum.PRODUCT_INSERT_ERROR);
+        }
+        try {
+            Trend trend = new Trend();
+            trend.setId(date);
+            trend.setProduct_id(product.getId());
+            trend.setPrice(BigDecimal.valueOf(1.0000));
+            trendService.addTrend(trend,date);
+        }catch (Exception e){
+            logger.error("净值走势添加失败："+e.getMessage());
+            return RespBean.error(RespBeanEnum.PRICE_INSERT_ERROR);
         }
         logger.info("产品添加成功");
         return RespBean.success();

@@ -13,7 +13,7 @@ public interface TrendService {
     //根据时间查找净值，从指定日期到目前为止,近一个月、近三个月、近一年、近三年
     public RespBean findTrendById(String product_id);
     //增加净值数据，每日清算时增加
-    public RespBean addTrend(Trend trend);
+    public RespBean addTrend(Trend trend,Date date);
 
     Trend outTrendFindById(Date dateId, String productId);
 

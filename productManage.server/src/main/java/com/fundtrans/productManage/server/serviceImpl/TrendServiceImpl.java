@@ -48,9 +48,9 @@ public class TrendServiceImpl implements TrendService {
     }
 
     //增加净值数据，每日清算时增加
-    public RespBean addTrend(Trend trend){
+    public RespBean addTrend(Trend trend,Date date_now){
 
-        String date1 = DateFormatUtils.format(new Date(), "yyyy-MM-dd 15:00:00");
+        String date1 = DateFormatUtils.format(date_now, "yyyy-MM-dd 15:00:00");
         DateFormat pattern = new SimpleDateFormat("yyyy-MM-dd HH:ss:mm");
         Date date = null;
         try {

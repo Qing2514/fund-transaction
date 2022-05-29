@@ -6,7 +6,10 @@ import com.fundtrans.productManage.service.ProductService;
 import com.fundtrans.productManage.service.TrendService;
 import com.fundtrans.vo.RespBean;
 import com.hundsun.jrescloud.rpc.annotation.CloudReference;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
 
 @RestController
 @RequestMapping("/product")
@@ -22,9 +25,9 @@ public class ProductController {
         return productService.findAllProduct(index, limit);
     }
 
-    @PostMapping("/addProduct")
-    public RespBean addProduct(@RequestBody Product product) {
-        return productService.addProduct(product);
+    @PostMapping("/addProduct/{date}")
+    public RespBean addProduct(@RequestBody Product product,@PathVariable("date")@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date date) {
+        return productService.addProduct(product,date);
     }
 
     @PutMapping("/updateProduct")

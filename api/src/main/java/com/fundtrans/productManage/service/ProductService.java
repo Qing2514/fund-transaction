@@ -5,12 +5,13 @@ import com.fundtrans.pojo.Product;
 import com.fundtrans.vo.RespBean;
 import com.hundsun.jrescloud.rpc.annotation.CloudService;
 
+import java.util.Date;
 import java.util.List;
 
 @CloudService
 public interface ProductService {
     public RespBean findAllProduct(int index,int limit);//查找所有的产品信息
-    public RespBean addProduct(Product product);//添加产品信息
+    public RespBean addProduct(Product product, Date date);//添加产品信息
     public RespBean updateProduct(Product product);//修改产品信息
     public RespBean findProductById(String id);//通过id查找产品信息
     public RespBean findProductByName(String name);//通过名称查找产品信息
