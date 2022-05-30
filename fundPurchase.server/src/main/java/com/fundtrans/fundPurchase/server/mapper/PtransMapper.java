@@ -28,16 +28,11 @@ public interface PtransMapper {
     @Select("select * from ptrans where time >= #{beforeDate} and #{date} > time and state = 0")
     List<Ptrans> findTodayptrans(@Param("date") Date date,@Param("beforeDate") Date beforeDate);
 
-
-
-
-
     @Select("select * from ptrans where user_id = #{user_id}")
     List<Ptrans> findByUserId(@Param("user_id") String user_id);
 
     @Select("select count(*) from ptrans")
     int getSum();
-
 
     List<Ptrans> findByAll(TransSelectVo transSelectVo);
 }

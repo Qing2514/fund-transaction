@@ -18,7 +18,7 @@ public class TransSelectVo implements Serializable {
 
     private String card_id;
 
-    private int state;
+    private int state = 3;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd" , timezone = "GMT+8")
     private Date date1;

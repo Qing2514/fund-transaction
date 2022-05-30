@@ -34,7 +34,7 @@
             <if test="date1!=null and date2!=null">
                 and time >= #{date1} and #{date2} >= time
             </if>
-            <if test="state!=null">
+            <if test="state!=3">
                 and state = #{state}
             </if>
         </where>
