@@ -3,6 +3,7 @@ package com.fundtrans.productManage.service;
 
 import com.fundtrans.pojo.Trend;
 import com.fundtrans.vo.RespBean;
+import com.fundtrans.vo.TransSelectVo;
 import com.hundsun.jrescloud.rpc.annotation.CloudService;
 
 import java.math.BigDecimal;
@@ -22,4 +23,6 @@ public interface TrendService {
     RespBean getSum();
 
     Date outGetMaxDate();
+
+    RespBean findByAll(TransSelectVo transSelectVo);
 }

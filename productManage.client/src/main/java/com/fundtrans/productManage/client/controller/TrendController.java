@@ -3,6 +3,7 @@ package com.fundtrans.productManage.client.controller;
 import com.fundtrans.pojo.Trend;
 import com.fundtrans.productManage.service.TrendService;
 import com.fundtrans.vo.RespBean;
+import com.fundtrans.vo.TransSelectVo;
 import com.hundsun.jrescloud.rpc.annotation.CloudReference;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
@@ -30,5 +31,10 @@ public class TrendController {
     @GetMapping("/getSum")
     public RespBean getSum(){
         return trendService.getSum();
+    }
+
+    @PostMapping("/findByAll")
+    public RespBean findByAll(@RequestBody TransSelectVo transSelectVo){
+        return trendService.findByAll(transSelectVo);
     }
 }

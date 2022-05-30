@@ -66,6 +66,7 @@ public class ProductServiceImpl implements ProductService {
             trend.setId(date);
             trend.setProduct_id(product.getId());
             trend.setPrice(BigDecimal.valueOf(1.0000));
+            trend.setName(product.getName());
             trendService.addTrend(trend,date);
         }catch (Exception e){
             logger.error("净值走势添加失败："+e.getMessage());

@@ -6,6 +6,7 @@ import com.fundtrans.productManage.server.mapper.TrendMapper;
 import com.fundtrans.productManage.service.TrendService;
 import com.fundtrans.vo.RespBean;
 import com.fundtrans.vo.RespBeanEnum;
+import com.fundtrans.vo.TransSelectVo;
 import com.hundsun.jrescloud.rpc.annotation.CloudComponent;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -89,5 +90,10 @@ public class TrendServiceImpl implements TrendService {
     @Override
     public Date outGetMaxDate() {
         return trendMapper.getMaxDate();
+    }
+
+    @Override
+    public RespBean findByAll(TransSelectVo transSelectVo) {
+        return RespBean.success(trendMapper.findByAll(transSelectVo));
     }
 }

@@ -18,4 +18,6 @@ public class Trend implements Serializable {
     private String product_id;
 
     private BigDecimal price;//净值
+
+    private String name;
 }
