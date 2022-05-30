@@ -40,4 +40,9 @@ public class ShareController {
     public RespBean getShare(String user_id, String product_id, String card_id){
         return shareService.getShare(user_id,product_id,card_id);
     }
+
+    @PostMapping("/findByUserId")
+    public RespBean findByUserId(@RequestBody TransSelectVo transSelectVo){
+        return shareService.findByUserId(transSelectVo);
+    }
 }

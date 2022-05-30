@@ -61,4 +61,9 @@ public class ShareServiceImpl implements ShareService {
         Share share = shareMapper.findByThree(user_id,product_id,card_id);
         return RespBean.success(share.getValue().subtract(share.getFrozen_num()));
     }
+
+    @Override
+    public RespBean findByUserId(TransSelectVo transSelectVo) {
+        return RespBean.success(shareMapper.findByUserId(transSelectVo.getUser_id()));
+    }
 }

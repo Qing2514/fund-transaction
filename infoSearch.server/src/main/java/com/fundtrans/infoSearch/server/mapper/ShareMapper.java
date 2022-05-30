@@ -37,4 +37,7 @@ public interface ShareMapper {
     int getSum();
 
     List<Share> findByAll(TransSelectVo transSelectVo);
+
+    @Select("select distinct product_id from share where user_id = #{user_id}")
+    List<String> findByUserId(@Param("user_id") String user_id);
 }
