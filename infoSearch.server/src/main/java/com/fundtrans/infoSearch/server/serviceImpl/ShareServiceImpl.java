@@ -8,6 +8,8 @@ import com.fundtrans.vo.TransSelectVo;
 import com.hundsun.jrescloud.rpc.annotation.CloudComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @CloudComponent
@@ -63,7 +65,22 @@ public class ShareServiceImpl implements ShareService {
     }
 
     @Override
-    public RespBean findProductIdByUserId(TransSelectVo transSelectVo) {
-        return RespBean.success(shareMapper.findProductIdByUserId(transSelectVo.getUser_id()));
+    public RespBean findShareByUserId(TransSelectVo transSelectVo) {
+        List<Share> result = new ArrayList<>();
+        List<String> product_ids = shareMapper.findProductIdByUserId(transSelectVo.getUser_id());
+        for (int i = 0; i < product_ids.size(); i++){
+            BigDecimal num_sum = new BigDecimal(0.00);
+            Share share = new Share();
+            List<Share> shares = shareMapper.findByUserIdAndProductId(transSelectVo.getUser_id(),product_ids.get(i));
+            int j = 0;
+            for (;j<shares.size();++j){
+                num_sum = num_sum.add(shares.get(j).getValue());
+            }
+            share.setProduct_id(product_ids.get(i));
+            share.setName(shares.get(j-1).getName());
+            share.setValue(num_sum);
+            result.add(share);
+        }
+        return RespBean.success(result);
     }
 }

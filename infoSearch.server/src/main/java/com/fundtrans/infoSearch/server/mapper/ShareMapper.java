@@ -40,4 +40,7 @@ public interface ShareMapper {
 
     @Select("select distinct product_id from share where user_id = #{user_id}")
     List<String> findProductIdByUserId(@Param("user_id") String user_id);
+
+    @Select("select * from share where user_id = #{user_id} and product_id = #{product_id}")
+    List<Share> findByUserIdAndProductId(@Param("user_id") String user_id, @Param("product_id") String product_id);
 }

@@ -43,6 +43,6 @@ public class ShareController {
 
     @PostMapping("/findProductIdByUserId")
     public RespBean findProductIdByUserId(@RequestBody TransSelectVo transSelectVo){
-        return shareService.findProductIdByUserId(transSelectVo);
+        return shareService.findShareByUserId(transSelectVo);
     }
 }
