@@ -20,8 +20,8 @@
             <if test="product_id!=null">
                 and product_id = #{product_id}
             </if>
-            <if test="date1!=null and date2!=null">
-                and id >= #{date1} and #{date2} >= id
+            <if test="date1!=null">
+                and id = #{date1}
             </if>
         </where>
     </select>
