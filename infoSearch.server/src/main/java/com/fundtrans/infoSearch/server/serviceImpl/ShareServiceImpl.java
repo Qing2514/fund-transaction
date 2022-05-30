@@ -63,7 +63,7 @@ public class ShareServiceImpl implements ShareService {
     }
 
     @Override
-    public RespBean findByUserId(TransSelectVo transSelectVo) {
-        return RespBean.success(shareMapper.findByUserId(transSelectVo.getUser_id()));
+    public RespBean findProductIdByUserId(TransSelectVo transSelectVo) {
+        return RespBean.success(shareMapper.findProductIdByUserId(transSelectVo.getUser_id()));
     }
 }

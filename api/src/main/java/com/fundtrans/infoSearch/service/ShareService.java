@@ -29,5 +29,5 @@ public interface ShareService {
 
     RespBean getShare(String user_id, String product_id, String card_id);
 
-    RespBean findByUserId(TransSelectVo transSelectVo);
+    RespBean findProductIdByUserId(TransSelectVo transSelectVo);
 }
