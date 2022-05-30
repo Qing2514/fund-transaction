@@ -25,4 +25,6 @@ public interface TrendService {
     Date outGetMaxDate();
 
     RespBean findByAll(TransSelectVo transSelectVo);
+
+    void outAddTrend(Trend trend);
 }

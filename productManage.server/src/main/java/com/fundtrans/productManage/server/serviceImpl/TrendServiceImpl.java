@@ -96,4 +96,9 @@ public class TrendServiceImpl implements TrendService {
     public RespBean findByAll(TransSelectVo transSelectVo) {
         return RespBean.success(trendMapper.findByAll(transSelectVo));
     }
+
+    @Override
+    public void outAddTrend(Trend trend) {
+        trendMapper.addTrend(trend);
+    }
 }

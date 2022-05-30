@@ -74,7 +74,14 @@ public class ClearingServiceImpl implements ClearingService {
                 netWorth = ClearingUtil.getNewNetWorth(trend.getPrice());
                 try {
                     logger.info("更新行情");
-                    num = trendService.outTrendUpdate(dateId, product.getId(), netWorth);
+                    Trend newTrend = trendService.outTrendFindById(dateId,product.getId());
+                    if (newTrend != null) {
+                        num = trendService.outTrendUpdate(dateId, product.getId(), netWorth);
+                    }
+                    else {
+                        newTrend = new Trend(dateId,product.getId(),netWorth,product.getName());
+                        trendService.outAddTrend(newTrend);
+                    }
                 } catch (Exception e) {
                     logger.error("更新行情失败：" + e.getMessage());
                     return RespBean.error(RespBeanEnum.TREND_UPDATE_ERROR);
