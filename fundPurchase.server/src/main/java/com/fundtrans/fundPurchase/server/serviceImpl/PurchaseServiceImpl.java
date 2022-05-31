@@ -134,7 +134,9 @@ public class PurchaseServiceImpl implements PurchaseService {
             Purchase purchase = new Purchase();
             purchase.setId(temp.getId());
             purchase.setUser_id(temp.getUser_id());
+            purchase.setUser_name(temp.getUser_name());
             purchase.setProduct_id(temp.getProduct_id());
+            purchase.setProduct_name(temp.getProduct_name());
             purchase.setCard_id(temp.getCard_id());
             purchase.setTime(temp.getTime());
             purchase.setAmount(temp.getAmount());

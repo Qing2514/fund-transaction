@@ -102,7 +102,9 @@ public class RedemptionServiceImpl implements RedemptionService {
             Redemption redemption = new Redemption();
             redemption.setId(temp.getId());
             redemption.setUser_id(temp.getUser_id());
+            redemption.setUser_name(temp.getUser_name());
             redemption.setProduct_id(temp.getProduct_id());
+            redemption.setProduct_name(temp.getProduct_name());
             redemption.setCard_id(temp.getCard_id());
             redemption.setTime(temp.getTime());
             redemption.setCount(temp.getCount());

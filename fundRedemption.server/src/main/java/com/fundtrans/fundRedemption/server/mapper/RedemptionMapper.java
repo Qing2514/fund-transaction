@@ -12,8 +12,8 @@ import java.util.List;
 @Repository
 @Mapper
 public interface RedemptionMapper {
-    @Insert("insert into redemption values(#{redemption.id},#{redemption.user_id}," +
-            "#{redemption.product_id},#{redemption.card_id},#{redemption.time},#{redemption.count},#{redemption.amount})")
+    @Insert("insert into redemption values(#{redemption.id},#{redemption.user_id},#{redemption.user_name}," +
+            "#{redemption.product_id},#{redemption.product_name},#{redemption.card_id},#{redemption.time},#{redemption.count},#{redemption.amount})")
     void addRedemption(@Param("redemption") Redemption redemption);
 
     @Delete("delete from redemption where id = #{redemption.id}")

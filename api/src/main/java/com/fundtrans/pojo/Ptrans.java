@@ -26,7 +26,11 @@ public class Ptrans implements Serializable {
 
     private String user_id;
 
+    private String user_name;
+
     private String product_id;
+
+    private String product_name;
 
     private String card_id;
 

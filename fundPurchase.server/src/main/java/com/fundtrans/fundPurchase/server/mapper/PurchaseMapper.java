@@ -13,8 +13,8 @@ import java.util.List;
 @Repository
 @Mapper
 public interface PurchaseMapper {
-    @Insert("insert into purchase values(#{purchase.id},#{purchase.user_id},#{purchase.product_id}," +
-            "#{purchase.card_id},#{purchase.time},#{purchase.amount},#{purchase.count})")
+    @Insert("insert into purchase values(#{purchase.id},#{purchase.user_id},#{purchase.user_name},#{purchase.product_id}," +
+            "#{purchase.product_name},#{purchase.card_id},#{purchase.time},#{purchase.amount},#{purchase.count})")
     void addPurchase(@Param("purchase") Purchase purchase);
 
     @Delete("delete from purchase where id = #{id}")

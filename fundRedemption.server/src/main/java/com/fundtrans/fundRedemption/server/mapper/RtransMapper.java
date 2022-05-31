@@ -12,8 +12,8 @@ import java.util.List;
 @Repository
 @Mapper
 public interface RtransMapper {
-    @Insert("insert into rtrans values(#{rtrans.id},#{rtrans.user_id},#{rtrans.product_id}," +
-            "#{rtrans.card_id},#{rtrans.time},#{rtrans.method},#{rtrans.count},#{rtrans.state})")
+    @Insert("insert into rtrans values(#{rtrans.id},#{rtrans.user_id},#{rtrans.user_name},#{rtrans.product_id}," +
+            "#{rtrans.product_name},#{rtrans.card_id},#{rtrans.time},#{rtrans.method},#{rtrans.count},#{rtrans.state})")
     void addRtrans(@Param("rtrans") Rtrans rtrans);
 
     @Select("select * from rtrans where id = #{id}")

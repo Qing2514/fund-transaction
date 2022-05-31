@@ -6,7 +6,9 @@
     <resultMap id="BaseResultMap" type="com.fundtrans.pojo.Purchase">
         <id column="id" property="id" />
         <result column="user_id" property="user_id" />
+        <result column="user_name" property="user_name" />
         <result column="product_id" property="product_id" />
+        <result column="product_name" property="product_name" />
         <result column="card_id" property="card_id" />
         <result column="time" property="time" />
         <result column="amount" property="amount" />
@@ -15,7 +17,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, user_id, product_id, card_id, time, amount, count
+        id, user_id, user_name, product_id, product_name, card_id, time, amount, count
     </sql>
 
     <select id="findByAll" parameterType="com.fundtrans.vo.TransSelectVo" resultType="com.fundtrans.pojo.Purchase">

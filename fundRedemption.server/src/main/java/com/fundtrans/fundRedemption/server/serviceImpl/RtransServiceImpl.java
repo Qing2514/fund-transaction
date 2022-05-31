@@ -1,11 +1,13 @@
 package com.fundtrans.fundRedemption.server.serviceImpl;
 
+import com.fundtrans.pojo.Product;
 import com.fundtrans.pojo.Rtrans;
 import com.fundtrans.pojo.Share;
 import com.fundtrans.fundRedemption.server.mapper.RtransMapper;
 import com.fundtrans.fundRedemption.service.RtransService;
 import com.fundtrans.infoSearch.service.ShareService;
 import com.fundtrans.pojo.User;
+import com.fundtrans.productManage.service.ProductService;
 import com.fundtrans.userManage.service.UserService;
 import com.fundtrans.vo.Datetime;
 import com.fundtrans.vo.RespBean;
@@ -37,12 +39,28 @@ public class RtransServiceImpl implements RtransService {
     private ShareService shareService;
     @CloudReference
     private UserService userService;
+    @CloudReference
+    private ProductService productService;
 
     @Autowired
     private RtransMapper rtransMapper;
 
     @Override
     public RespBean addRtrans(Rtrans rtrans, Date date_now) {
+        User user = null;
+        try {
+            user = userService.OutFindById(rtrans.getUser_id());
+        }catch (Exception e){
+            logger.error("用户不存在："+e.getMessage());
+            return RespBean.error(RespBeanEnum.USER_NOT_EXIST);
+        }
+        Product product = null;
+        try {
+            product = productService.outFindProductById(rtrans.getProduct_id());
+        }catch (Exception e){
+            logger.error("产品不存在："+e.getMessage());
+            return RespBean.error(RespBeanEnum.PRODUCT_NOT_EXIST);
+        }
 
         //首先判断赎回银行卡是否在份额表中该用户对应该基金产品持有份额对应的银行卡列表中
         String card_id = rtrans.getCard_id();
@@ -78,6 +96,8 @@ public class RtransServiceImpl implements RtransService {
         }
 
         //完成判断 能够添加到赎回交易记录中
+        rtrans.setUser_name(user.getName());
+        rtrans.setProduct_name(product.getName());
         rtrans.setId(0);
         rtrans.setTime(date_now);
         rtrans.setState(0);

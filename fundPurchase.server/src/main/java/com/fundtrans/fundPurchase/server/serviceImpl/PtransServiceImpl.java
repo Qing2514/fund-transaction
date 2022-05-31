@@ -1,11 +1,13 @@
 package com.fundtrans.fundPurchase.server.serviceImpl;
 
 import com.fundtrans.infoSearch.service.CardService;
+import com.fundtrans.pojo.Product;
 import com.fundtrans.pojo.Ptrans;
 import com.fundtrans.fundPurchase.server.mapper.PtransMapper;
 import com.fundtrans.fundPurchase.service.PtransService;
 import com.fundtrans.pojo.Card;
 import com.fundtrans.pojo.User;
+import com.fundtrans.productManage.service.ProductService;
 import com.fundtrans.userManage.service.UserService;
 import com.fundtrans.vo.Datetime;
 import com.fundtrans.vo.RespBean;
@@ -37,6 +39,8 @@ public class PtransServiceImpl implements PtransService {
     private CardService cardService;
     @CloudReference
     private UserService userService;
+    @CloudReference
+    private ProductService productService;
 
     @Autowired
     private PtransMapper ptransMapper;
@@ -53,6 +57,20 @@ public class PtransServiceImpl implements PtransService {
      */
     @Override
     public RespBean addPtrans(Ptrans ptrans,Date date) {
+        User user = null;
+        try {
+            user = userService.OutFindById(ptrans.getUser_id());
+        }catch (Exception e){
+            logger.error("用户不存在："+e.getMessage());
+            return RespBean.error(RespBeanEnum.USER_NOT_EXIST);
+        }
+        Product product = null;
+        try {
+            product = productService.outFindProductById(ptrans.getProduct_id());
+        }catch (Exception e){
+            logger.error("产品不存在："+e.getMessage());
+            return RespBean.error(RespBeanEnum.PRODUCT_NOT_EXIST);
+        }
         String card_id = ptrans.getCard_id();
         BigDecimal amount = ptrans.getAmount();
         List<Card> cardList = cardService.OutFindByUserId(ptrans.getUser_id());
@@ -122,6 +140,8 @@ public class PtransServiceImpl implements PtransService {
             logger.error("该卡余额不足");
             return RespBean.error(RespBeanEnum.BALANCE_NOT_AVAILABLE);
         }
+        ptrans.setUser_name(user.getName());
+        ptrans.setProduct_name(product.getName());
         ptrans.setId(0);
         ptrans.setTime(date);
         ptrans.setState(0);
