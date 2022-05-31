@@ -273,6 +273,7 @@ public class PurchaseServiceImpl implements PurchaseService {
         logger.info("更新申购表份额");
         int num = 0;
         List<Product> products = new ArrayList<Product>();
+        List<Purchase> purchases = new ArrayList<>();
         try {
             // 将时间设置成每天的 15:00
             datetime = DateUtils.setHours(datetime, 15);
@@ -293,12 +294,13 @@ public class PurchaseServiceImpl implements PurchaseService {
                     return RespBean.error(RespBeanEnum.PURCHASE_RELOAD_ERROR);
                 }
             }
+            purchases = purchaseMapper.outFindPurchaseByDate(datetime);
         } catch (Exception e) {
             logger.error("更新申购表份额失败: " + e.getMessage());
             return RespBean.error(RespBeanEnum.PURCHASE_UPDATECOUNT_ERROR);
         }
         logger.info("更新申购表结束, 受影响申购记录数: " + num);
-        return RespBean.success(num);
+        return RespBean.success(purchases);
     }
 
     @Override

@@ -31,7 +31,7 @@ public class RtransController {
     }
 
     @PostMapping("/withdrawRtrans/{date}")
-    public RespBean withdrawRtrans(Rtrans rtrans,@PathVariable("date")@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")Date date){
+    public RespBean withdrawRtrans(@RequestBody Rtrans rtrans,@PathVariable("date")@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")Date date){
         return rtransService.withdrawRtrans(rtrans,date);
     }
 

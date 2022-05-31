@@ -233,6 +233,7 @@ public class RedemptionServiceImpl implements RedemptionService {
         logger.info("更新赎回表份额");
         int num = 0;
         List<Product> products = new ArrayList<Product>();
+        List<Redemption> redemptions = new ArrayList<>();
         try {
             // 将时间设置成每天的 15:00
             datetime = DateUtils.setHours(datetime, 15);
@@ -253,12 +254,13 @@ public class RedemptionServiceImpl implements RedemptionService {
                     return RespBean.error(RespBeanEnum.REDEMPTION_RELOAD_ERROR);
                 }
             }
+            redemptions = redemptionMapper.outFindRedemptionByDate(datetime);
         } catch (Exception e) {
             logger.error("更新赎回表份额失败: " + e.getMessage());
             return RespBean.error(RespBeanEnum.REDEMPTION_UPDATEAMOUNT_ERROR);
         }
         logger.info("更新赎回表结束, 受影响赎回记录数: " + num);
-        return RespBean.success(num);
+        return RespBean.success(redemptions);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.fundtrans.fundRedemption.server.mapper;
 
 import com.fundtrans.pojo.Ptrans;
+import com.fundtrans.pojo.Purchase;
 import com.fundtrans.pojo.Redemption;
 import com.fundtrans.vo.TransSelectVo;
 import org.apache.ibatis.annotations.*;
@@ -41,4 +42,7 @@ public interface RedemptionMapper {
     public Redemption findById(@Param("id") int id);
 
     List<Redemption> findByAll(TransSelectVo transSelectVo);
+
+    @Select("select * from redemption where time < #{date} and time >= DATE_SUB(#{date}, INTERVAL 1 DAY)")
+    List<Redemption> outFindRedemptionByDate(@Param("date") Date datetime);
 }

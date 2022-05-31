@@ -33,4 +33,7 @@ public interface PurchaseMapper {
     public Purchase findById(@Param("id") int id);
 
     List<Purchase> findByAll(TransSelectVo transSelectVo);
+
+    @Select("select * from purchase where time < #{date} and time >= DATE_SUB(#{date}, INTERVAL 1 DAY)")
+    List<Purchase> outFindPurchaseByDate(@Param("date") Date datetime);
 }
