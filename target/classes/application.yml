@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/fundtrans?characterEncoding=utf-8&serverTimezone=UTC
+    username: root
+    password: 2514632453
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+#mybatis-plus:
+#  mapper-locations: classpath*:/mapper/**/*.xml
+
+server:
+  port: 8080
