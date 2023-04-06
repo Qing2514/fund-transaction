@@ -8,18 +8,10 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
-import java.io.Serializable;
-
-/**
- * @author Qing2514
- */
 @ApiModel(value = "用户")
 @TableName("user")
 @Data
-public class User implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class User {
 
     @ApiModelProperty(value = "证件类型+证件号码")
     @TableField(value = "id")
@@ -30,20 +22,19 @@ public class User implements Serializable {
     @TableField(value = "name")
     private String name;
 
-    @ApiModelProperty(value = "密码", required = true)
-    @NotBlank(message = "密码不能为空")
+    @ApiModelProperty(value = "银行卡密码", required = true)
     @TableField(value = "password")
     private String password;
 
-    @ApiModelProperty(value = "类型")
+    @ApiModelProperty(value = "客户类型，0-机构，1-个人")
     @TableField(value = "type")
-    private String type;
+    private Integer type;
 
-    @ApiModelProperty(value = "证件类型")
+    @ApiModelProperty(value = "证件类型，0-居民身份证，1-护照")
     @TableField(value = "ctype")
-    private String ctype;
+    private Integer ctype;
 
-    @ApiModelProperty(value = "证件号")
+    @ApiModelProperty(value = "证件号码")
     @TableField(value = "cid")
     private String cid;
 
@@ -55,9 +46,9 @@ public class User implements Serializable {
     @TableField(value = "age")
     private Integer age;
 
-    @ApiModelProperty(value = "性别")
+    @ApiModelProperty(value = "性别，0-男，1-女")
     @TableField(value = "sex")
-    private String sex;
+    private Integer sex;
 
     @ApiModelProperty(value = "地址")
     @TableField(value = "address")
@@ -67,12 +58,12 @@ public class User implements Serializable {
     @TableField(value = "job")
     private String job;
 
-    @ApiModelProperty(value = "安全性")
+    @ApiModelProperty(value = "1~4的整数，1为安全性最高，4风险性最高")
     @TableField(value = "security")
-    private String security;
+    private Integer security = 4;
 
-    @ApiModelProperty(value = "状态")
+    @ApiModelProperty(value = "状态，0-正常账户，1-已销户")
     @TableField(value = "state")
-    private Integer state;
+    private Integer state = 0;
 
 }

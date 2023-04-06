@@ -16,23 +16,8 @@ public enum ResultEnum {
     ERROR(500,"服务端异常"),
     BIND_ERROR(500009,"参数校验异常"),
 
-    USER_FINDALL_ERROR(500100,"查询失败"),
-    USER_FIND_ERROR(500101,"用户查询失败"),
-    USER_NOT_EXIST(500102,"用户不存在"),
-    USER_LIST_NULL(500103,"用户列表为空"),
-    USER_INSERT_ERROR(500104,"用户插入失败"),
-    USER_UPDATE_ERROR(500105,"用户更新失败"),
-    USER_DELETE_ERROR(500106,"用户删除失败"),
-    USER_ALREADY_EXIST(500107,"用户已开户"),
-    USER_ASSESS_FAIL(500108,"用户评估失败，用户更新失败"),
-    USER_NAME_EMPTY(500109,"姓名不能为空"),
-    USER_TYPE_EMPTY(500110,"客户类型不能为空"),
-    USER_CTYPE_EMPTY(500111,"证件类型不能为空"),
-    USER_CID_EMPTY(500112,"证件号不能为空"),
-
-
-
-
+    USER_NOT_EXIST(500101,"用户不存在"),
+    USER_ALREADY_EXIST(500102,"用户已开户"),
 
     CARD_ALREADY_BIND(500300,"该银行卡已绑定"),
     CARD_INSERT_FAIL(500301,"银行卡绑定失败"),
@@ -49,7 +34,6 @@ public enum ResultEnum {
     PURCHASE_UPDATECOUNT_ERROR(500200,"更新申购表份额失败"),
     PURCHASE_ADD_ERROR(500201,"申购记录添加失败"),
     PURCHASE_RELOAD_ERROR(500202,"重新生成当天申购订单失败"),
-
 
     BALANCE_NOT_AVAILABLE(500400,"该卡余额不足"),
     PTRANS_INSERT_FAIL(500401,"申购交易记录添加失败"),
@@ -97,9 +81,7 @@ public enum ResultEnum {
     DATE_PARSE_ERROR(501000,"日初始化失败"),
     TREND_UPDATE_ERROR(501001,"更新行情失败"),
     TREND_FIND_ERROR(501002,"净值查询失败"),
-    TREND_NOT_EXIST(501003,"指定查询条件下无净值")
-    ;
-
+    TREND_NOT_EXIST(501003,"指定查询条件下无净值");
 
     private final Integer code;
     private final String message;

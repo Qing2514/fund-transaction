@@ -4,23 +4,21 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * 公共返回对象
- */
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AjaxResult<T> {
+public class AjaxResult {
 
     private Integer code;
     private String msg;
-    private T data;
+    private Object data;
 
     public AjaxResult(Integer code, String msg) {
         this.code = code;
         this.msg = msg;
     }
 
-    public AjaxResult(Integer code, T data) {
+    public AjaxResult(Integer code, Object data) {
         this.code = code;
         this.data = data;
     }
