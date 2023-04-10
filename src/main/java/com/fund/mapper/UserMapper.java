@@ -25,20 +25,14 @@ public interface UserMapper extends BaseMapper<User> {
     @Select("select * from user where type = #{type} and ctype= #{ctype} and cid = #{cid} and state = 0")
     User findUser(@Param("type") Integer type, @Param("ctype") Integer ctype, @Param("cid") String cid);
 
-    // @Insert("insert into user values(#{id},#{name},#{type},#{ctype},#{cid},#{password},#{phone},#{age},#{sex},#{address},#{job},#{security},#{state})")
-    // public void addUserByField(@Param("id") String id, @Param("name") String name, @Param("type") String type,
-    //                            @Param("ctype") String ctype, @Param("cid") String cid, @Param("password") String password,
-    //                            @Param("phone") String phone, @Param("age") int age, @Param("sex") String sex,
-    //                            @Param("address") String address, @Param("job") String job, @Param("security") String security, @Param("state") int state);
-
     @Insert("insert into user values(#{user.id},#{user.name},#{user.type}," +
             "#{user.ctype},#{user.cid},#{user.password},#{user.phone},#{user.age}," +
             "#{user.sex},#{user.address},#{user.job},#{user.security},#{user.state})")
     void addUser(@Param("user") User user);
 
-    @Update("update user set name = #{user.name}, type = #{user.type}, ctype = #{user.ctype}, cid = #{user.cid}, " +
+    @Update("update user set name = #{user.name}, " +
             "password = #{user.password}, phone = #{user.phone}, age = #{user.age}, sex = #{user.sex}, " +
-            "address = #{user.address}, job = #{user.job}, security = #{user.security}, state = #{user.state} where id = #{user.id}")
+            "address = #{user.address}, job = #{user.job}, security = #{user.security} where id = #{user.id}")
     void updateUser(@Param("user") User user);
 
     @Update("update user set state = 1 where id = #{id}")

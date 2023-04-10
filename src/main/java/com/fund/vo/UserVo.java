@@ -15,7 +15,7 @@ public class UserVo {
     @NotBlank(message = "客户姓名不能为空")
     private String name;
 
-    @NotNull(message = "客户类型不能为空，0-居民身份证，1-护照")
+    @NotNull(message = "客户类型不能为空")
     private Integer type;
 
     @NotNull(message = "证件类型不能为空")

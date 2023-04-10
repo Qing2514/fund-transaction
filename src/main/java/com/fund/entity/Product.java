@@ -1,38 +1,54 @@
 package com.fund.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 
-/**
- * <p>
- *
- * </p>
- *
- * @author dyoung
- * @since 2022-05-07
- */
+@ApiModel(value = "理财产品")
+@TableName("product")
 @Data
-public class Product implements Serializable {
+public class Product {
 
-    private static final long serialVersionUID = 1L;
-
+    @ApiModelProperty(value = "产品id")
+    @TableField(value = "id")
+    @TableId
     private String id;
 
+    @ApiModelProperty(value = "产品名称")
+    @TableField(value = "name")
     private String name;
 
+    @ApiModelProperty(value = "创建日期")
+    @TableField(value = "date")
+    private String date;
+
+    @ApiModelProperty(value = "产品详情")
+    @TableField(value = "detail")
     private String detail;
 
-    /**
-     * 净值
-     */
-    private BigDecimal networth;
+    @ApiModelProperty(value = "产品净值")
+    @TableField(value = "net_worth")
+    private BigDecimal netWorth;
 
-    private String type;
+    @ApiModelProperty(value = "产品类型，0-基金，1-股票")
+    @TableField(value = "type")
+    private Integer type;
 
-    private String security;
+    @ApiModelProperty(value = "风险等级，1安全性最高，4风险性最高")
+    @TableField(value = "security")
+    private Integer security;
 
+    @ApiModelProperty(value = "")
+    @TableField(value = "prange")
     private BigDecimal prange;
+
+    @ApiModelProperty(value = "产品状态，0-正常，1-已删除")
+    @TableField(value = "state")
+    private Integer state;
 
 }

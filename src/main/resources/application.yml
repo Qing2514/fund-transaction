@@ -5,8 +5,5 @@ spring:
     password: 2514632453
     driver-class-name: com.mysql.cj.jdbc.Driver
 
-#mybatis-plus:
-#  mapper-locations: classpath*:/mapper/**/*.xml
-
 server:
   port: 8080

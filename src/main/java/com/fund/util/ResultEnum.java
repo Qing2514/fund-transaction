@@ -4,9 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
-/**
- * 公共返回对象枚举
- */
 @Getter
 @ToString
 @AllArgsConstructor

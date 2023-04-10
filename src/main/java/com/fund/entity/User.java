@@ -1,6 +1,5 @@
 package com.fund.entity;
 
-import com.baomidou.mybatisplus.annotation.SqlCondition;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -13,7 +12,7 @@ import lombok.Data;
 @Data
 public class User {
 
-    @ApiModelProperty(value = "证件类型+证件号码")
+    @ApiModelProperty(value = "用户id")
     @TableField(value = "id")
     @TableId
     private String id;
@@ -58,11 +57,11 @@ public class User {
     @TableField(value = "job")
     private String job;
 
-    @ApiModelProperty(value = "1~4的整数，1为安全性最高，4风险性最高")
+    @ApiModelProperty(value = "风险等级，1为安全性最高，4风险性最高")
     @TableField(value = "security")
     private Integer security = 4;
 
-    @ApiModelProperty(value = "状态，0-正常账户，1-已销户")
+    @ApiModelProperty(value = "账户状态，0-正常，1-已销户")
     @TableField(value = "state")
     private Integer state = 0;
 

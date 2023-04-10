@@ -7,14 +7,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-/**
- * <p>
- *
- * </p>
- *
- * @author dyoung
- * @since 2022-05-07
- */
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class Purchase implements Serializable {

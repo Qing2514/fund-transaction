@@ -47,9 +47,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         User user = new User();
         BeanUtils.copyProperties(userVo, user);
-        user.setId(UUIDUtil.uuid());
+        user.setId(UUIDUtil.getUUID());
         userMapper.addUser(user);
-        return AjaxResult.success(user);
+        return AjaxResult.success();
     }
 
     @Override

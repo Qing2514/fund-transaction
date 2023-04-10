@@ -5,8 +5,6 @@ import com.fund.entity.User;
 import com.fund.util.AjaxResult;
 import com.fund.vo.UserVo;
 
-import java.util.List;
-
 public interface UserService extends IService<User> {
 
     AjaxResult findAll();
