@@ -1,6 +1,7 @@
 package com.fund.util;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
@@ -8,10 +9,10 @@ import java.util.Date;
 
 public class ClearingUtil {
 
-    public static String getDate() {
-        LocalDate date = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        return date.format(formatter);
+    public static Date getDate() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        return cal.getTime();
     }
 
     public static Date getNewDate(Date date) {

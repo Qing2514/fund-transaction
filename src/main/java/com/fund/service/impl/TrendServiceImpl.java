@@ -31,10 +31,16 @@ public class TrendServiceImpl extends ServiceImpl<TrendMapper, Trend> implements
 
     @Override
     public AjaxResult addTrend(String productId){
-        Trend temp  = trendMapper.getLateTrend(productId);
-        Date date = ClearingUtil.getNewDate(temp.getDate());
-        BigDecimal price = ClearingUtil.getNewNetWorth(temp.getPrice());
-        Trend trend = new Trend(date, productId, price);
+        Trend temp = trendMapper.getLateTrend(productId);
+        Trend trend;
+        if(temp == null) {
+            trend = new Trend(ClearingUtil.getDate(), productId, BigDecimal.valueOf(1.0000));
+        }
+        else {
+            Date date = ClearingUtil.getNewDate(temp.getDate());
+            BigDecimal price = ClearingUtil.getNewNetWorth(temp.getPrice());
+            trend = new Trend(date, productId, price);
+        }
         trendMapper.addTrend(trend);
         return AjaxResult.success();
     }

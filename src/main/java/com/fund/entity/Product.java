@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 @ApiModel(value = "理财产品")
 @TableName("product")
@@ -25,7 +26,7 @@ public class Product {
 
     @ApiModelProperty(value = "创建日期")
     @TableField(value = "date")
-    private String date;
+    private Date date;
 
     @ApiModelProperty(value = "产品详情")
     @TableField(value = "detail")

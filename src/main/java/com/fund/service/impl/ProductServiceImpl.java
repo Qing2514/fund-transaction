@@ -2,7 +2,6 @@ package com.fund.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fund.entity.Product;
-import com.fund.entity.Trend;
 import com.fund.mapper.ProductMapper;
 import com.fund.service.ProductService;
 import com.fund.service.TrendService;
@@ -15,13 +14,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-
 @Service
 public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> implements ProductService {
 
-    // @Autowired
-    // private TrendService trendService;
+    @Autowired
+    private TrendService trendService;
 
     @Autowired
     private ProductMapper productMapper;
@@ -59,11 +56,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         product.setDate(ClearingUtil.getDate());
         productMapper.addProduct(product);
         // 添加产品走势
-        // Trend trend = new Trend();
-        // trend.setDate(ClearingUtil.getDate());
-        // trend.setProduct_id(product.getId());
-        // trend.setPrice(BigDecimal.valueOf(1.0000));
-        // trendService.addTrend(trend, date);
+        trendService.addTrend(product.getId());
         return AjaxResult.success();
     }
 
