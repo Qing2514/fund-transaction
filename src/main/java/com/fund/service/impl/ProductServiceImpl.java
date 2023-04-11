@@ -2,16 +2,20 @@ package com.fund.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fund.entity.Product;
+import com.fund.entity.Trend;
 import com.fund.mapper.ProductMapper;
 import com.fund.service.ProductService;
+import com.fund.service.TrendService;
 import com.fund.util.AjaxResult;
-import com.fund.util.DateUtil;
+import com.fund.util.ClearingUtil;
 import com.fund.util.ResultEnum;
 import com.fund.util.UUIDUtil;
 import com.fund.vo.ProductVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 
 @Service
 public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> implements ProductService {
@@ -52,14 +56,13 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         Product product = new Product();
         BeanUtils.copyProperties(productVo, product);
         product.setId(UUIDUtil.getUUID());
-        product.setDate(DateUtil.getDate());
+        product.setDate(ClearingUtil.getDate());
         productMapper.addProduct(product);
-        // todo: 添加基金走势
+        // 添加产品走势
         // Trend trend = new Trend();
-        // trend.setId(date);
+        // trend.setDate(ClearingUtil.getDate());
         // trend.setProduct_id(product.getId());
         // trend.setPrice(BigDecimal.valueOf(1.0000));
-        // trend.setName(product.getName());
         // trendService.addTrend(trend, date);
         return AjaxResult.success();
     }
