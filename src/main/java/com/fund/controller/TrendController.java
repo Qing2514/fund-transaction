@@ -18,13 +18,13 @@ public class TrendController {
     @ApiOperation("根据产品id查询走势")
     @GetMapping("/findById/{productId}")
     public AjaxResult findById(@PathVariable("productId") String productId) {
-        return trendService.findById(productId);
+        return AjaxResult.success(trendService.findById(productId));
     }
 
     @ApiOperation("新增产品走势")
     @PostMapping("/addTrend/{productId}")
     public AjaxResult addTrend(@PathVariable("productId") String productId) {
-        return trendService.addTrend(productId);
+        return trendService.addTrend(productId) ? AjaxResult.success() : AjaxResult.error();
     }
 
 }

@@ -4,8 +4,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fund.entity.User;
 import com.fund.mapper.UserMapper;
 import com.fund.service.UserService;
-import com.fund.util.AjaxResult;
-import com.fund.util.ResultEnum;
 import com.fund.util.UUIDUtil;
 import com.fund.vo.UserVo;
 import org.springframework.beans.BeanUtils;

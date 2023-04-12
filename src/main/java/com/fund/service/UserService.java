@@ -2,7 +2,6 @@ package com.fund.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.fund.entity.User;
-import com.fund.util.AjaxResult;
 import com.fund.vo.UserVo;
 
 import java.util.List;
