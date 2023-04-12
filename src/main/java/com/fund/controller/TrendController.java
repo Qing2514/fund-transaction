@@ -15,7 +15,7 @@ public class TrendController {
     @Autowired
     private TrendService trendService;
 
-    @ApiOperation("根据产品id查询")
+    @ApiOperation("根据产品id查询走势")
     @GetMapping("/findById/{productId}")
     public AjaxResult findById(@PathVariable("productId") String productId) {
         return trendService.findById(productId);
