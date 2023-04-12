@@ -28,15 +28,15 @@ public interface UserMapper extends BaseMapper<User> {
     @Insert("insert into user values(#{user.id},#{user.name},#{user.type}," +
             "#{user.ctype},#{user.cid},#{user.password},#{user.phone},#{user.age}," +
             "#{user.sex},#{user.address},#{user.job},#{user.security},#{user.state})")
-    void addUser(@Param("user") User user);
+    boolean addUser(@Param("user") User user);
 
     @Update("update user set name = #{user.name}, " +
             "password = #{user.password}, phone = #{user.phone}, age = #{user.age}, sex = #{user.sex}, " +
             "address = #{user.address}, job = #{user.job}, security = #{user.security} where id = #{user.id}")
-    void updateUser(@Param("user") User user);
+    boolean updateUser(@Param("user") User user);
 
     @Update("update user set state = 1 where id = #{id}")
-    void deleteUser(@Param("id") String id);
+    boolean deleteUser(@Param("id") String id);
 
     @Select("select count(*) from user where state = 0")
     int getSum();

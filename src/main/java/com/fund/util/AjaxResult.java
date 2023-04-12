@@ -31,11 +31,12 @@ public class AjaxResult {
         return new AjaxResult(ResultEnum.SUCCESS.getCode(), ResultEnum.SUCCESS.getMessage(), obj);
     }
 
+    public static AjaxResult error(){
+        return new AjaxResult(ResultEnum.ERROR.getCode(), ResultEnum.ERROR.getMessage(), null);
+    }
+
     public static AjaxResult error(ResultEnum resultEnum){
         return new AjaxResult(resultEnum.getCode(), resultEnum.getMessage(), null);
     }
 
-    public static AjaxResult error(ResultEnum resultEnum, Object obj){
-        return new AjaxResult(resultEnum.getCode(), resultEnum.getMessage(), obj);
-    }
 }

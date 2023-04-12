@@ -5,24 +5,26 @@ import com.fund.entity.User;
 import com.fund.util.AjaxResult;
 import com.fund.vo.UserVo;
 
+import java.util.List;
+
 public interface UserService extends IService<User> {
 
-    AjaxResult findAll();
+    List<User> findAll();
 
-    AjaxResult findById(String id);
+    User findById(String id);
 
-    AjaxResult findByFuzzyId(String id);
+    List<User> findByFuzzyId(String id);
 
-    AjaxResult findByNameAndCid(String name, String cid);
+    List<User> findByNameAndCid(String name, String cid);
 
-    AjaxResult addUser(UserVo userVo);
+    boolean addUser(UserVo userVo);
 
-    AjaxResult updateUser(User user);
+    boolean updateUser(User user);
 
-    AjaxResult deleteUser(String id);
+    boolean deleteUser(String id);
 
-    AjaxResult riskAssess(User user, String answer);
+    boolean riskAssess(User user, String answer);
 
-    AjaxResult getSum();
+    int getSum();
 
 }

@@ -12,6 +12,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
@@ -19,61 +21,58 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private UserMapper userMapper;
 
     @Override
-    public AjaxResult findAll() {
-        return AjaxResult.success(userMapper.findAll());
+    public List<User> findAll() {
+        return userMapper.findAll();
     }
 
     @Override
-    public AjaxResult findById(String id) {
-        return AjaxResult.success(userMapper.findById(id));
+    public User findById(String id) {
+        return userMapper.findById(id);
     }
 
     @Override
-    public AjaxResult findByFuzzyId(String id) {
-        return AjaxResult.success(userMapper.findByFuzzyId(id));
+    public List<User> findByFuzzyId(String id) {
+        return userMapper.findByFuzzyId(id);
     }
 
     @Override
-    public AjaxResult findByNameAndCid(String name, String cid) {
-        return AjaxResult.success(userMapper.findByNameAndCid(name, cid));
+    public List<User> findByNameAndCid(String name, String cid) {
+        return userMapper.findByNameAndCid(name, cid);
     }
 
     @Override
-    public AjaxResult addUser(UserVo userVo) {
+    public boolean addUser(UserVo userVo) {
         // 判断用户是否已开户
         User temp = userMapper.findUser(userVo.getType(), userVo.getCtype(), userVo.getCid());
         if (temp != null) {
-            return AjaxResult.error(ResultEnum.USER_ALREADY_EXIST);
+            return false;
         }
         User user = new User();
         BeanUtils.copyProperties(userVo, user);
         user.setId(UUIDUtil.getUUID());
-        userMapper.addUser(user);
-        return AjaxResult.success();
+        return userMapper.addUser(user);
     }
 
     @Override
-    public AjaxResult updateUser(User user) {
+    public boolean updateUser(User user) {
         User temp = userMapper.findById(user.getId());
         if (temp == null) {
-            return AjaxResult.error(ResultEnum.USER_NOT_EXIST);
+            return false;
         }
-        userMapper.updateUser(user);
-        return AjaxResult.success();
+        return userMapper.updateUser(user);
     }
 
     @Override
-    public AjaxResult deleteUser(String id) {
+    public boolean deleteUser(String id) {
         User temp = userMapper.findById(id);
         if (temp == null) {
-            return AjaxResult.error(ResultEnum.USER_NOT_EXIST);
+            return false;
         }
-        userMapper.deleteUser(id);
-        return AjaxResult.success();
+        return userMapper.deleteUser(id);
     }
 
     @Override
-    public AjaxResult riskAssess(User user, String answer) {
+    public boolean riskAssess(User user, String answer) {
         int security;
         switch (answer) {
             case "A":
@@ -89,13 +88,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 security = 4;
         }
         user.setSecurity(security);
-        userMapper.updateUser(user);
-        return AjaxResult.success();
+        return userMapper.updateUser(user);
     }
 
     @Override
-    public AjaxResult getSum() {
-        return AjaxResult.success(userMapper.getSum());
+    public int getSum() {
+        return userMapper.getSum();
     }
 
 }

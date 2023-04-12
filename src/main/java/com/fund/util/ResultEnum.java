@@ -10,8 +10,7 @@ import lombok.ToString;
 public enum ResultEnum {
 
     SUCCESS(200,"SUCCESS"),
-    ERROR(500,"服务端异常"),
-    BIND_ERROR(500009,"参数校验异常"),
+    ERROR(500,"ERROR"),
 
     USER_NOT_EXIST(500101,"用户不存在"),
     USER_ALREADY_EXIST(500102,"用户已开户"),
