@@ -14,6 +14,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> implements ProductService {
 
@@ -24,65 +26,62 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     private ProductMapper productMapper;
 
     @Override
-    public AjaxResult findAll() {
-        return AjaxResult.success(productMapper.findAll());
+    public List<Product> findAll() {
+        return productMapper.findAll();
     }
 
     @Override
-    public AjaxResult findById(String id) {
-        return AjaxResult.success(productMapper.findById(id));
+    public Product findById(String id) {
+        return productMapper.findById(id);
     }
 
     @Override
-    public AjaxResult findByFuzzyId(String id) {
-        return AjaxResult.success(productMapper.findByFuzzyId(id));
+    public List<Product> findByFuzzyId(String id) {
+        return productMapper.findByFuzzyId(id);
     }
 
     @Override
-    public AjaxResult findProduct(Integer type, String name, Integer security) {
-        return AjaxResult.success(productMapper.findProduct(type, name, security));
+    public Product findProduct(Integer type, String name, Integer security) {
+        return productMapper.findProduct(type, name, security);
     }
 
     @Override
-    public AjaxResult addProduct(ProductVo productVo) {
+    public boolean addProduct(ProductVo productVo) {
         // 判断产品是否已存在
         Product temp = productMapper.findByTypeAndName(productVo.getType(), productVo.getName());
         if (temp != null) {
-            return AjaxResult.error(ResultEnum.PRODUCT_ALREADY_EXIST);
+            return false;
         }
         Product product = new Product();
         BeanUtils.copyProperties(productVo, product);
         product.setId(UUIDUtil.getUUID());
         product.setDate(ClearingUtil.getDate());
-        productMapper.addProduct(product);
         // 添加产品走势
         trendService.addTrend(product.getId());
-        return AjaxResult.success();
+        return productMapper.addProduct(product);
     }
 
     @Override
-    public AjaxResult updateProduct(Product product) {
+    public boolean updateProduct(Product product) {
         Product temp = productMapper.findById(product.getId());
         if (temp == null) {
-            return AjaxResult.error(ResultEnum.PRODUCT_NOT_EXIST);
+            return false;
         }
-        productMapper.updateProduct(product);
-        return AjaxResult.success();
+        return productMapper.updateProduct(product);
     }
 
     @Override
-    public AjaxResult deleteProduct(String id) {
+    public boolean deleteProduct(String id) {
         Product temp = productMapper.findById(id);
         if (temp == null) {
-            return AjaxResult.error(ResultEnum.PRODUCT_NOT_EXIST);
+            return false;
         }
-        productMapper.deleteProduct(id);
-        return AjaxResult.success();
+        return productMapper.deleteProduct(id);
     }
 
     @Override
-    public AjaxResult getSum() {
-        return AjaxResult.success(productMapper.getSum());
+    public int getSum() {
+        return productMapper.getSum();
     }
 
 }

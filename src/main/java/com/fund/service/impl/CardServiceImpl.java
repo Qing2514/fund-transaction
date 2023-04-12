@@ -32,7 +32,7 @@ public class CardServiceImpl extends ServiceImpl<CardMapper, Card> implements Ca
     public boolean addCard(CardVo cardVo) {
         // 判断银行卡是否被绑定及绑定的卡主是否存在
         Card card = cardMapper.findByCardId(cardVo.getCardId());
-        User user = (User)userService.findById(cardVo.getUserId()).getData();
+        User user = userService.findById(cardVo.getUserId());
         if (card != null || user == null) {
             return false;
         }

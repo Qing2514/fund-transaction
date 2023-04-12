@@ -27,15 +27,15 @@ public interface ProductMapper extends BaseMapper<Product> {
 
     @Insert("insert into product values(#{product.id},#{product.name},#{product.detail}," +
             "1,#{product.type},#{product.security},0,#{product.date},0)")
-    void addProduct(@Param("product") Product product);
+    boolean addProduct(@Param("product") Product product);
 
     @Update("update product set name = #{product.name}, " +
             "detail = #{product.detail}, type = #{product.type}, " +
             "security = #{product.security}, prange = #{product.prange} where id=#{product.id}")
-    void updateProduct(@Param("product") Product product);
+    boolean updateProduct(@Param("product") Product product);
 
     @Update("update product set state = 1 where id = #{id}")
-    void deleteProduct(@Param("id") String id);
+    boolean deleteProduct(@Param("id") String id);
 
     @Select("select count(*) from product where state = 0")
     int getSum();

@@ -5,21 +5,24 @@ import com.fund.entity.Product;
 import com.fund.util.AjaxResult;
 import com.fund.vo.ProductVo;
 
+import java.util.List;
+
 public interface ProductService extends IService<Product> {
 
-    AjaxResult findAll();
+    List<Product> findAll();
 
-    AjaxResult findById(String id);
+    Product findById(String id);
 
-    AjaxResult findByFuzzyId(String id);
+    List<Product> findByFuzzyId(String id);
 
-    AjaxResult findProduct(Integer type, String name, Integer security);
+    Product findProduct(Integer type, String name, Integer security);
 
-    AjaxResult addProduct(ProductVo productVo);
+    boolean addProduct(ProductVo productVo);
 
-    AjaxResult updateProduct(Product product);
+    boolean updateProduct(Product product);
 
-    AjaxResult deleteProduct(String id);
+    boolean deleteProduct(String id);
 
-    AjaxResult getSum();
+    int getSum();
+
 }
