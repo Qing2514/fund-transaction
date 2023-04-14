@@ -29,6 +29,11 @@ public class CardServiceImpl extends ServiceImpl<CardMapper, Card> implements Ca
     }
 
     @Override
+    public Card findByCardId(String cardId) {
+        return cardMapper.findByCardId(cardId);
+    }
+
+    @Override
     public boolean addCard(CardVo cardVo) {
         // 判断银行卡是否被绑定及绑定的卡主是否存在
         Card card = cardMapper.findByCardId(cardVo.getCardId());
@@ -52,12 +57,21 @@ public class CardServiceImpl extends ServiceImpl<CardMapper, Card> implements Ca
     }
 
     @Override
-    public boolean recharge(String cardId, BigDecimal amount) {
+    public boolean recharge(String cardId, BigDecimal account) {
         Card card = cardMapper.findByCardId(cardId);
         if (card == null) {
             return false;
         }
-        return cardMapper.updateCard(cardId, amount);
+        return cardMapper.updateCard(cardId, card.getAccount().add(account));
+    }
+
+    @Override
+    public boolean purchase(String cardId, BigDecimal account) {
+        Card card = cardMapper.findByCardId(cardId);
+        if (card == null) {
+            return false;
+        }
+        return cardMapper.updateCard(cardId, card.getAccount().subtract(account));
     }
 
 }

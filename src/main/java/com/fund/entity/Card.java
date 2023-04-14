@@ -19,7 +19,7 @@ public class Card {
     @TableId
     private String cardId;
 
-    @ApiModelProperty(value = "用户id")
+    @ApiModelProperty(value = "客户id")
     @TableField(value = "user_id")
     private String userId;
 

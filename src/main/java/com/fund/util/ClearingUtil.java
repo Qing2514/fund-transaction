@@ -1,9 +1,6 @@
 package com.fund.util;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -12,6 +9,15 @@ public class ClearingUtil {
     public static Date getDate() {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
+        return cal.getTime();
+    }
+
+    public static Date setDate(Date date, int hour) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY, hour);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
         return cal.getTime();
     }
 

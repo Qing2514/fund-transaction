@@ -11,10 +11,14 @@ public interface CardService extends IService<Card> {
 
     List<Card> findByUserId(String userId);
 
+    Card findByCardId(String CardId);
+
     boolean addCard(CardVo cardVo);
 
     boolean deleteCard(String cardId);
 
     boolean recharge(String cardId, BigDecimal amount);
+
+    boolean purchase(String cardId, BigDecimal amount);
 
 }

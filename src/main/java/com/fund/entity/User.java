@@ -12,12 +12,12 @@ import lombok.Data;
 @Data
 public class User {
 
-    @ApiModelProperty(value = "用户id")
+    @ApiModelProperty(value = "客户id")
     @TableField(value = "id")
     @TableId
     private String id;
 
-    @ApiModelProperty(value = "姓名")
+    @ApiModelProperty(value = "客户名称")
     @TableField(value = "name")
     private String name;
 

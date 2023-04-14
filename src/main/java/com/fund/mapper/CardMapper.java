@@ -22,7 +22,7 @@ public interface CardMapper extends BaseMapper<Card> {
     @Update("update card set state = 1 where card_id = #{cardId}")
     boolean deleteCard(@Param("cardId") String cardId);
 
-    @Update("update card set account = account + #{amount} where card_id = #{cardId}")
-    boolean updateCard(@Param("cardId") String cardId, @Param("amount") BigDecimal amount);
+    @Update("update card set account = #{account} where card_id = #{cardId}")
+    boolean updateCard(@Param("cardId") String cardId, @Param("account") BigDecimal account);
 
 }

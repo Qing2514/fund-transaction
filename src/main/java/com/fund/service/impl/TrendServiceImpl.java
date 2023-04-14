@@ -19,23 +19,31 @@ public class TrendServiceImpl extends ServiceImpl<TrendMapper, Trend> implements
     private TrendMapper trendMapper;
 
     @Override
-    public List<Trend> findById(String productId){
-        return trendMapper.findById(productId);
+    public List<Trend> findById(String productId) {
+        return trendMapper.findByProductId(productId);
     }
 
     @Override
-    public boolean addTrend(String productId){
+    public boolean addTrend(String productId) {
         Trend temp = trendMapper.getLateTrend(productId);
         Trend trend;
-        if(temp == null) {
+        if (temp == null) {
             trend = new Trend(ClearingUtil.getDate(), productId, BigDecimal.valueOf(1.0000));
-        }
-        else {
+        } else {
             Date date = ClearingUtil.getNewDate(temp.getDate());
             BigDecimal price = ClearingUtil.getNewNetWorth(temp.getPrice());
             trend = new Trend(date, productId, price);
         }
         return trendMapper.addTrend(trend);
+    }
+
+    @Override
+    public BigDecimal getPrice(String productId, Date date) {
+        Trend trend = trendMapper.findByProductIdAndDate(productId, date);
+        if(trend == null) {
+            return BigDecimal.ZERO;
+        }
+        return trend.getPrice();
     }
 
 }
