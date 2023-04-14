@@ -55,7 +55,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         product.setId(UUIDUtil.getUUID());
         product.setDate(ClearingUtil.getDate());
         // 添加产品走势
-        trendService.addTrend(product.getId());
+        trendService.addTrendByProductId(product.getId());
         return productMapper.addProduct(product);
     }
 
@@ -75,6 +75,11 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
             return false;
         }
         return productMapper.deleteProduct(id);
+    }
+
+    @Override
+    public List<String> getIds() {
+        return productMapper.getIds();
     }
 
     @Override

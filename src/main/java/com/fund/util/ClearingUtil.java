@@ -9,6 +9,11 @@ public class ClearingUtil {
     public static Date getDate() {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
+        int hour = cal.get(Calendar.HOUR_OF_DAY);
+        // 超过15:00即为下一个工作日
+        if(hour > 15) {
+            cal.add(Calendar.DATE,1);
+        }
         return cal.getTime();
     }
 
@@ -21,13 +26,10 @@ public class ClearingUtil {
         return cal.getTime();
     }
 
-    public static Date getNewDate(Date date) {
+    public static boolean isWeekend(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
-        do {
-            cal.add(Calendar.DATE, 1);
-        } while (cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY);
-        return cal.getTime();
+        return cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY;
     }
 
     public static BigDecimal getNewNetWorth(BigDecimal netWorth) {

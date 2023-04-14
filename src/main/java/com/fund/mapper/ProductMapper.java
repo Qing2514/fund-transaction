@@ -37,6 +37,9 @@ public interface ProductMapper extends BaseMapper<Product> {
     @Update("update product set state = 1 where id = #{id}")
     boolean deleteProduct(@Param("id") String id);
 
+    @Select("select id from product where state = 0")
+    List<String> getIds();
+
     @Select("select count(*) from product where state = 0")
     int getSum();
 

@@ -2,10 +2,14 @@ package com.fund.controller;
 
 import com.fund.service.TrendService;
 import com.fund.util.AjaxResult;
+import com.fund.util.ResultEnum;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
 
 @Api(value = "TrendController", tags = "产品走势模块")
 @RestController
@@ -22,9 +26,9 @@ public class TrendController {
     }
 
     @ApiOperation("新增产品走势")
-    @PostMapping("/addTrend/{productId}")
-    public AjaxResult addTrend(@PathVariable("productId") String productId) {
-        return trendService.addTrend(productId) ? AjaxResult.success() : AjaxResult.error();
+    @PostMapping("/addTrend/{date}")
+    public AjaxResult addTrend(@PathVariable("date") @DateTimeFormat(pattern="yyyy-MM-dd") Date date) {
+        return trendService.addTrendByDate(date) ? AjaxResult.success() : AjaxResult.error(ResultEnum.DATE_ERROR);
     }
 
 }

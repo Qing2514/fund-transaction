@@ -11,7 +11,9 @@ public interface TrendService extends IService<Trend> {
 
     List<Trend> findById(String productId);
 
-    boolean addTrend(String productId);
+    boolean addTrendByProductId(String productId);
+
+    boolean addTrendByDate(Date date);
 
     BigDecimal getPrice(String productId, Date date);
 

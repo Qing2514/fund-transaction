@@ -24,7 +24,11 @@ public enum ResultEnum {
 
     PURCHASE_NOT_EXIST(500401,"申购订单不存在"),
     CARD_OR_USER_OR_PRODUCT_NOT_EXIST(500402,"银行卡或用户或产品不存在，或银行卡余额不足"),
-    NET_WORTH_NOT_EXIST(500403,"该天净值不存在");
+    NET_WORTH_NOT_EXIST(500403,"该天净值不存在"),
+
+    DATE_ERROR(500601,"该天为周末或该天净值已更新"),
+
+    ;
 
     private final Integer code;
     private final String message;

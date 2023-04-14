@@ -22,6 +22,8 @@ public interface ProductService extends IService<Product> {
 
     boolean deleteProduct(String id);
 
+    List<String> getIds();
+
     int getSum();
 
 }

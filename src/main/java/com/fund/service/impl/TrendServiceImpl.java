@@ -3,6 +3,7 @@ package com.fund.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fund.entity.Trend;
 import com.fund.mapper.TrendMapper;
+import com.fund.service.ProductService;
 import com.fund.service.TrendService;
 import com.fund.util.ClearingUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,21 +19,37 @@ public class TrendServiceImpl extends ServiceImpl<TrendMapper, Trend> implements
     @Autowired
     private TrendMapper trendMapper;
 
+    @Autowired
+    private ProductService productService;
+
     @Override
     public List<Trend> findById(String productId) {
         return trendMapper.findByProductId(productId);
     }
 
     @Override
-    public boolean addTrend(String productId) {
-        Trend temp = trendMapper.getLateTrend(productId);
-        Trend trend;
-        if (temp == null) {
-            trend = new Trend(ClearingUtil.getDate(), productId, BigDecimal.valueOf(1.0000));
-        } else {
-            Date date = ClearingUtil.getNewDate(temp.getDate());
-            BigDecimal price = ClearingUtil.getNewNetWorth(temp.getPrice());
-            trend = new Trend(date, productId, price);
+    public boolean addTrendByProductId(String productId) {
+        Trend trend = new Trend(ClearingUtil.getDate(), productId, BigDecimal.valueOf(1.0000));
+        return trendMapper.addTrend(trend);
+    }
+
+    @Override
+    public boolean addTrendByDate(Date date) {
+        // 若为周末，不让更新
+        if(ClearingUtil.isWeekend(date)) {
+            return false;
+        }
+        List<String> productIds = productService.getIds();
+        Trend trend = null;
+        for(String productId : productIds) {
+            Trend temp = trendMapper.getLateTrend(productId);
+            if(date.after(temp.getDate())) {
+                BigDecimal price = ClearingUtil.getNewNetWorth(temp.getPrice());
+                trend = new Trend(date, productId, price);
+            }
+            else {
+                return false;
+            }
         }
         return trendMapper.addTrend(trend);
     }
