@@ -47,6 +47,11 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseMapper, Purchase> i
     }
 
     @Override
+    public List<Purchase> findByCardId(String cardId, Integer state) {
+        return purchaseMapper.findByUserId(cardId, state);
+    }
+
+    @Override
     public List<Purchase> findByDate(Date date, Integer state) {
         Date datetime = ClearingUtil.setDate(date, 24);
         return purchaseMapper.findByDate(datetime, state);

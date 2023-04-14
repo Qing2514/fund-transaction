@@ -17,6 +17,9 @@ public interface PurchaseMapper extends BaseMapper<Purchase> {
     @Select("select * from purchase where user_id = #{userId} and state = #{state}")
     List<Purchase> findByUserId(@Param("userId") String userId, @Param("state") Integer state);
 
+    @Select("select * from purchase where card_id = #{cardId} and state = #{state}")
+    List<Purchase> findByCardId(@Param("cardId") String cardId, @Param("state") Integer state);
+
     @Select("select * from purchase where datetime < #{datetime} and datetime >= DATE_SUB(#{datetime}, " +
             "INTERVAL 1 DAY) and state = #{state}")
     List<Purchase> findByDate(@Param("datetime") Date datetime, @Param("state") Integer state);

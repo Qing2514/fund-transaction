@@ -13,6 +13,8 @@ public interface PurchaseService extends IService<Purchase> {
 
     List<Purchase> findByUserId(String userId, Integer state);
 
+    List<Purchase> findByCardId(String cardId, Integer state);
+
     List<Purchase> findByDate(Date date, Integer state);
 
     boolean addPurchase(PurchaseVo purchaseVo);

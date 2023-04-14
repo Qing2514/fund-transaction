@@ -2,9 +2,11 @@ package com.fund.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fund.entity.Card;
+import com.fund.entity.Purchase;
 import com.fund.entity.User;
 import com.fund.mapper.CardMapper;
 import com.fund.service.CardService;
+import com.fund.service.PurchaseService;
 import com.fund.service.UserService;
 import com.fund.vo.CardVo;
 import org.springframework.beans.BeanUtils;
@@ -18,10 +20,13 @@ import java.util.List;
 public class CardServiceImpl extends ServiceImpl<CardMapper, Card> implements CardService {
 
     @Autowired
+    private CardMapper cardMapper;
+
+    @Autowired
     private UserService userService;
 
     @Autowired
-    private CardMapper cardMapper;
+    private PurchaseService purchaseService;
 
     @Override
     public List<Card> findByUserId(String userId) {
@@ -50,7 +55,8 @@ public class CardServiceImpl extends ServiceImpl<CardMapper, Card> implements Ca
     @Override
     public boolean deleteCardByCardId(String cardId) {
         Card card = cardMapper.findByCardId(cardId);
-        if (card == null) {
+        List<Purchase> purchaseList = purchaseService.findByCardId(cardId, 0);
+        if (card == null || purchaseList != null) {
             return false;
         }
         return cardMapper.deleteCardByCardId(cardId);

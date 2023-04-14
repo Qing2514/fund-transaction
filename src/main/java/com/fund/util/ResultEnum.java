@@ -21,6 +21,7 @@ public enum ResultEnum {
 
     CARD_NOT_EXIST(500301,"银行卡不存在"),
     CARD_EXIST_OR_USER_NOT_EXIST(500302,"银行卡已绑定或用户不存在"),
+    CARD_NOT_EXIST_OR_HAVING_ORDERS(500303,"银行卡不存在或有进行中订单"),
 
     PURCHASE_NOT_EXIST(500401,"申购订单不存在"),
     CARD_OR_USER_OR_PRODUCT_NOT_EXIST(500402,"银行卡或用户或产品不存在，或银行卡余额不足"),

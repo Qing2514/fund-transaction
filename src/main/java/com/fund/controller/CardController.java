@@ -37,7 +37,7 @@ public class CardController {
     @DeleteMapping("/deleteCard/{cardId}")
     public AjaxResult deleteCard(@PathVariable("cardId") String cardId) {
         return cardService.deleteCardByCardId(cardId) ? AjaxResult.success() :
-                AjaxResult.error(ResultEnum.CARD_NOT_EXIST);
+                AjaxResult.error(ResultEnum.CARD_NOT_EXIST_OR_HAVING_ORDERS);
     }
 
     @ApiOperation("银行卡金额充值")
