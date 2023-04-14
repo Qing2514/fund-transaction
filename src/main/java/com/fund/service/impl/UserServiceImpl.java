@@ -3,6 +3,8 @@ package com.fund.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fund.entity.User;
 import com.fund.mapper.UserMapper;
+import com.fund.service.CardService;
+import com.fund.service.PurchaseService;
 import com.fund.service.UserService;
 import com.fund.util.UUIDUtil;
 import com.fund.vo.UserVo;
@@ -17,6 +19,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private CardService cardService;
+
+    @Autowired
+    private PurchaseService purchaseService;
 
     @Override
     public List<User> findAll() {
@@ -66,6 +74,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (temp == null) {
             return false;
         }
+        // 取消申购订单
+        purchaseService.cancelPurchaseByUserId(id);
+        // 注销银行卡
+        cardService.deleteCardByUserId(id);
         return userMapper.deleteUser(id);
     }
 

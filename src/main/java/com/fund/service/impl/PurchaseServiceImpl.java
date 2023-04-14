@@ -102,4 +102,15 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseMapper, Purchase> i
         return purchaseMapper.cancelPurchase(id);
     }
 
+    @Override
+    public boolean cancelPurchaseByUserId(String userId) {
+        List<Purchase> purchaseList = purchaseMapper.findByUserId(userId, 0);
+        for(Purchase purchase : purchaseList) {
+            // 银行卡归还金额
+            cardService.recharge(purchase.getCardId(), purchase.getAmount());
+            purchaseMapper.cancelPurchase(purchase.getId());
+        }
+        return true;
+    }
+
 }

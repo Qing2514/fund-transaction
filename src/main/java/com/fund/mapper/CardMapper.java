@@ -19,10 +19,13 @@ public interface CardMapper extends BaseMapper<Card> {
     @Insert("insert into card values(#{card.cardId},#{card.userId},0,#{card.password},0)")
     boolean addCard(@Param("card") Card card);
 
-    @Update("update card set state = 1 where card_id = #{cardId}")
-    boolean deleteCard(@Param("cardId") String cardId);
+    @Update("update card set state = 1 where card_id = #{cardId} and state = 0")
+    boolean deleteCardByCardId(@Param("cardId") String cardId);
 
-    @Update("update card set account = #{account} where card_id = #{cardId}")
+    @Update("update card set state = 1 where user_id = #{userId} and state = 0")
+    boolean deleteCardByUserId(@Param("userId") String userId);
+
+    @Update("update card set account = #{account} where card_id = #{cardId} and state = 0")
     boolean updateCard(@Param("cardId") String cardId, @Param("account") BigDecimal account);
 
 }

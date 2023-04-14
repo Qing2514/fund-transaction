@@ -48,12 +48,17 @@ public class CardServiceImpl extends ServiceImpl<CardMapper, Card> implements Ca
     }
 
     @Override
-    public boolean deleteCard(String cardId) {
+    public boolean deleteCardByCardId(String cardId) {
         Card card = cardMapper.findByCardId(cardId);
         if (card == null) {
             return false;
         }
-        return cardMapper.deleteCard(cardId);
+        return cardMapper.deleteCardByCardId(cardId);
+    }
+
+    @Override
+    public boolean deleteCardByUserId(String userId) {
+        return cardMapper.deleteCardByUserId(userId);
     }
 
     @Override

@@ -28,20 +28,21 @@ public class CardController {
 
     @ApiOperation("绑定银行卡")
     @PostMapping("/addCard")
-    public AjaxResult addCard(@Valid @RequestBody CardVo cardVo){
+    public AjaxResult addCard(@Valid @RequestBody CardVo cardVo) {
         return cardService.addCard(cardVo) ? AjaxResult.success() :
                 AjaxResult.error(ResultEnum.CARD_EXIST_OR_USER_NOT_EXIST);
     }
 
     @ApiOperation("解绑银行卡")
     @DeleteMapping("/deleteCard/{cardId}")
-    public AjaxResult deleteCard(@PathVariable("cardId") String cardId){
-        return cardService.deleteCard(cardId) ? AjaxResult.success() : AjaxResult.error(ResultEnum.CARD_NOT_EXIST);
+    public AjaxResult deleteCard(@PathVariable("cardId") String cardId) {
+        return cardService.deleteCardByCardId(cardId) ? AjaxResult.success() :
+                AjaxResult.error(ResultEnum.CARD_NOT_EXIST);
     }
 
     @ApiOperation("银行卡金额充值")
     @PutMapping("/recharge/{cardId}/{amount}")
-    public AjaxResult recharge(@PathVariable("cardId") String cardId, @PathVariable("amount") BigDecimal amount){
+    public AjaxResult recharge(@PathVariable("cardId") String cardId, @PathVariable("amount") BigDecimal amount) {
         return cardService.recharge(cardId, amount) ? AjaxResult.success() :
                 AjaxResult.error(ResultEnum.CARD_NOT_EXIST);
     }

@@ -15,7 +15,9 @@ public interface CardService extends IService<Card> {
 
     boolean addCard(CardVo cardVo);
 
-    boolean deleteCard(String cardId);
+    boolean deleteCardByCardId(String cardId);
+
+    boolean deleteCardByUserId(String userId);
 
     boolean recharge(String cardId, BigDecimal amount);
 

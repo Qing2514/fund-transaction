@@ -21,4 +21,6 @@ public interface PurchaseService extends IService<Purchase> {
 
     boolean cancelPurchase(String id);
 
+    boolean cancelPurchaseByUserId(String userId);
+
 }
