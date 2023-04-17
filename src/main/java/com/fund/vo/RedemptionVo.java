@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
-@ApiModel(value = "新增申购记录校验参数")
+@ApiModel(value = "新增赎回记录校验参数")
 @Data
 public class RedemptionVo {
 

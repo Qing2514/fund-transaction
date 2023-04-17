@@ -29,10 +29,10 @@ public interface PurchaseMapper extends BaseMapper<Purchase> {
             "#{purchase.amount},0,0)")
     boolean addPurchase(@Param("purchase") Purchase purchase);
 
-    @Update("update purchase set share = amount / #{netWorth}, state = 1 where state = 0 " +
+    @Update("update purchase set share = #{share}, state = 1 where state = 0 " +
             "and datetime < #{datetime} and datetime >= DATE_SUB(#{datetime}, INTERVAL 1 DAY) " +
             "and product_id = #{productId}")
-    boolean finishPurchase(@Param("productId") String productId, @Param("netWorth") BigDecimal netWorth,
+    boolean finishPurchase(@Param("productId") String productId, @Param("share") BigDecimal share,
                            @Param("datetime") Date datetime);
 
     @Update("update purchase set state = 2 where id = #{id} and state = 0")

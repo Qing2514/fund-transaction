@@ -27,7 +27,7 @@ public enum ResultEnum {
     CARD_OR_USER_OR_PRODUCT_NOT_EXIST_OR_LACK_AMOUNT(500402,"银行卡或用户或产品不存在，或银行卡余额不足"),
     NET_WORTH_NOT_EXIST(500403,"该天净值不存在"),
 
-    REDEMPTION_NOT_EXIST(500501,"申购订单不存在"),
+    REDEMPTION_NOT_EXIST(500501,"赎回订单不存在"),
     CARD_OR_USER_OR_PRODUCT_NOT_EXIST_OR_LACK_SHARE(500502,"银行卡或用户或产品不存在，或拥有份额不足"),
 
     DATE_ERROR(500601,"该天为周末或该天净值已更新"),

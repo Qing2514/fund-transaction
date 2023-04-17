@@ -1,10 +1,7 @@
 package com.fund.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.fund.entity.Card;
-import com.fund.entity.Product;
-import com.fund.entity.Redemption;
-import com.fund.entity.User;
+import com.fund.entity.*;
 import com.fund.mapper.RedemptionMapper;
 import com.fund.service.*;
 import com.fund.util.ClearingUtil;
@@ -36,6 +33,9 @@ public class RedemptionServiceImpl extends ServiceImpl<RedemptionMapper, Redempt
     @Autowired
     private TrendService trendService;
 
+    @Autowired
+    private ShareService shareService;
+
     @Override
     public Redemption findById(String id, Integer state) {
         return redemptionMapper.findById(id, state);
@@ -48,7 +48,7 @@ public class RedemptionServiceImpl extends ServiceImpl<RedemptionMapper, Redempt
 
     @Override
     public List<Redemption> findByCardId(String cardId, Integer state) {
-        return redemptionMapper.findByUserId(cardId, state);
+        return redemptionMapper.findByCardId(cardId, state);
     }
 
     @Override
@@ -65,7 +65,12 @@ public class RedemptionServiceImpl extends ServiceImpl<RedemptionMapper, Redempt
         if(user == null || product == null || card == null) {
             return false;
         }
-        // todo:减少份额表份额
+        // 减少份额表份额
+        boolean flag = shareService.reduceShare(new Share(redemptionVo.getUserId(), redemptionVo.getProductId(),
+                redemptionVo.getShare()));
+        if(!flag) {
+            return false;
+        }
         // 新增赎回
         Redemption redemption = new Redemption();
         BeanUtils.copyProperties(redemptionVo, redemption);
@@ -85,7 +90,11 @@ public class RedemptionServiceImpl extends ServiceImpl<RedemptionMapper, Redempt
             if(BigDecimal.ZERO.equals(netWorth)) {
                 return false;
             }
-            redemptionMapper.finishRedemption(redemption.getProductId(), netWorth, newDate);
+            // 将获得金额写入银行卡
+            BigDecimal amount = redemption.getShare().multiply(netWorth);
+            cardService.recharge(redemption.getCardId(), amount);
+            // 完成订单
+            redemptionMapper.finishRedemption(redemption.getProductId(), amount, newDate);
         }
         return true;
     }
@@ -96,7 +105,8 @@ public class RedemptionServiceImpl extends ServiceImpl<RedemptionMapper, Redempt
         if(redemption == null) {
             return false;
         }
-        // todo:份额表归还份额
+        // 份额表归还份额
+        shareService.addShare(new Share(redemption.getUserId(), redemption.getProductId(), redemption.getShare()));
         // 取消赎回
         return redemptionMapper.cancelRedemption(id);
     }
@@ -105,7 +115,9 @@ public class RedemptionServiceImpl extends ServiceImpl<RedemptionMapper, Redempt
     public boolean cancelRedemptionByUserId(String userId) {
         List<Redemption> redemptionList = redemptionMapper.findByUserId(userId, 0);
         for(Redemption redemption : redemptionList) {
-            // todo:份额表归还份额
+            // 份额表归还份额
+            shareService.addShare(new Share(redemption.getUserId(), redemption.getProductId(), redemption.getShare()));
+            // 取消赎回
             redemptionMapper.cancelRedemption(redemption.getId());
         }
         return true;

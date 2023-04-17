@@ -39,21 +39,21 @@ public class RedemptionController {
         return AjaxResult.success(redemptionService.findByDate(date, state));
     }
 
-    @ApiOperation("新增申购")
+    @ApiOperation("新增赎回")
     @PostMapping("/addRedemption")
-    public AjaxResult addRedemption(@RequestBody RedemptionVo purchaseVo) {
-        return redemptionService.addRedemption(purchaseVo) ? AjaxResult.success() :
+    public AjaxResult addRedemption(@RequestBody RedemptionVo redemptionVo) {
+        return redemptionService.addRedemption(redemptionVo) ? AjaxResult.success() :
                 AjaxResult.error(ResultEnum.CARD_OR_USER_OR_PRODUCT_NOT_EXIST_OR_LACK_SHARE);
     }
 
-    @ApiOperation("完成申购")
+    @ApiOperation("完成赎回")
     @PutMapping("/finishRedemption/{date}")
     public AjaxResult finishRedemption(@PathVariable @DateTimeFormat(pattern="yyyy-MM-dd") Date date) {
         return redemptionService.finishRedemption(date) ? AjaxResult.success() :
                 AjaxResult.error(ResultEnum.NET_WORTH_NOT_EXIST);
     }
 
-    @ApiOperation("取消申购")
+    @ApiOperation("取消赎回")
     @DeleteMapping("/cancelRedemption/{id}")
     public AjaxResult cancelRedemption(@PathVariable String id) {
         return redemptionService.cancelRedemption(id) ? AjaxResult.success() :

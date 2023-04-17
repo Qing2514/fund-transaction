@@ -1,10 +1,7 @@
 package com.fund.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.fund.entity.Card;
-import com.fund.entity.Product;
-import com.fund.entity.Purchase;
-import com.fund.entity.User;
+import com.fund.entity.*;
 import com.fund.mapper.PurchaseMapper;
 import com.fund.service.*;
 import com.fund.util.ClearingUtil;
@@ -36,6 +33,9 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseMapper, Purchase> i
     @Autowired
     private TrendService trendService;
 
+    @Autowired
+    private ShareService shareService;
+
     @Override
     public Purchase findById(String id, Integer state) {
         return purchaseMapper.findById(id, state);
@@ -48,7 +48,7 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseMapper, Purchase> i
 
     @Override
     public List<Purchase> findByCardId(String cardId, Integer state) {
-        return purchaseMapper.findByUserId(cardId, state);
+        return purchaseMapper.findByCardId(cardId, state);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseMapper, Purchase> i
             return false;
         }
         // 若银行卡余额不够，返回
-        if(card.getAccount().compareTo(purchaseVo.getAmount()) == -1) {
+        if(card.getAmount().compareTo(purchaseVo.getAmount()) == -1) {
             return false;
         }
         // 银行卡余额足够，扣除金额
@@ -90,8 +90,14 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseMapper, Purchase> i
             if(BigDecimal.ZERO.equals(netWorth)) {
                 return false;
             }
-            purchaseMapper.finishPurchase(purchase.getProductId(), netWorth, newDate);
-            // todo:份额写入份额表
+            // 将获得份额写入份额表
+            BigDecimal share = purchase.getAmount().divide(netWorth, 4);
+            boolean flag = shareService.addShare(new Share(purchase.getUserId(), purchase.getProductId(), share));
+            if(!flag) {
+                return false;
+            }
+            // 完成订单
+            purchaseMapper.finishPurchase(purchase.getProductId(), share, newDate);
         }
         return true;
     }
