@@ -91,6 +91,7 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseMapper, Purchase> i
                 return false;
             }
             purchaseMapper.finishPurchase(purchase.getProductId(), netWorth, newDate);
+            // todo:份额写入份额表
         }
         return true;
     }

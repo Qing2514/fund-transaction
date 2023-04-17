@@ -11,7 +11,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.util.Date;
 
-@ApiModel(value = "申购记录")
+@ApiModel(value = "申购订单")
 @TableName("purchase")
 @Data
 public class Purchase {
