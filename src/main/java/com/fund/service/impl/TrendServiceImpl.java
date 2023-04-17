@@ -44,7 +44,7 @@ public class TrendServiceImpl extends ServiceImpl<TrendMapper, Trend> implements
         for(String productId : productIds) {
             Trend temp = trendMapper.getLateTrend(productId);
             if(date.after(temp.getDate())) {
-                BigDecimal price = ClearingUtil.getNewNetWorth(temp.getPrice());
+                BigDecimal price = ClearingUtil.getNewNetWorth(temp.getNetWorth());
                 trend = new Trend(date, productId, price);
             }
             else {
@@ -60,7 +60,7 @@ public class TrendServiceImpl extends ServiceImpl<TrendMapper, Trend> implements
         if(trend == null) {
             return BigDecimal.ZERO;
         }
-        return trend.getPrice();
+        return trend.getNetWorth();
     }
 
 }

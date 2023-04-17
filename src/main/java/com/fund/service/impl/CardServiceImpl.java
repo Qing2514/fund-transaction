@@ -68,21 +68,21 @@ public class CardServiceImpl extends ServiceImpl<CardMapper, Card> implements Ca
     }
 
     @Override
-    public boolean recharge(String cardId, BigDecimal account) {
+    public boolean recharge(String cardId, BigDecimal amount) {
         Card card = cardMapper.findByCardId(cardId);
         if (card == null) {
             return false;
         }
-        return cardMapper.updateCard(cardId, card.getAccount().add(account));
+        return cardMapper.updateCard(cardId, card.getAmount().add(amount));
     }
 
     @Override
-    public boolean purchase(String cardId, BigDecimal account) {
+    public boolean purchase(String cardId, BigDecimal amount) {
         Card card = cardMapper.findByCardId(cardId);
         if (card == null) {
             return false;
         }
-        return cardMapper.updateCard(cardId, card.getAccount().subtract(account));
+        return cardMapper.updateCard(cardId, card.getAmount().subtract(amount));
     }
 
 }

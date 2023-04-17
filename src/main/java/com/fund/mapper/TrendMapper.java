@@ -19,7 +19,7 @@ public interface TrendMapper extends BaseMapper<Trend> {
     @Select("select * from trend where product_id = #{productId} and date = #{date}")
     Trend findByProductIdAndDate(@Param("productId") String productId, @Param("date") Date date);
 
-    @Insert("insert into trend values(#{trend.date},#{trend.productId},#{trend.price})")
+    @Insert("insert into trend values(#{trend.date},#{trend.productId},#{trend.netWorth})")
     boolean addTrend(@Param("trend") Trend trend);
 
     @Select("select * from trend where product_id=#{productId} and date=" +

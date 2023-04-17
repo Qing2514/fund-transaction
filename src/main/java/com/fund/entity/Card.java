@@ -24,8 +24,8 @@ public class Card {
     private String userId;
 
     @ApiModelProperty(value = "银行卡余额")
-    @TableField(value = "account")
-    private BigDecimal account;
+    @TableField(value = "amount")
+    private BigDecimal amount;
 
     @ApiModelProperty(value = "银行卡密码")
     @TableField(value = "password")

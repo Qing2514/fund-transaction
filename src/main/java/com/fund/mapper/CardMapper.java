@@ -25,7 +25,7 @@ public interface CardMapper extends BaseMapper<Card> {
     @Update("update card set state = 1 where user_id = #{userId} and state = 0")
     boolean deleteCardByUserId(@Param("userId") String userId);
 
-    @Update("update card set account = #{account} where card_id = #{cardId} and state = 0")
-    boolean updateCard(@Param("cardId") String cardId, @Param("account") BigDecimal account);
+    @Update("update card set amount = #{amount} where card_id = #{cardId} and state = 0")
+    boolean updateCard(@Param("cardId") String cardId, @Param("amount") BigDecimal amount);
 
 }

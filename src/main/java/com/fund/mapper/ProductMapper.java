@@ -26,12 +26,11 @@ public interface ProductMapper extends BaseMapper<Product> {
     Product findProduct(@Param("type") Integer type, @Param("name") String name, @Param("security") Integer security);
 
     @Insert("insert into product values(#{product.id},#{product.name},#{product.detail}," +
-            "1,#{product.type},#{product.security},0,#{product.date},0)")
+            "1,#{product.type},#{product.security},#{product.date},0)")
     boolean addProduct(@Param("product") Product product);
 
-    @Update("update product set name = #{product.name}, " +
-            "detail = #{product.detail}, type = #{product.type}, " +
-            "security = #{product.security}, prange = #{product.prange} where id=#{product.id}")
+    @Update("update product set name = #{product.name}, detail = #{product.detail}, type = #{product.type}, " +
+            "security = #{product.security} where id=#{product.id}")
     boolean updateProduct(@Param("product") Product product);
 
     @Update("update product set state = 1 where id = #{id}")

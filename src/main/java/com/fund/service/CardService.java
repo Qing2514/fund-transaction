@@ -11,7 +11,7 @@ public interface CardService extends IService<Card> {
 
     List<Card> findByUserId(String userId);
 
-    Card findByCardId(String CardId);
+    Card findByCardId(String cardId);
 
     boolean addCard(CardVo cardVo);
 

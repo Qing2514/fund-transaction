@@ -46,10 +46,6 @@ public class Product {
     @TableField(value = "security")
     private Integer security;
 
-    @ApiModelProperty(value = "")
-    @TableField(value = "prange")
-    private BigDecimal prange;
-
     @ApiModelProperty(value = "产品状态，0-正常，1-已删除")
     @TableField(value = "state")
     private Integer state;
