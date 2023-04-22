@@ -59,7 +59,7 @@ public class User {
 
     @ApiModelProperty(value = "风险等级，1为安全性最高，4风险性最高")
     @TableField(value = "security")
-    private Integer security = 4;
+    private Integer security;
 
     @ApiModelProperty(value = "账户状态，0-正常，1-已销户")
     @TableField(value = "state")

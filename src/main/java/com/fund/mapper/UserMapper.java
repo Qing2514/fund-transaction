@@ -22,6 +22,9 @@ public interface UserMapper extends BaseMapper<User> {
             "state = 0")
     List<User> findByNameAndCid(@Param("name") String name, @Param("cid") String cid);
 
+    @Select("select * from user where phone = #{phone} and password = #{password} and state = 0 limit 1")
+    User findByPhoneAndPassword(@Param("phone") String phone, @Param("password") String password);
+
     @Select("select * from user where type = #{type} and ctype= #{ctype} and cid = #{cid} and state = 0")
     User findUser(@Param("type") Integer type, @Param("ctype") Integer ctype, @Param("cid") String cid);
 
@@ -30,9 +33,8 @@ public interface UserMapper extends BaseMapper<User> {
             "#{user.sex},#{user.address},#{user.job},#{user.security},#{user.state})")
     boolean addUser(@Param("user") User user);
 
-    @Update("update user set name = #{user.name}, " +
-            "password = #{user.password}, phone = #{user.phone}, age = #{user.age}, sex = #{user.sex}, " +
-            "address = #{user.address}, job = #{user.job}, security = #{user.security} where id = #{user.id}")
+    @Update("update user set name = #{user.name}, type = #{user.type}, ctype = #{user.ctype}, " +
+            "cid = #{user.cid}, phone = #{user.phone}, security = #{user.security} where id = #{user.id}")
     boolean updateUser(@Param("user") User user);
 
     @Update("update user set state = 1 where id = #{id}")

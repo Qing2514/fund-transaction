@@ -10,11 +10,11 @@ public enum ResultEnum {
     /**
      * 返回结果枚举
      */
-    SUCCESS(200,"SUCCESS"),
+    SUCCESS(0,"SUCCESS"),
     ERROR(500,"ERROR"),
 
-    USER_NOT_EXIST(500101,"用户不存在"),
-    USER_ALREADY_EXIST(500102,"用户已开户"),
+    USER_NOT_EXIST(500101,"客户不存在"),
+    USER_ALREADY_EXIST(500102,"客户已开户"),
 
     PRODUCT_ALREADY_EXIST(500201,"产品代码已存在"),
     PRODUCT_NOT_EXIST(500202,"产品不存在"),

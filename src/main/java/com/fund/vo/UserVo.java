@@ -32,11 +32,8 @@ public class UserVo {
     @Size(min = 11, max = 11, message = "手机号必须是11位")
     private String phone;
 
-    @NotNull(message = "年龄不能为空")
-    @Min(value = 10, message = "年龄必须大于10")
     private Integer age;
 
-    @NotNull(message = "性别不能为空")
     private Integer sex;
 
     private String address;

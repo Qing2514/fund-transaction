@@ -7,6 +7,7 @@ import com.fund.service.CardService;
 import com.fund.service.PurchaseService;
 import com.fund.service.UserService;
 import com.fund.util.UUIDUtil;
+import com.fund.vo.LoginVo;
 import com.fund.vo.UserVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Autowired
     private PurchaseService purchaseService;
+
+    @Override
+    public User login(LoginVo loginVo) {
+        return userMapper.findByPhoneAndPassword(loginVo.getPhone(), loginVo.getPassword());
+    }
 
     @Override
     public List<User> findAll() {

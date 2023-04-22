@@ -2,11 +2,14 @@ package com.fund.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.fund.entity.User;
+import com.fund.vo.LoginVo;
 import com.fund.vo.UserVo;
 
 import java.util.List;
 
 public interface UserService extends IService<User> {
+
+    User login(LoginVo loginVo);
 
     List<User> findAll();
 
