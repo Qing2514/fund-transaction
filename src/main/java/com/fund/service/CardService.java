@@ -1,5 +1,6 @@
 package com.fund.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.fund.entity.Card;
 import com.fund.vo.CardVo;
@@ -9,7 +10,7 @@ import java.util.List;
 
 public interface CardService extends IService<Card> {
 
-    List<Card> findAll();
+    IPage<Card> findAll(int currentPage, int pageSize);
 
     List<Card> findByUserId(String userId);
 

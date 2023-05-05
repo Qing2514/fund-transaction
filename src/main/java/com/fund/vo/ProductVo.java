@@ -10,15 +10,19 @@ import javax.validation.constraints.NotNull;
 @Data
 public class ProductVo {
 
+    @NotBlank(message = "产品代码不能为空")
+    private String id;
+
     @NotBlank(message = "产品名称不能为空")
     private String name;
 
-    private String detail;
-
-    @NotNull(message = "产品类型不能为空")
-    private Integer type;
+    @NotBlank(message = "产品类型不能为空")
+    private String type;
 
     @NotNull(message = "风险等级不能为空")
     private Integer security;
+
+    @NotBlank(message = "产品经理不能为空")
+    private String manager;
 
 }

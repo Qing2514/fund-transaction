@@ -1,5 +1,8 @@
 package com.fund.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fund.entity.*;
 import com.fund.mapper.PurchaseMapper;
@@ -37,8 +40,12 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseMapper, Purchase> i
     private ShareService shareService;
 
     @Override
-    public List<Purchase> findAll(Integer state) {
-        return purchaseMapper.findAll(state);
+    public IPage<Purchase> findAll(int currentPage, int pageSize, Integer state) {
+        IPage<Purchase> page = new Page<>(currentPage, pageSize);
+        // 增加查询条件
+        LambdaQueryWrapper<Purchase> lqw = new LambdaQueryWrapper<>();
+        lqw.eq(Purchase::getState, state);
+        return purchaseMapper.selectPage(page, lqw);
     }
 
     @Override

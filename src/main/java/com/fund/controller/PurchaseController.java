@@ -1,5 +1,7 @@
 package com.fund.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.fund.entity.Purchase;
 import com.fund.service.PurchaseService;
 import com.fund.util.AjaxResult;
 import com.fund.util.ResultEnum;
@@ -24,8 +26,10 @@ public class PurchaseController {
 
     @ApiOperation("根据订单状态查询所有订单")
     @GetMapping("/findAll/{state}")
-    public AjaxResult findAll(@PathVariable Integer state) {
-        return AjaxResult.success(purchaseService.findAll(state));
+    public AjaxResult findAll(@PathParam("currentPage") int currentPage, @PathParam("pageSize") int pageSize,
+                              @PathVariable Integer state) {
+        IPage<Purchase> page = purchaseService.findAll(currentPage, pageSize, state);
+        return AjaxResult.success(page.getRecords());
     }
 
     @ApiOperation("根据订单号、客户名称、产品名称、银行卡号、申购日期、订单状态模糊查询")

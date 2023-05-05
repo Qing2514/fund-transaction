@@ -1,5 +1,7 @@
 package com.fund.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.fund.entity.Share;
 import com.fund.service.ShareService;
 import com.fund.util.AjaxResult;
 import io.swagger.annotations.Api;
@@ -20,8 +22,9 @@ public class ShareController {
 
     @ApiOperation("查询所有")
     @GetMapping("/findAll")
-    public AjaxResult findAll(){
-        return AjaxResult.success(shareService.findAll());
+    public AjaxResult findAll(@PathParam("currentPage") int currentPage, @PathParam("pageSize") int pageSize){
+        IPage<Share> page = shareService.findAll(currentPage, pageSize);
+        return AjaxResult.success(page.getRecords());
     }
 
     @ApiOperation("根据客户id查询")

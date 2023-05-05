@@ -16,7 +16,7 @@ import java.util.Date;
 @Data
 public class Product {
 
-    @ApiModelProperty(value = "产品id")
+    @ApiModelProperty(value = "产品代码")
     @TableField(value = "id")
     @TableId
     private String id;
@@ -25,22 +25,25 @@ public class Product {
     @TableField(value = "name")
     private String name;
 
-    @ApiModelProperty(value = "创建日期")
-    @TableField(value = "date")
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
-    private Date date;
-
-    @ApiModelProperty(value = "产品详情")
-    @TableField(value = "detail")
-    private String detail;
-
-    @ApiModelProperty(value = "产品类型，0-基金，1-股票")
+    @ApiModelProperty(value = "产品类型")
     @TableField(value = "type")
-    private Integer type;
+    private String type;
 
     @ApiModelProperty(value = "风险等级，1安全性最高，4风险性最高")
     @TableField(value = "security")
     private Integer security;
+
+    @ApiModelProperty(value = "产品最近一天的单位净值")
+    @TableField(value = "net_worth")
+    private BigDecimal netWorth;
+
+    @ApiModelProperty(value = "日增长率")
+    @TableField(value = "growth")
+    private BigDecimal growth;
+
+    @ApiModelProperty(value = "产品经理")
+    @TableField(value = "manager")
+    private String manager;
 
     @ApiModelProperty(value = "产品状态，0-正常，1-已删除")
     @TableField(value = "state")

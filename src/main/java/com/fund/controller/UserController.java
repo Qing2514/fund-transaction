@@ -1,5 +1,6 @@
 package com.fund.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fund.entity.User;
 import com.fund.service.UserService;
 import com.fund.util.AjaxResult;
@@ -31,8 +32,9 @@ public class UserController {
 
     @ApiOperation("查询所有客户")
     @GetMapping("/findAll")
-    public AjaxResult findAll() {
-        return AjaxResult.success(userService.findAll());
+    public AjaxResult findAll(@PathParam("currentPage") int currentPage, @PathParam("pageSize") int pageSize) {
+        IPage<User> page = userService.findAll(currentPage, pageSize);
+        return AjaxResult.success(page.getRecords());
     }
 
     @ApiOperation("根据证件号、名称和手机号查询客户")
@@ -51,7 +53,7 @@ public class UserController {
 
     @ApiOperation("更新客户")
     @PutMapping("/updateUser")
-    public AjaxResult updateUser(@Valid @RequestBody User user) {
+    public AjaxResult updateUser(@RequestBody User user) {
         return userService.updateUser(user) ? AjaxResult.success() : AjaxResult.error(ResultEnum.USER_NOT_EXIST);
     }
 

@@ -1,5 +1,8 @@
 package com.fund.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fund.entity.*;
 import com.fund.mapper.RedemptionMapper;
@@ -37,8 +40,12 @@ public class RedemptionServiceImpl extends ServiceImpl<RedemptionMapper, Redempt
     private ShareService shareService;
 
     @Override
-    public List<Redemption> findAll(Integer state) {
-        return redemptionMapper.findAll(state);
+    public IPage<Redemption> findAll(int currentPage, int pageSize, Integer state) {
+        IPage<Redemption> page = new Page<>(currentPage, pageSize);
+        // 增加查询条件
+        LambdaQueryWrapper<Redemption> lqw = new LambdaQueryWrapper<>();
+        lqw.eq(Redemption::getState, state);
+        return redemptionMapper.selectPage(page, lqw);
     }
 
     @Override

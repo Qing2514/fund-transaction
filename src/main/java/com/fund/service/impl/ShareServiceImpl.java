@@ -1,5 +1,7 @@
 package com.fund.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fund.entity.Product;
 import com.fund.entity.Share;
@@ -27,8 +29,9 @@ public class ShareServiceImpl extends ServiceImpl<ShareMapper, Share> implements
     private ProductService productService;
 
     @Override
-    public List<Share> findAll() {
-        return shareMapper.findAll();
+    public IPage<Share> findAll(int currentPage, int pageSize) {
+        IPage<Share> page = new Page<>(currentPage, pageSize);
+        return shareMapper.selectPage(page, null);
     }
 
     @Override

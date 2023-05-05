@@ -1,5 +1,7 @@
 package com.fund.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fund.entity.Card;
 import com.fund.entity.Purchase;
@@ -34,8 +36,9 @@ public class CardServiceImpl extends ServiceImpl<CardMapper, Card> implements Ca
     private RedemptionService redemptionService;
 
     @Override
-    public List<Card> findAll() {
-        return cardMapper.findAll();
+    public IPage<Card> findAll(int currentPage, int pageSize) {
+        IPage<Card> page = new Page<>(currentPage, pageSize);
+        return cardMapper.selectPage(page, null);
     }
 
     @Override

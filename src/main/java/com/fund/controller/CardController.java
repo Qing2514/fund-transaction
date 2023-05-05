@@ -1,5 +1,7 @@
 package com.fund.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.fund.entity.Card;
 import com.fund.service.CardService;
 import com.fund.util.AjaxResult;
 import com.fund.util.ResultEnum;
@@ -24,8 +26,9 @@ public class CardController {
 
     @ApiOperation("查询全部银行卡")
     @GetMapping("/findAll")
-    public AjaxResult findAll() {
-        return AjaxResult.success(cardService.findAll());
+    public AjaxResult findAll(@PathParam("currentPage") int currentPage, @PathParam("pageSize") int pageSize) {
+        IPage<Card> page = cardService.findAll(currentPage, pageSize);
+        return AjaxResult.success(page.getRecords());
     }
 
     @ApiOperation("根据客户证件号查询银行卡")

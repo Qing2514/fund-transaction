@@ -1,5 +1,6 @@
 package com.fund.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fund.entity.Product;
 import com.fund.service.ProductService;
 import com.fund.util.AjaxResult;
@@ -24,8 +25,9 @@ public class ProductController {
 
     @ApiOperation("查询所有产品")
     @GetMapping("/findAll")
-    public AjaxResult findAllProduct() {
-        return AjaxResult.success(productService.findAll());
+    public AjaxResult findAll(@PathParam("currentPage") int currentPage, @PathParam("pageSize") int pageSize) {
+        IPage<Product> page = productService.findAll(currentPage, pageSize);
+        return AjaxResult.success(page.getRecords());
     }
 
     @ApiOperation("根据产品id和产品名称模糊查询产品")
@@ -43,7 +45,7 @@ public class ProductController {
 
     @ApiOperation("更新产品")
     @PutMapping("/updateProduct")
-    public AjaxResult updateProduct(@Valid @RequestBody Product product) {
+    public AjaxResult updateProduct(@RequestBody Product product) {
         return productService.updateProduct(product) ? AjaxResult.success() :
                 AjaxResult.error(ResultEnum.PRODUCT_NOT_EXIST);
     }
@@ -52,12 +54,6 @@ public class ProductController {
     @DeleteMapping("/deleteProduct/{id}")
     public AjaxResult deleteProduct(@PathVariable("id") String id) {
         return productService.deleteProduct(id) ? AjaxResult.success() : AjaxResult.error(ResultEnum.PRODUCT_NOT_EXIST);
-    }
-
-    @ApiOperation("获取产品总数")
-    @GetMapping("/getSum")
-    public AjaxResult getSum() {
-        return AjaxResult.success(productService.getSum());
     }
 
 }

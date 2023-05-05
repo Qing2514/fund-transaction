@@ -1,5 +1,6 @@
 package com.fund.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.fund.entity.Redemption;
 import com.fund.vo.RedemptionVo;
@@ -9,7 +10,7 @@ import java.util.List;
 
 public interface RedemptionService extends IService<Redemption> {
 
-    List<Redemption> findAll(Integer state);
+    IPage<Redemption> findAll(int currentPage, int pageSize, Integer state);
 
     List<Redemption> findByUserId(String userId, Integer state);
 

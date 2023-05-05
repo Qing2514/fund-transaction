@@ -1,5 +1,7 @@
 package com.fund.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fund.entity.User;
 import com.fund.mapper.UserMapper;
@@ -37,8 +39,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public List<User> findAll() {
-        return userMapper.findAll();
+    public IPage<User> findAll(int currentPage, int pageSize) {
+        IPage<User> page = new Page<>(currentPage, pageSize);
+        return userMapper.selectPage(page, null);
     }
 
     @Override

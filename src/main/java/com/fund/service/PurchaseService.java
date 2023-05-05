@@ -1,5 +1,6 @@
 package com.fund.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.fund.entity.Purchase;
 import com.fund.vo.PurchaseVo;
@@ -9,7 +10,7 @@ import java.util.List;
 
 public interface PurchaseService extends IService<Purchase> {
 
-    List<Purchase> findAll(Integer state);
+    IPage<Purchase> findAll(int currentPage, int pageSize, Integer state);
 
     List<Purchase> findByUserId(String userId, Integer state);
 
