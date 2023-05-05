@@ -34,10 +34,6 @@ public class Product {
     @TableField(value = "detail")
     private String detail;
 
-    @ApiModelProperty(value = "产品净值")
-    @TableField(value = "net_worth")
-    private BigDecimal netWorth;
-
     @ApiModelProperty(value = "产品类型，0-基金，1-股票")
     @TableField(value = "type")
     private Integer type;

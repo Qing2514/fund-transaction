@@ -13,20 +13,16 @@ public interface UserService extends IService<User> {
 
     List<User> findAll();
 
-    User findById(String id);
+    User findByCid(String cid);
 
-    List<User> findByFuzzyId(String id);
-
-    List<User> findByNameAndCid(String name, String cid);
+    List<User> findUser(String cid, String name, String phone);
 
     boolean addUser(UserVo userVo);
 
     boolean updateUser(User user);
 
-    boolean deleteUser(String id);
+    boolean deleteUser(String cid);
 
-    boolean riskAssess(User user, String answer);
-
-    int getSum();
+    boolean riskAssess(String cid, String answer);
 
 }

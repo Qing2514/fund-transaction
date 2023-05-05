@@ -14,6 +14,7 @@ import java.util.Date;
 @Api(value = "TrendController", tags = "产品走势模块")
 @RestController
 @RequestMapping("/trend")
+@CrossOrigin
 public class TrendController {
 
     @Autowired
@@ -25,9 +26,16 @@ public class TrendController {
         return AjaxResult.success(trendService.findById(productId));
     }
 
-    @ApiOperation("新增产品走势")
-    @PostMapping("/addTrend/{date}")
-    public AjaxResult addTrend(@PathVariable("date") @DateTimeFormat(pattern="yyyy-MM-dd") Date date) {
+    @ApiOperation("根据产品id新增产品走势")
+    @PostMapping("/addTrend/{productId}")
+    public AjaxResult addTrend(@PathVariable("productId") String productId) {
+        return trendService.addTrendByProductId(productId) ? AjaxResult.success() :
+                AjaxResult.error(ResultEnum.PRODUCT_NOT_EXIST);
+    }
+
+    @ApiOperation("根据日期新增产品走势")
+    @PostMapping("/addTrendByDate/{date}")
+    public AjaxResult addTrendByDate(@PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
         return trendService.addTrendByDate(date) ? AjaxResult.success() : AjaxResult.error(ResultEnum.DATE_ERROR);
     }
 

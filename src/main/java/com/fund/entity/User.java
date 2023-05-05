@@ -12,10 +12,14 @@ import lombok.Data;
 @Data
 public class User {
 
-    @ApiModelProperty(value = "客户id")
-    @TableField(value = "id")
+    @ApiModelProperty(value = "证件号码")
+    @TableField(value = "cid")
     @TableId
-    private String id;
+    private String cid;
+
+    @ApiModelProperty(value = "证件类型，0-居民身份证，1-护照")
+    @TableField(value = "ctype")
+    private Integer ctype;
 
     @ApiModelProperty(value = "客户名称")
     @TableField(value = "name")
@@ -29,33 +33,9 @@ public class User {
     @TableField(value = "type")
     private Integer type;
 
-    @ApiModelProperty(value = "证件类型，0-居民身份证，1-护照")
-    @TableField(value = "ctype")
-    private Integer ctype;
-
-    @ApiModelProperty(value = "证件号码")
-    @TableField(value = "cid")
-    private String cid;
-
     @ApiModelProperty(value = "手机号")
     @TableField(value = "phone")
     private String phone;
-
-    @ApiModelProperty(value = "年龄")
-    @TableField(value = "age")
-    private Integer age;
-
-    @ApiModelProperty(value = "性别，0-男，1-女")
-    @TableField(value = "sex")
-    private Integer sex;
-
-    @ApiModelProperty(value = "地址")
-    @TableField(value = "address")
-    private String address;
-
-    @ApiModelProperty(value = "工作")
-    @TableField(value = "job")
-    private String job;
 
     @ApiModelProperty(value = "风险等级，1为安全性最高，4风险性最高")
     @TableField(value = "security")

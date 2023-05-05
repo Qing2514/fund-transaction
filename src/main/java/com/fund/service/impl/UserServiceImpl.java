@@ -5,6 +5,7 @@ import com.fund.entity.User;
 import com.fund.mapper.UserMapper;
 import com.fund.service.CardService;
 import com.fund.service.PurchaseService;
+import com.fund.service.RedemptionService;
 import com.fund.service.UserService;
 import com.fund.util.UUIDUtil;
 import com.fund.vo.LoginVo;
@@ -27,6 +28,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Autowired
     private PurchaseService purchaseService;
 
+    @Autowired
+    private RedemptionService redemptionService;
+
     @Override
     public User login(LoginVo loginVo) {
         return userMapper.findByPhoneAndPassword(loginVo.getPhone(), loginVo.getPassword());
@@ -38,36 +42,31 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public User findById(String id) {
-        return userMapper.findById(id);
+    public User findByCid(String cid) {
+        return userMapper.findByCid(cid);
     }
 
     @Override
-    public List<User> findByFuzzyId(String id) {
-        return userMapper.findByFuzzyId(id);
-    }
-
-    @Override
-    public List<User> findByNameAndCid(String name, String cid) {
-        return userMapper.findByNameAndCid(name, cid);
+    public List<User> findUser(String cid, String name, String phone) {
+        return userMapper.findUser(cid, name, phone);
     }
 
     @Override
     public boolean addUser(UserVo userVo) {
-        // 判断用户是否已开户
-        User temp = userMapper.findUser(userVo.getType(), userVo.getCtype(), userVo.getCid());
-        if (temp != null) {
+        // 判断证件号和手机号是否已存在
+        User temp1 = userMapper.findByCid(userVo.getCid());
+        User temp2 = userMapper.findByPhone(userVo.getPhone());
+        if (temp1 != null || temp2 != null) {
             return false;
         }
         User user = new User();
         BeanUtils.copyProperties(userVo, user);
-        user.setId(UUIDUtil.getUUID());
         return userMapper.addUser(user);
     }
 
     @Override
     public boolean updateUser(User user) {
-        User temp = userMapper.findById(user.getId());
+        User temp = userMapper.findByCid(user.getCid());
         if (temp == null) {
             return false;
         }
@@ -75,41 +74,43 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public boolean deleteUser(String id) {
-        User temp = userMapper.findById(id);
+    public boolean deleteUser(String cid) {
+        User temp = userMapper.findByCid(cid);
         if (temp == null) {
             return false;
         }
         // 取消申购订单
-        purchaseService.cancelPurchaseByUserId(id);
+        purchaseService.cancelPurchaseByUserId(cid);
+        // 取消赎回订单
+        redemptionService.cancelRedemptionByUserId(cid);
         // 注销银行卡
-        cardService.deleteCardByUserId(id);
-        return userMapper.deleteUser(id);
+        cardService.deleteCardByUserId(cid);
+        return userMapper.deleteUser(cid);
     }
 
     @Override
-    public boolean riskAssess(User user, String answer) {
-        int security;
+    public boolean riskAssess(String cid, String answer) {
+        Integer security;
         switch (answer) {
-            case "A":
+            case "R1":
                 security = 1;
                 break;
-            case "B":
+            case "R2":
                 security = 2;
                 break;
-            case "C":
+            case "R3":
                 security = 3;
                 break;
-            default:
+            case "R4":
                 security = 4;
+                break;
+            default:
+                security = null;
         }
-        user.setSecurity(security);
-        return userMapper.updateUser(user);
-    }
-
-    @Override
-    public int getSum() {
-        return userMapper.getSum();
+        if(security == null) {
+            return false;
+        }
+        return userMapper.updateSecurity(cid, security);
     }
 
 }

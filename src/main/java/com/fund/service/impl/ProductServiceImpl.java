@@ -12,6 +12,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -34,13 +35,8 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     }
 
     @Override
-    public List<Product> findByFuzzyId(String id) {
-        return productMapper.findByFuzzyId(id);
-    }
-
-    @Override
-    public Product findProduct(Integer type, String name, Integer security) {
-        return productMapper.findProduct(type, name, security);
+    public List<Product> findProduct(String id, String name) {
+        return productMapper.findProduct(id, name);
     }
 
     @Override
@@ -53,7 +49,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         Product product = new Product();
         BeanUtils.copyProperties(productVo, product);
         product.setId(UUIDUtil.getUUID());
-        product.setDate(ClearingUtil.getDate());
+        product.setDate(ClearingUtil.getDate(new Date()));
         // 添加产品走势
         trendService.addTrendByProductId(product.getId());
         return productMapper.addProduct(product);

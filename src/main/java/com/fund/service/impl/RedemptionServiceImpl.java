@@ -37,8 +37,8 @@ public class RedemptionServiceImpl extends ServiceImpl<RedemptionMapper, Redempt
     private ShareService shareService;
 
     @Override
-    public Redemption findById(String id, Integer state) {
-        return redemptionMapper.findById(id, state);
+    public List<Redemption> findAll(Integer state) {
+        return redemptionMapper.findAll(state);
     }
 
     @Override
@@ -53,21 +53,27 @@ public class RedemptionServiceImpl extends ServiceImpl<RedemptionMapper, Redempt
 
     @Override
     public List<Redemption> findByDate(Date date, Integer state) {
-        Date datetime = ClearingUtil.setDate(date, 24);
+        Date datetime = ClearingUtil.setDate(date, 15);
         return redemptionMapper.findByDate(datetime, state);
     }
 
     @Override
+    public List<Redemption> findRedemption(Integer state, String id, String userName, String productName, String cardId,
+                                           String date) {
+        return redemptionMapper.findRedemption(state, id, userName, productName, cardId, date);
+    }
+
+    @Override
     public boolean addRedemption(RedemptionVo redemptionVo) {
-        User user = userService.findById(redemptionVo.getUserId());
+        User user = userService.findByCid(redemptionVo.getUserId());
         Product product = productService.findById(redemptionVo.getProductId());
         Card card = cardService.findByCardId(redemptionVo.getCardId());
         if(user == null || product == null || card == null) {
             return false;
         }
         // 减少份额表份额
-        boolean flag = shareService.reduceShare(new Share(redemptionVo.getUserId(), redemptionVo.getProductId(),
-                redemptionVo.getShare()));
+        boolean flag = shareService.reduceShare(new Share(redemptionVo.getUserId(), user.getName(),
+                redemptionVo.getProductId(), product.getName(), redemptionVo.getShare()));
         if(!flag) {
             return false;
         }
@@ -82,7 +88,25 @@ public class RedemptionServiceImpl extends ServiceImpl<RedemptionMapper, Redempt
     }
 
     @Override
-    public boolean finishRedemption(Date date) {
+    public boolean finishRedemption(String id) {
+        Redemption redemption = redemptionMapper.findById(id, 0);
+        if(redemption == null) {
+            return false;
+        }
+        Date date = ClearingUtil.getDate(redemption.getDatetime());
+        BigDecimal netWorth = trendService.getPrice(redemption.getProductId(), date);
+        if(BigDecimal.ZERO.equals(netWorth)) {
+            return false;
+        }
+        // 将获得金额写入银行卡
+        BigDecimal amount = redemption.getShare().multiply(netWorth);
+        cardService.recharge(redemption.getCardId(), amount);
+        // 完成订单
+        return redemptionMapper.finishRedemption(redemption.getId(), amount);
+    }
+
+    @Override
+    public boolean finishRedemptionByDate(Date date) {
         Date newDate = ClearingUtil.setDate(date, 15);
         List<Redemption> rList = redemptionMapper.findByDate(newDate, 0);
         for(Redemption redemption : rList) {
@@ -94,7 +118,7 @@ public class RedemptionServiceImpl extends ServiceImpl<RedemptionMapper, Redempt
             BigDecimal amount = redemption.getShare().multiply(netWorth);
             cardService.recharge(redemption.getCardId(), amount);
             // 完成订单
-            redemptionMapper.finishRedemption(redemption.getProductId(), amount, newDate);
+            redemptionMapper.finishRedemptionByDate(redemption.getProductId(), amount, newDate);
         }
         return true;
     }
@@ -106,9 +130,22 @@ public class RedemptionServiceImpl extends ServiceImpl<RedemptionMapper, Redempt
             return false;
         }
         // 份额表归还份额
-        shareService.addShare(new Share(redemption.getUserId(), redemption.getProductId(), redemption.getShare()));
+        shareService.addShare(new Share(redemption.getUserId(), redemption.getUserName(),
+                redemption.getProductId(), redemption.getProductName(), redemption.getShare()));
         // 取消赎回
         return redemptionMapper.cancelRedemption(id);
+    }
+
+    @Override
+    public boolean cancelRedemptionByDate(Date date) {
+        Date newDate = ClearingUtil.setDate(date, 15);
+        List<Redemption> rList = redemptionMapper.findByDate(newDate, 0);
+        for(Redemption redemption : rList) {
+            // 份额表归还份额
+            shareService.addShare(new Share(redemption.getUserId(), redemption.getUserName(),
+                    redemption.getProductId(), redemption.getProductName(), redemption.getShare()));
+        }
+        return redemptionMapper.cancelRedemptionByDate(ClearingUtil.getDate(newDate));
     }
 
     @Override
@@ -116,7 +153,8 @@ public class RedemptionServiceImpl extends ServiceImpl<RedemptionMapper, Redempt
         List<Redemption> redemptionList = redemptionMapper.findByUserId(userId, 0);
         for(Redemption redemption : redemptionList) {
             // 份额表归还份额
-            shareService.addShare(new Share(redemption.getUserId(), redemption.getProductId(), redemption.getShare()));
+            shareService.addShare(new Share(redemption.getUserId(), redemption.getUserName(),
+                    redemption.getProductId(), redemption.getProductName(), redemption.getShare()));
             // 取消赎回
             redemptionMapper.cancelRedemption(redemption.getId());
         }

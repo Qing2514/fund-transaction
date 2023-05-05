@@ -37,8 +37,8 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseMapper, Purchase> i
     private ShareService shareService;
 
     @Override
-    public Purchase findById(String id, Integer state) {
-        return purchaseMapper.findById(id, state);
+    public List<Purchase> findAll(Integer state) {
+        return purchaseMapper.findAll(state);
     }
 
     @Override
@@ -53,16 +53,26 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseMapper, Purchase> i
 
     @Override
     public List<Purchase> findByDate(Date date, Integer state) {
-        Date datetime = ClearingUtil.setDate(date, 24);
+        Date datetime = ClearingUtil.setDate(date, 15);
         return purchaseMapper.findByDate(datetime, state);
     }
 
     @Override
+    public List<Purchase> findPurchase(Integer state, String id, String userName, String productName, String cardId,
+                                       String date) {
+        return purchaseMapper.findPurchase(state, id, userName, productName, cardId, date);
+    }
+
+    @Override
     public boolean addPurchase(PurchaseVo purchaseVo) {
-        User user = userService.findById(purchaseVo.getUserId());
+        User user = userService.findByCid(purchaseVo.getUserId());
         Product product = productService.findById(purchaseVo.getProductId());
         Card card = cardService.findByCardId(purchaseVo.getCardId());
         if(user == null || product == null || card == null) {
+            return false;
+        }
+        // 若银行卡不属于该客户，则无法申购
+        if(!card.getUserId().equals(user.getCid())) {
             return false;
         }
         // 若银行卡余额不够，返回
@@ -82,7 +92,29 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseMapper, Purchase> i
     }
 
     @Override
-    public boolean finishPurchase(Date date) {
+    public boolean finishPurchase(String id) {
+        Purchase purchase = purchaseMapper.findById(id, 0);
+        if(purchase == null) {
+            return false;
+        }
+        Date date = ClearingUtil.getDate(purchase.getDatetime());
+        BigDecimal netWorth = trendService.getPrice(purchase.getProductId(), date);
+        if(BigDecimal.ZERO.equals(netWorth)) {
+            return false;
+        }
+        // 将获得份额写入份额表
+        BigDecimal share = purchase.getAmount().divide(netWorth, 4);
+        boolean flag = shareService.addShare(new Share(purchase.getUserId(), purchase.getUserName(),
+                purchase.getProductId(), purchase.getProductName(), share));
+        if(!flag) {
+            return false;
+        }
+        // 完成订单
+        return purchaseMapper.finishPurchase(purchase.getId(), share);
+    }
+
+    @Override
+    public boolean finishPurchaseByDate(Date date) {
         Date newDate = ClearingUtil.setDate(date, 15);
         List<Purchase> pList = purchaseMapper.findByDate(newDate, 0);
         for(Purchase purchase : pList) {
@@ -92,12 +124,13 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseMapper, Purchase> i
             }
             // 将获得份额写入份额表
             BigDecimal share = purchase.getAmount().divide(netWorth, 4);
-            boolean flag = shareService.addShare(new Share(purchase.getUserId(), purchase.getProductId(), share));
+            boolean flag = shareService.addShare(new Share(purchase.getUserId(), purchase.getUserName(),
+                    purchase.getProductId(), purchase.getProductName(), share));
             if(!flag) {
                 return false;
             }
             // 完成订单
-            purchaseMapper.finishPurchase(purchase.getProductId(), share, newDate);
+            purchaseMapper.finishPurchaseByDate(purchase.getProductId(), share, newDate);
         }
         return true;
     }
@@ -112,6 +145,17 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseMapper, Purchase> i
         cardService.recharge(purchase.getCardId(), purchase.getAmount());
         // 取消申购
         return purchaseMapper.cancelPurchase(id);
+    }
+
+    @Override
+    public boolean cancelPurchaseByDate(Date date) {
+        Date newDate = ClearingUtil.setDate(date, 15);
+        List<Purchase> pList = purchaseMapper.findByDate(newDate, 0);
+        for(Purchase purchase : pList) {
+            // 银行卡归还金额
+            cardService.recharge(purchase.getCardId(), purchase.getAmount());
+        }
+        return purchaseMapper.cancelPurchaseByDate(ClearingUtil.getDate(newDate));
     }
 
     @Override

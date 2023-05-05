@@ -9,9 +9,13 @@ import java.util.List;
 
 public interface CardService extends IService<Card> {
 
+    List<Card> findAll();
+
     List<Card> findByUserId(String userId);
 
     Card findByCardId(String cardId);
+
+    List<Card> findCard(String cardId, String userName);
 
     boolean addCard(CardVo cardVo);
 

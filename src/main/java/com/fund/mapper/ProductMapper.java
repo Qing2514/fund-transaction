@@ -15,18 +15,15 @@ public interface ProductMapper extends BaseMapper<Product> {
     @Select("select * from product where id = #{id} and state = 0")
     Product findById(@Param("id") String id);
 
-    @Select("select * from product where id like CONCAT('%',#{id},'%') and state = 0")
-    List<Product> findByFuzzyId(@Param("id") String id);
-
     @Select("select * from product where type = #{type} and name = #{name} and state = 0")
     Product findByTypeAndName(@Param("type") Integer type, @Param("name") String name);
 
-    @Select("select * from product where type like CONCAT('%',#{type},'%') and name like CONCAT('%',#{name},'%') and " +
-            "security like CONCAT('%',#{security},'%') and state = 0")
-    Product findProduct(@Param("type") Integer type, @Param("name") String name, @Param("security") Integer security);
+    @Select("select * from product where id like CONCAT('%',#{id},'%') and name like CONCAT('%',#{name},'%') " +
+            "and state = 0")
+    List<Product> findProduct(@Param("id") String id , @Param("name") String name);
 
-    @Insert("insert into product values(#{product.id},#{product.name},#{product.detail}," +
-            "1,#{product.type},#{product.security},#{product.date},0)")
+    @Insert("insert into product values(#{product.id},#{product.name}," +
+            "#{product.type},#{product.security},#{product.date},#{product.detail},0)")
     boolean addProduct(@Param("product") Product product);
 
     @Update("update product set name = #{product.name}, detail = #{product.detail}, type = #{product.type}, " +

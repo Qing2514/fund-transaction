@@ -23,6 +23,10 @@ public class Card {
     @TableField(value = "user_id")
     private String userId;
 
+    @ApiModelProperty(value = "客户名称")
+    @TableField(value = "user_name")
+    private String userName;
+
     @ApiModelProperty(value = "银行卡余额")
     @TableField(value = "amount")
     private BigDecimal amount;

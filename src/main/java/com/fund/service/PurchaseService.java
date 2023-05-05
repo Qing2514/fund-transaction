@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface PurchaseService extends IService<Purchase> {
 
-    Purchase findById(String id, Integer state);
+    List<Purchase> findAll(Integer state);
 
     List<Purchase> findByUserId(String userId, Integer state);
 
@@ -17,11 +17,18 @@ public interface PurchaseService extends IService<Purchase> {
 
     List<Purchase> findByDate(Date date, Integer state);
 
+    List<Purchase> findPurchase(Integer state, String id, String userName, String productName, String cardId,
+                                String date);
+
     boolean addPurchase(PurchaseVo purchaseVo);
 
-    boolean finishPurchase(Date date);
+    boolean finishPurchase(String id);
+
+    boolean finishPurchaseByDate(Date date);
 
     boolean cancelPurchase(String id);
+
+    boolean cancelPurchaseByDate(Date date);
 
     boolean cancelPurchaseByUserId(String userId);
 

@@ -11,10 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 
 @Api(value = "ProductController", tags = "产品模块")
 @RestController
 @RequestMapping("/product")
+@CrossOrigin
 public class ProductController {
 
     @Autowired
@@ -26,23 +28,10 @@ public class ProductController {
         return AjaxResult.success(productService.findAll());
     }
 
-    @ApiOperation("根据id查询产品")
-    @GetMapping("/findById/{id}")
-    public AjaxResult findById(@PathVariable("id") String id) {
-        return AjaxResult.success(productService.findById(id));
-    }
-
-    @ApiOperation("根据id模糊查询产品")
-    @GetMapping("/findByFuzzyId/{id}")
-    public AjaxResult findByFuzzyId(@PathVariable("id") String id) {
-        return AjaxResult.success(productService.findByFuzzyId(id));
-    }
-
-    @ApiOperation("根据id模糊查询产品")
-    @GetMapping("/findProduct/{type}/{name}/{security}")
-    public AjaxResult findProduct(@PathVariable("type") Integer type, @PathVariable("name") String name,
-                                  @PathVariable("security") Integer security) {
-        return AjaxResult.success(productService.findProduct(type, name, security));
+    @ApiOperation("根据产品id和产品名称模糊查询产品")
+    @GetMapping("/findProduct")
+    public AjaxResult findProduct(@PathParam("id") String id, @PathParam("name") String name) {
+        return AjaxResult.success(productService.findProduct(id, name));
     }
 
     @ApiOperation("新增产品")

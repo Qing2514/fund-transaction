@@ -12,9 +12,7 @@ public interface ProductService extends IService<Product> {
 
     Product findById(String id);
 
-    List<Product> findByFuzzyId(String id);
-
-    Product findProduct(Integer type, String name, Integer security);
+    List<Product> findProduct(String id, String name);
 
     boolean addProduct(ProductVo productVo);
 

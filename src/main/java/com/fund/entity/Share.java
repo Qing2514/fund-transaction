@@ -19,9 +19,17 @@ public class Share {
     @TableField(value = "user_id")
     private String userId;
 
+    @ApiModelProperty(value = "客户名称")
+    @TableField(value = "user_name")
+    private String userName;
+
     @ApiModelProperty(value = "产品id")
     @TableField(value = "product_id")
     private String productId;
+
+    @ApiModelProperty(value = "产品名称")
+    @TableField(value = "product_name")
+    private String productName;
 
     @ApiModelProperty(value = "份额")
     @TableField(value = "share")

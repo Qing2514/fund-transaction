@@ -26,6 +26,10 @@ public class Trend {
     @TableField(value = "product_id")
     private String productId;
 
+    @ApiModelProperty(value = "所属产品名称")
+    @TableField(value = "product_name")
+    private String productName;
+
     @ApiModelProperty(value = "净值")
     @TableField(value = "net_worth")
     private BigDecimal netWorth;

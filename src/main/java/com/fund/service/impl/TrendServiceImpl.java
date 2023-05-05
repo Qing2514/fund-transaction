@@ -1,6 +1,7 @@
 package com.fund.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.fund.entity.Product;
 import com.fund.entity.Trend;
 import com.fund.mapper.TrendMapper;
 import com.fund.service.ProductService;
@@ -29,8 +30,19 @@ public class TrendServiceImpl extends ServiceImpl<TrendMapper, Trend> implements
 
     @Override
     public boolean addTrendByProductId(String productId) {
-        Trend trend = new Trend(ClearingUtil.getDate(), productId, BigDecimal.valueOf(1.0000));
-        return trendMapper.addTrend(trend);
+        Trend temp = trendMapper.getLateTrend(productId);
+        if(temp == null) {
+            Product product = productService.getById(productId);
+            Trend trend = new Trend(ClearingUtil.getDate(new Date()), productId, product.getName(),
+                    BigDecimal.valueOf(1.0000));
+            return trendMapper.addTrend(trend);
+        }
+        else {
+            Date date = temp.getDate();
+            Trend trend = new Trend(ClearingUtil.addDate(date), productId, temp.getProductName(),
+                    ClearingUtil.getNewNetWorth(temp.getNetWorth()));
+            return trendMapper.addTrend(trend);
+        }
     }
 
     @Override
@@ -45,7 +57,8 @@ public class TrendServiceImpl extends ServiceImpl<TrendMapper, Trend> implements
             Trend temp = trendMapper.getLateTrend(productId);
             if(date.after(temp.getDate())) {
                 BigDecimal price = ClearingUtil.getNewNetWorth(temp.getNetWorth());
-                trend = new Trend(date, productId, price);
+                Product product = productService.getById(productId);
+                trend = new Trend(date, productId, product.getName(), price);
             }
             else {
                 return false;

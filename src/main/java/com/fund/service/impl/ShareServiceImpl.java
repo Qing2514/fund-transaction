@@ -1,9 +1,13 @@
 package com.fund.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.fund.entity.Product;
 import com.fund.entity.Share;
+import com.fund.entity.User;
 import com.fund.mapper.ShareMapper;
+import com.fund.service.ProductService;
 import com.fund.service.ShareService;
+import com.fund.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +20,17 @@ public class ShareServiceImpl extends ServiceImpl<ShareMapper, Share> implements
     @Autowired
     private ShareMapper shareMapper;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private ProductService productService;
+
+    @Override
+    public List<Share> findAll() {
+        return shareMapper.findAll();
+    }
+
     @Override
     public List<Share> findByUserId(String userId) {
         return shareMapper.findByUserId(userId);
@@ -27,10 +42,19 @@ public class ShareServiceImpl extends ServiceImpl<ShareMapper, Share> implements
     }
 
     @Override
+    public List<Share> findShare(String userName, String productName) {
+        return shareMapper.findShare(userName, productName);
+    }
+
+    @Override
     public boolean addShare(Share share) {
         Share temp = shareMapper.findByUserIdAndProductId(share.getUserId(), share.getProductId());
         // 若不存在该记录，则新增份额记录
         if(temp == null) {
+            User user = userService.findByCid(share.getUserId());
+            Product product = productService.getById(share.getProductId());
+            share.setUserName(user.getName());
+            share.setProductName(product.getName());
             return shareMapper.addShare(share);
         }
         share.setShare(share.getShare().add(temp.getShare()));

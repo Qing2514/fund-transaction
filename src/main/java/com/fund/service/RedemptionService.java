@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface RedemptionService extends IService<Redemption> {
 
-    Redemption findById(String id, Integer state);
+    List<Redemption> findAll(Integer state);
 
     List<Redemption> findByUserId(String userId, Integer state);
 
@@ -17,11 +17,18 @@ public interface RedemptionService extends IService<Redemption> {
 
     List<Redemption> findByDate(Date date, Integer state);
 
+    List<Redemption> findRedemption(Integer state, String id, String userName, String productName, String cardId,
+                                    String date);
+
     boolean addRedemption(RedemptionVo redemptionVo);
 
-    boolean finishRedemption(Date date);
+    boolean finishRedemption(String id);
+
+    boolean finishRedemptionByDate(Date date);
 
     boolean cancelRedemption(String id);
+
+    boolean cancelRedemptionByDate(Date date);
 
     boolean cancelRedemptionByUserId(String userId);
 

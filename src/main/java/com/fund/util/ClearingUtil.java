@@ -6,14 +6,17 @@ import java.util.Date;
 
 public class ClearingUtil {
 
-    public static Date getDate() {
+    public static Date getDate(Date datetime) {
         Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
+        cal.setTime(datetime);
         int hour = cal.get(Calendar.HOUR_OF_DAY);
         // 超过15:00即为下一个工作日
         if(hour > 15) {
             cal.add(Calendar.DATE,1);
         }
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
         return cal.getTime();
     }
 
@@ -23,6 +26,13 @@ public class ClearingUtil {
         cal.set(Calendar.HOUR_OF_DAY, hour);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
+        return cal.getTime();
+    }
+
+    public static Date addDate(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.DATE,1);
         return cal.getTime();
     }
 
