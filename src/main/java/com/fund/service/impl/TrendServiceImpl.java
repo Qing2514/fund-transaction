@@ -31,18 +31,19 @@ public class TrendServiceImpl extends ServiceImpl<TrendMapper, Trend> implements
     @Override
     public boolean addTrendByProductId(String productId) {
         Trend temp = trendMapper.getLateTrend(productId);
+        Trend trend;
         if(temp == null) {
-            Product product = productService.getById(productId);
-            Trend trend = new Trend(ClearingUtil.getDate(new Date()), productId, product.getName(),
-                    BigDecimal.valueOf(1.0000));
-            return trendMapper.addTrend(trend);
+            trend = new Trend(ClearingUtil.getDate(new Date()), BigDecimal.valueOf(1.0000),
+                    BigDecimal.valueOf(0.00));
         }
         else {
             Date date = temp.getDate();
-            Trend trend = new Trend(ClearingUtil.addDate(date), productId, temp.getProductName(),
-                    ClearingUtil.getNewNetWorth(temp.getNetWorth()));
-            return trendMapper.addTrend(trend);
+            BigDecimal newNetWorth = ClearingUtil.getNewNetWorth(temp.getNetWorth());
+            BigDecimal lateNetWorth = trendMapper.getLateTrend(productId).getNetWorth();
+            BigDecimal growth = newNetWorth.subtract(lateNetWorth).divide(lateNetWorth, 4);
+            trend = new Trend(ClearingUtil.addDate(date), newNetWorth, growth);
         }
+        return trendMapper.addTrend(productId, trend);
     }
 
     @Override
@@ -56,15 +57,17 @@ public class TrendServiceImpl extends ServiceImpl<TrendMapper, Trend> implements
         for(String productId : productIds) {
             Trend temp = trendMapper.getLateTrend(productId);
             if(date.after(temp.getDate())) {
-                BigDecimal price = ClearingUtil.getNewNetWorth(temp.getNetWorth());
-                Product product = productService.getById(productId);
-                trend = new Trend(date, productId, product.getName(), price);
+                BigDecimal newNetWorth = ClearingUtil.getNewNetWorth(temp.getNetWorth());
+                BigDecimal lateNetWorth = trendMapper.getLateTrend(productId).getNetWorth();
+                BigDecimal growth = newNetWorth.subtract(lateNetWorth).divide(lateNetWorth, 4);
+                trend = new Trend(ClearingUtil.addDate(date), newNetWorth, growth);
+                trendMapper.addTrend(productId, trend);
             }
             else {
                 return false;
             }
         }
-        return trendMapper.addTrend(trend);
+        return true;
     }
 
     @Override

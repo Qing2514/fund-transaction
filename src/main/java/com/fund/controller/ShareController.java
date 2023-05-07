@@ -9,8 +9,6 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.websocket.server.PathParam;
-
 @Api(value = "ShareController", tags = "份额模块")
 @RestController
 @RequestMapping("/share")
@@ -22,7 +20,7 @@ public class ShareController {
 
     @ApiOperation("查询所有")
     @GetMapping("/findAll")
-    public AjaxResult findAll(@PathParam("currentPage") int currentPage, @PathParam("pageSize") int pageSize){
+    public AjaxResult findAll(@RequestParam("currentPage") int currentPage, @RequestParam("pageSize") int pageSize){
         IPage<Share> page = shareService.findAll(currentPage, pageSize);
         return AjaxResult.success(page.getRecords());
     }
@@ -41,7 +39,7 @@ public class ShareController {
 
     @ApiOperation("根据客户名称和产品名称模糊查询")
     @GetMapping("/findShare")
-    public AjaxResult findShare(@PathParam("userName") String userName, @PathParam("productName") String productName){
+    public AjaxResult findShare(@RequestParam("userName") String userName, @RequestParam("productName") String productName){
         return AjaxResult.success(shareService.findShare(userName, productName));
     }
 

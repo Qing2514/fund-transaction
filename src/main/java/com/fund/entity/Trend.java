@@ -12,7 +12,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @ApiModel(value = "产品走势")
-@TableName("trend")
 @Data
 @AllArgsConstructor
 public class Trend {
@@ -22,16 +21,12 @@ public class Trend {
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date date;
 
-    @ApiModelProperty(value = "所属产品id")
-    @TableField(value = "product_id")
-    private String productId;
-
-    @ApiModelProperty(value = "所属产品名称")
-    @TableField(value = "product_name")
-    private String productName;
-
     @ApiModelProperty(value = "净值")
     @TableField(value = "net_worth")
     private BigDecimal netWorth;
+
+    @ApiModelProperty(value = "日增长率")
+    @TableField(value = "growth")
+    private BigDecimal growth;
 
 }

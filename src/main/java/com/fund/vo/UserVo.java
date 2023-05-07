@@ -12,7 +12,8 @@ import javax.validation.constraints.Size;
 @Data
 public class UserVo {
 
-    @NotBlank(message = "证件号码不能为空")
+    @NotBlank(message = "证件号不能为空")
+    @Size(min = 18, max = 18, message = "证件号必须是18位")
     private String cid;
 
     @NotNull(message = "证件类型不能为空")

@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
-import javax.websocket.server.PathParam;
 import java.util.Date;
 
 @Api(value = "RedemptionController", tags = "赎回模块")
@@ -26,7 +25,7 @@ public class RedemptionController {
 
     @ApiOperation("根据订单状态查询所有订单")
     @GetMapping("/findAll/{state}")
-    public AjaxResult findAll(@PathParam("currentPage") int currentPage, @PathParam("pageSize") int pageSize,
+    public AjaxResult findAll(@RequestParam("currentPage") int currentPage, @RequestParam("pageSize") int pageSize,
                               @PathVariable Integer state) {
         IPage<Redemption> page = redemptionService.findAll(currentPage, pageSize, state);
         return AjaxResult.success(page.getRecords());
@@ -34,10 +33,10 @@ public class RedemptionController {
 
     @ApiOperation("根据订单号、客户名称、产品名称、银行卡号、申购日期、订单状态模糊查询")
     @GetMapping("/findRedemption/{state}")
-    public AjaxResult findRedemption(@PathVariable Integer state, @PathParam("id") String id,
-                                     @PathParam("userName") String userName,
-                                     @PathParam("productName") String productName, @PathParam("cardId") String cardId,
-                                     @PathParam("date") String date) {
+    public AjaxResult findRedemption(@PathVariable Integer state, @RequestParam("id") String id,
+                                     @RequestParam("userName") String userName,
+                                     @RequestParam("productName") String productName, @RequestParam("cardId") String cardId,
+                                     @RequestParam("date") String date) {
         return AjaxResult.success(redemptionService.findRedemption(state, id, userName, productName, cardId, date));
     }
 

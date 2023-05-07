@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.websocket.server.PathParam;
 
 @Api(value = "UserController", tags = "客户模块")
 @RestController
@@ -32,15 +31,15 @@ public class UserController {
 
     @ApiOperation("查询所有客户")
     @GetMapping("/findAll")
-    public AjaxResult findAll(@PathParam("currentPage") int currentPage, @PathParam("pageSize") int pageSize) {
+    public AjaxResult findAll(@RequestParam("currentPage") int currentPage, @RequestParam("pageSize") int pageSize) {
         IPage<User> page = userService.findAll(currentPage, pageSize);
         return AjaxResult.success(page.getRecords());
     }
 
     @ApiOperation("根据证件号、名称和手机号查询客户")
     @GetMapping("/findUser")
-    public AjaxResult findUser(@PathParam("cid") String cid, @PathParam("name") String name,
-                               @PathParam("phone") String phone) {
+    public AjaxResult findUser(@RequestParam("cid") String cid, @RequestParam("name") String name,
+                               @RequestParam("phone") String phone) {
         return AjaxResult.success(userService.findUser(cid, name, phone));
     }
 

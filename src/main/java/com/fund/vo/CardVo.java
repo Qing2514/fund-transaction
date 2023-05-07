@@ -11,6 +11,7 @@ import javax.validation.constraints.Size;
 public class CardVo {
 
     @NotBlank(message = "银行卡号不能为空")
+    @Size(min = 16, max = 16, message = "银行卡号必须是16位")
     private String cardId;
 
     @NotBlank(message = "用户id不能为空")

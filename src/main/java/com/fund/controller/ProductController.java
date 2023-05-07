@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.websocket.server.PathParam;
 
 @Api(value = "ProductController", tags = "产品模块")
 @RestController
@@ -25,14 +24,14 @@ public class ProductController {
 
     @ApiOperation("查询所有产品")
     @GetMapping("/findAll")
-    public AjaxResult findAll(@PathParam("currentPage") int currentPage, @PathParam("pageSize") int pageSize) {
+    public AjaxResult findAll(@RequestParam("currentPage") int currentPage, @RequestParam("pageSize") int pageSize) {
         IPage<Product> page = productService.findAll(currentPage, pageSize);
         return AjaxResult.success(page.getRecords());
     }
 
     @ApiOperation("根据产品id和产品名称模糊查询产品")
     @GetMapping("/findProduct")
-    public AjaxResult findProduct(@PathParam("id") String id, @PathParam("name") String name) {
+    public AjaxResult findProduct(@RequestParam("id") String id, @RequestParam("name") String name) {
         return AjaxResult.success(productService.findProduct(id, name));
     }
 

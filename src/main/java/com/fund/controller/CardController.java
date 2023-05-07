@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.websocket.server.PathParam;
 import java.math.BigDecimal;
 
 @Api(value = "CardController", tags = "银行卡模块")
@@ -26,7 +25,7 @@ public class CardController {
 
     @ApiOperation("查询全部银行卡")
     @GetMapping("/findAll")
-    public AjaxResult findAll(@PathParam("currentPage") int currentPage, @PathParam("pageSize") int pageSize) {
+    public AjaxResult findAll(@RequestParam("currentPage") int currentPage, @RequestParam("pageSize") int pageSize) {
         IPage<Card> page = cardService.findAll(currentPage, pageSize);
         return AjaxResult.success(page.getRecords());
     }
@@ -39,7 +38,7 @@ public class CardController {
 
     @ApiOperation("根据银行卡号和客户名称查询银行卡")
     @GetMapping("/findCard")
-    public AjaxResult findCard(@PathParam("cardId") String cardId, @PathParam("userName") String userName) {
+    public AjaxResult findCard(@RequestParam("cardId") String cardId, @RequestParam("userName") String userName) {
         return AjaxResult.success(cardService.findCard(cardId, userName));
     }
 

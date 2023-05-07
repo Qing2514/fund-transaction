@@ -13,17 +13,17 @@ import java.util.List;
 @Mapper
 public interface TrendMapper extends BaseMapper<Trend> {
 
-    @Select("select * from trend where product_id=#{productId}")
+    @Select("select * from fund_${productId}")
     List<Trend> findByProductId(@Param("productId") String productId);
 
-    @Select("select * from trend where product_id = #{productId} and date = #{date}")
+    @Select("select * from fund_${productId} where date = #{date}")
     Trend findByProductIdAndDate(@Param("productId") String productId, @Param("date") Date date);
 
-    @Insert("insert into trend values(#{trend.date},#{trend.productId},#{trend.productName},#{trend.netWorth})")
-    boolean addTrend(@Param("trend") Trend trend);
+    @Insert("insert into fund_${productId} values(#{trend.date}, #{trend.netWorth}, #{trend.growth})")
+    boolean addTrend(@Param("productId") String productId, @Param("trend") Trend trend);
 
-    @Select("select * from trend where product_id=#{productId} and date=" +
-            "(select max(date) from trend where product_id=#{productId})")
-    Trend getLateTrend(String productId);
+    @Select("select * from fund_${productId} where date = " +
+            "(select max(date) from fund_${productId}")
+    Trend getLateTrend(@Param("productId") String productId);
 
 }
