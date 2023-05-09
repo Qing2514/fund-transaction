@@ -20,13 +20,13 @@ public class TrendController {
     @Autowired
     private TrendService trendService;
 
-    @ApiOperation("根据产品id查询走势")
+    @ApiOperation("根据产品代码查询走势")
     @GetMapping("/findById/{productId}")
     public AjaxResult findById(@PathVariable("productId") String productId) {
         return AjaxResult.success(trendService.findById(productId));
     }
 
-    @ApiOperation("根据产品id新增产品走势")
+    @ApiOperation("根据产品代码新增产品走势")
     @PostMapping("/addTrend/{productId}")
     public AjaxResult addTrend(@PathVariable("productId") String productId) {
         return trendService.addTrendByProductId(productId) ? AjaxResult.success() :

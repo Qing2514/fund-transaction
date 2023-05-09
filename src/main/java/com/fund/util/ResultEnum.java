@@ -32,6 +32,8 @@ public enum ResultEnum {
 
     DATE_ERROR(500601,"该天为周末或该天净值已更新"),
 
+    PREDICTION_ERROR(500701,"产品不存在或产品走势预测已存在"),
+
     ;
 
     private final Integer code;

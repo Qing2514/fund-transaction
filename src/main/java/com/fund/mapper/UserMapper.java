@@ -26,11 +26,11 @@ public interface UserMapper extends BaseMapper<User> {
     List<User> findUser(@Param("cid") String cid, @Param("name") String name, @Param("phone") String phone);
 
     @Insert("insert into user values(#{user.cid}, #{user.ctype}, #{user.name}, #{user.type}, " +
-            "#{user.password}, #{user.phone}, #{user.security}, #{user.state})")
+            "#{user.password}, #{user.phone}, #{user.security}, #{user.authority}, #{user.state})")
     boolean addUser(@Param("user") User user);
 
     @Update("update user set name = #{user.name}, type = #{user.type}, ctype = #{user.ctype}, " +
-            "cid = #{user.cid}, phone = #{user.phone}, security = #{user.security} where cid = #{user.cid}")
+            "password = #{user.password}, phone = #{user.phone}, security = #{user.security} where cid = #{user.cid}")
     boolean updateUser(@Param("user") User user);
 
     @Update("update user set security = #{security} where cid = #{cid}")

@@ -25,13 +25,13 @@ public class ShareController {
         return AjaxResult.success(page.getRecords());
     }
 
-    @ApiOperation("根据客户id查询")
+    @ApiOperation("根据客户证件号查询")
     @GetMapping("/findByUserId/{userId}")
     public AjaxResult findByUserId(@PathVariable String userId){
         return AjaxResult.success(shareService.findByUserId(userId));
     }
 
-    @ApiOperation("根据客户id和产品id查询")
+    @ApiOperation("根据客户证件号和产品代码查询")
     @GetMapping("/findByUserIdAndProductId/{userId}/{productId}")
     public AjaxResult findByUserIdAndProductId(@PathVariable String userId, @PathVariable String productId){
         return AjaxResult.success(shareService.findByUserIdAndProductId(userId, productId));

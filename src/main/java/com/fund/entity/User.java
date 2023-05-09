@@ -41,6 +41,10 @@ public class User {
     @TableField(value = "security")
     private Integer security;
 
+    @ApiModelProperty(value = "客户权限，0-管理员，1-普通客户")
+    @TableField(value = "authority")
+    private Integer authority;
+
     @ApiModelProperty(value = "账户状态，0-正常，1-已销户")
     @TableField(value = "state")
     private Integer state = 0;
