@@ -16,6 +16,14 @@ public interface TrendMapper extends BaseMapper<Trend> {
     @Select("select * from trend_${productId}")
     List<Trend> findByProductId(@Param("productId") String productId);
 
+    @Select("select * from trend_${productId} where date <= #{endDate} and date >= #{startDate}")
+    List<Trend> findByDate(@Param("productId") String productId, @Param("startDate") Date startDate,
+                             @Param("endDate") Date endDate);
+
+    @Select("select * from trend_${productId} where date <= #{endDate} and date >= #{startDate} limit 1")
+    Trend findOneByDate(@Param("productId") String productId, @Param("startDate") Date startDate,
+                             @Param("endDate") Date endDate);
+
     @Select("select * from trend_${productId} where date = #{date}")
     Trend findByProductIdAndDate(@Param("productId") String productId, @Param("date") Date date);
 
@@ -23,7 +31,7 @@ public interface TrendMapper extends BaseMapper<Trend> {
     boolean addTrend(@Param("productId") String productId, @Param("trend") Trend trend);
 
     @Select("select * from trend_${productId} where date = " +
-            "(select max(date) from trend_${productId}")
+            "(select max(date) from trend_${productId})")
     Trend getLateTrend(@Param("productId") String productId);
 
 }

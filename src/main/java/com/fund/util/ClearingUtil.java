@@ -29,10 +29,10 @@ public class ClearingUtil {
         return cal.getTime();
     }
 
-    public static Date addDate(Date date) {
+    public static Date addDate(Date date, int day) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
-        cal.add(Calendar.DATE,1);
+        cal.add(Calendar.DATE, day);
         return cal.getTime();
     }
 

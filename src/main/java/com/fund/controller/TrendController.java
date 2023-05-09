@@ -3,12 +3,14 @@ package com.fund.controller;
 import com.fund.service.TrendService;
 import com.fund.util.AjaxResult;
 import com.fund.util.ResultEnum;
+import com.fund.vo.IncomeVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Api(value = "TrendController", tags = "产品走势模块")
@@ -37,6 +39,29 @@ public class TrendController {
     @PostMapping("/addTrendByDate/{date}")
     public AjaxResult addTrendByDate(@PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
         return trendService.addTrendByDate(date) ? AjaxResult.success() : AjaxResult.error(ResultEnum.DATE_ERROR);
+    }
+
+    @ApiOperation("根据天数查询一次性购入和定投的收益对比")
+    @GetMapping("/compareIncomeByDays/{productId}/{days}/{amount}/{frequency}")
+    public AjaxResult compareIncomeByDays(@PathVariable("productId") String productId,
+                                          @PathVariable("days") Integer days,
+                                          @PathVariable("amount") BigDecimal amount,
+                                          @PathVariable("frequency") Integer frequency) {
+        IncomeVo incomeVo = trendService.compareIncomeByDays(productId, days, amount, frequency);
+        return incomeVo == null ? AjaxResult.error(ResultEnum.PRODUCT_NOT_EXIST_OR_FORMAT_ERROR) :
+                AjaxResult.success(incomeVo);
+    }
+
+    @ApiOperation("根据日期查询一次性购入和定投的收益对比")
+    @GetMapping("/compareIncomeByDate/{productId}/{startDate}/{endDate}/{amount}/{frequency}")
+    public AjaxResult compareIncomeByDate(@PathVariable("productId") String productId,
+                                    @PathVariable("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+                                    @PathVariable("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
+                                    @PathVariable("amount") BigDecimal amount,
+                                    @PathVariable("frequency") Integer frequency) {
+        IncomeVo incomeVo = trendService.compareIncomeByDate(productId, startDate, endDate, amount, frequency);
+        return incomeVo == null ? AjaxResult.error(ResultEnum.PRODUCT_NOT_EXIST_OR_FORMAT_ERROR) :
+                AjaxResult.success(incomeVo);
     }
 
 }

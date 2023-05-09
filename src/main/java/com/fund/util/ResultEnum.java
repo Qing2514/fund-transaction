@@ -18,6 +18,7 @@ public enum ResultEnum {
 
     PRODUCT_ALREADY_EXIST(500201,"产品已存在"),
     PRODUCT_NOT_EXIST(500202,"产品不存在"),
+    PRODUCT_NOT_EXIST_OR_FORMAT_ERROR(500203,"产品不存在或输入格式不正确"),
 
     CARD_NOT_EXIST(500301,"银行卡不存在"),
     CARD_EXIST_OR_USER_NOT_EXIST(500302,"银行卡已绑定或客户不存在"),
