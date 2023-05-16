@@ -47,6 +47,12 @@ public class RedemptionController {
         return AjaxResult.success(redemptionService.findByDate(date, state));
     }
 
+    @ApiOperation("根据客户证件号和订单状态查询订单")
+    @GetMapping("/findByUserId/{userId}/{state}")
+    public AjaxResult findByUserId(@PathVariable String userId, @PathVariable Integer state) {
+        return AjaxResult.success(redemptionService.findByUserId(userId, state));
+    }
+
     @ApiOperation("新增赎回")
     @PostMapping("/addRedemption")
     public AjaxResult addRedemption(@RequestBody RedemptionVo redemptionVo) {

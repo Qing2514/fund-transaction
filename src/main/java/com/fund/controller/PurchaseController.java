@@ -40,6 +40,12 @@ public class PurchaseController {
         return AjaxResult.success(purchaseService.findPurchase(state, id, userName, productName, cardId, date));
     }
 
+    @ApiOperation("根据客户证件号和订单状态查询订单")
+    @GetMapping("/findByUserId/{userId}/{state}")
+    public AjaxResult findByUserId(@PathVariable String userId, @PathVariable Integer state) {
+        return AjaxResult.success(purchaseService.findByUserId(userId, state));
+    }
+
     @ApiOperation("根据日期和订单状态查询订单")
     @GetMapping("/findByDate/{date}/{state}")
     public AjaxResult findByDate(@PathVariable @DateTimeFormat(pattern="yyyy-MM-dd") Date date,
