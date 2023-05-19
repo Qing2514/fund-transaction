@@ -4,6 +4,7 @@ import com.fund.service.TrendService;
 import com.fund.util.AjaxResult;
 import com.fund.util.ResultEnum;
 import com.fund.vo.IncomeVo;
+import com.fund.vo.PerformanceVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Api(value = "TrendController", tags = "产品走势模块")
 @RestController
@@ -62,6 +64,14 @@ public class TrendController {
         IncomeVo incomeVo = trendService.compareIncomeByDate(productId, startDate, endDate, amount, frequency);
         return incomeVo == null ? AjaxResult.error(ResultEnum.PRODUCT_NOT_EXIST_OR_FORMAT_ERROR) :
                 AjaxResult.success(incomeVo);
+    }
+
+    @ApiOperation("根据产品代码查询历史业绩")
+    @GetMapping("/getPerformance/{productId}")
+    public AjaxResult getPerformance(@PathVariable("productId") String productId) {
+        List<PerformanceVo> performanceVo = trendService.getPerformance(productId);
+        return performanceVo == null ? AjaxResult.error(ResultEnum.PRODUCT_NOT_EXIST) :
+                AjaxResult.success(performanceVo);
     }
 
 }

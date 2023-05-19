@@ -3,6 +3,7 @@ package com.fund.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.fund.entity.Trend;
 import com.fund.vo.IncomeVo;
+import com.fund.vo.PerformanceVo;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -22,5 +23,7 @@ public interface TrendService extends IService<Trend> {
 
     IncomeVo compareIncomeByDate(String productId, Date startDate, Date endDate, BigDecimal amount,
                                  Integer frequency);
+
+    List<PerformanceVo> getPerformance(String productId);
 
 }

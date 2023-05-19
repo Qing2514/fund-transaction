@@ -13,7 +13,7 @@ import java.util.List;
 @Mapper
 public interface TrendMapper extends BaseMapper<Trend> {
 
-    @Select("select * from trend_${productId}")
+    @Select("select * from trend_${productId} where date >= '2021-01-01'")
     List<Trend> findByProductId(@Param("productId") String productId);
 
     @Select("select * from trend_${productId} where date <= #{endDate} and date >= #{startDate}")

@@ -8,10 +8,12 @@ import com.fund.service.ProductService;
 import com.fund.service.TrendService;
 import com.fund.util.ClearingUtil;
 import com.fund.vo.IncomeVo;
+import com.fund.vo.PerformanceVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -152,6 +154,48 @@ public class TrendServiceImpl extends ServiceImpl<TrendMapper, Trend> implements
         BigDecimal purchaseIncome = purchaseShare.multiply(endNetWorth).subtract(amount);
         BigDecimal allAmount = amount.multiply(BigDecimal.valueOf(count));
         return new IncomeVo(allAmount, purchaseIncome, investmentIncome);
+    }
+
+    @Override
+    public List<PerformanceVo> getPerformance(String productId) {
+        List<Trend> trendList = trendMapper.findByProductId(productId);
+        if(trendList.isEmpty()) {
+            return null;
+        }
+        Trend lateTrend = trendMapper.getLateTrend(productId);
+        BigDecimal lateNetWorth = lateTrend.getNetWorth();
+        Date lateDate = lateTrend.getDate();
+
+        Date oneWeek = ClearingUtil.addDate(lateDate, -7);
+        Date oneMonth = ClearingUtil.addDate(lateDate, -30);
+        Date threeMonth = ClearingUtil.addDate(lateDate, -90);
+        Date sixMonth = ClearingUtil.addDate(lateDate, -180);
+        Date oneYear = ClearingUtil.addDate(lateDate, -365);
+
+        BigDecimal oneWeekNetWorth = trendMapper.findOneByDate(productId, oneWeek, lateDate).getNetWorth();
+        BigDecimal oneMonthNetWorth = trendMapper.findOneByDate(productId, oneMonth, lateDate).getNetWorth();
+        BigDecimal threeMonthNetWorth = trendMapper.findOneByDate(productId, threeMonth, lateDate).getNetWorth();
+        BigDecimal sixMonthNetWorth = trendMapper.findOneByDate(productId, sixMonth, lateDate).getNetWorth();
+        BigDecimal oneYearNetWorth = trendMapper.findOneByDate(productId, oneYear, lateDate).getNetWorth();
+
+        BigDecimal oneWeekGrowth = lateNetWorth.subtract(oneWeekNetWorth).divide(oneWeekNetWorth, 4)
+                .multiply(BigDecimal.valueOf(100));
+        BigDecimal oneMonthGrowth = lateNetWorth.subtract(oneMonthNetWorth).divide(oneMonthNetWorth, 4)
+                .multiply(BigDecimal.valueOf(100));
+        BigDecimal threeMonthGrowth = lateNetWorth.subtract(threeMonthNetWorth).divide(threeMonthNetWorth, 4)
+                .multiply(BigDecimal.valueOf(100));
+        BigDecimal sixMonthGrowth = lateNetWorth.subtract(sixMonthNetWorth).divide(sixMonthNetWorth, 4)
+                .multiply(BigDecimal.valueOf(100));
+        BigDecimal oneYearGrowth = lateNetWorth.subtract(oneYearNetWorth).divide(oneYearNetWorth, 4)
+                .multiply(BigDecimal.valueOf(100));
+
+        List<PerformanceVo> performanceVoList = new ArrayList<>();
+        performanceVoList.add(new PerformanceVo("近1周", oneWeekGrowth));
+        performanceVoList.add(new PerformanceVo("近1月", oneMonthGrowth));
+        performanceVoList.add(new PerformanceVo("近3月", threeMonthGrowth));
+        performanceVoList.add(new PerformanceVo("近6月", sixMonthGrowth));
+        performanceVoList.add(new PerformanceVo("近1年", oneYearGrowth));
+        return performanceVoList;
     }
 
 }

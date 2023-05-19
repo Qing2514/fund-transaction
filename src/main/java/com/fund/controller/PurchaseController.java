@@ -34,7 +34,8 @@ public class PurchaseController {
     @ApiOperation("根据订单号、客户名称、产品名称、银行卡号、申购日期、订单状态模糊查询")
     @GetMapping("/findPurchase/{state}")
     public AjaxResult findPurchase(@PathVariable Integer state, @RequestParam("id") String id,
-                                   @RequestParam("userName") String userName, @RequestParam("productName") String productName,
+                                   @RequestParam("userName") String userName,
+                                   @RequestParam("productName") String productName,
                                    @RequestParam("cardId") String cardId,
                                    @RequestParam("date") String date) {
         return AjaxResult.success(purchaseService.findPurchase(state, id, userName, productName, cardId, date));
