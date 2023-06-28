@@ -15,14 +15,13 @@ import java.util.Date;
 @Data
 public class Prediction {
 
-    @ApiModelProperty(value = "日期")
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
-    @TableField(value = "date")
-    private Date date;
-
     @ApiModelProperty(value = "产品代码")
     @TableField(value = "product_id")
     private String productId;
+
+    @ApiModelProperty(value = "预测时间")
+    @TableField(value = "time")
+    private String time;
 
     @ApiModelProperty(value = "净值")
     @TableField(value = "net_worth")

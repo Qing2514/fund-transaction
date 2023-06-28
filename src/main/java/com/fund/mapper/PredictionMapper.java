@@ -12,7 +12,7 @@ public interface PredictionMapper extends BaseMapper<Prediction> {
     @Select("select * from prediction where product_id = #{productId}")
     List<Prediction> findByProductId(@Param("productId") String productId);
 
-    @Insert("insert into prediction values(#{prediction.date}, #{prediction.productId}, #{prediction.netWorth}, " +
+    @Insert("insert into prediction values(#{prediction.productId}, #{prediction.time}, #{prediction.netWorth}, " +
             "#{prediction.growth})")
     boolean addPrediction(@Param("prediction") Prediction prediction);
 
